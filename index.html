@@ -1,6 +1,6 @@
 <!--© Joan Aneas-->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,13 +9,41 @@
     <title>Biblio Digital</title>
 </head>
 <body>
-    <header class="">
+    <header>
         <button class="menu-hamburguesa"><!--Hamburguesa-->a</button>
-        <span class="titulo"><h1>Biblio Digital</h1></span> <!--Debe de ser dinámico-->
+        <span class="titulo"><h1>BIBLIO digital</h1></span> <!--Debe de ser dinámico-->
         <div class="cuenta-logout">
             <a class="logout">Logout</a>
             <a><img src="./media/icons/login.png" width="30" height="30" alt="cerrar sesión / tancar sessió"></a>
         </div>
     </header>
+    <main>
+        <div class="centrado">
+            <span class="izquierda">Llistat llibres nombiblioteca</span> <!--dinámico-->
+            <form class="derecha"> <!--Cerca de llibres-->
+                <label>Cerca</label>
+                <input class="" type="text">
+                <button class="" type="submit">
+            </form>
+        </div>
+        <br>
+        <section class="centrado contenedor-libros">
+            <article class="libros"> <!--dinamico-->
+                <h3>Titulo</h3>
+                <img src="./media/pruebas.jpg" width="100" height="100" alt="libro">
+                <br>
+                <span>estrellas</span>
+                <p>descripion breve</p>
+            </article>
+        </section>
+    </main>
+    <footer class="centrado">
+        <span class="izquierda">v1.0</span><!--dinamico-->
+        <div class="central">
+            <a>privacitat</a>
+            <a>etc</a>
+        </div>
+        <span class="derecha">&copy; Joan Aneas</span>
+    </footer>
 </body>
 </html>

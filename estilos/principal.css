@@ -1,10 +1,21 @@
 /*© Joan Aneas*/
 @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
+
+/*############# COMUN ###############*/
 *{
     font-family:  'Work Sans', sans-serif;
     background-color: #eae9e8;
-    padding: 0;
+}
+
+body {
     margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    position: relative;
+}
+
+a:hover{
+    text-decoration: underline;
 }
 
 .debug{
@@ -12,6 +23,35 @@
     border-color: black;
 }
 
+.centrado {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    position: fixed;
+    left: 0; /* Cambia left a 0 para que comience desde el borde izquierdo */
+    right: 0; /* Cambia right a 0 para que termine en el borde derecho */
+    padding: 5px;
+}
+
+.izquierda, .central, .derecha {
+    flex: 1; /* Todos los elementos ocupan espacio igualmente */
+}
+.izquierda{
+    text-align: left;
+    padding-left: 5px;
+}
+.derecha{
+    padding-right: 5px;
+    text-align: right;
+}
+.central{
+    text-align: center; /* Alinea el texto al centro */
+    margin: 0; /* Elimina el margen para que no haya espacio adicional */
+}
+/*###################################*/
+
+/*############# HEADER ##############*/
 header{
     padding: 5px;
     padding-bottom: 45px;
@@ -26,6 +66,7 @@ header{
 }
 
 h1{ padding: 0; margin: 0;}
+
 .titulo{
     padding: 0%;
     float: left;
@@ -33,14 +74,22 @@ h1{ padding: 0; margin: 0;}
     max-width: fit-content;
 }
 
-.logout{
-    
-}
 .cuenta-logout{
     max-width: fit-content;
     float: right;
 }
+/*###################################*/
 
-a:hover{
-    text-decoration: underline;
+/*############ CONTINGUT ############*/
+section{
+    margin-top: 70px;
 }
+/*###################################*/
+
+/*############# FOOTER ##############*/
+footer {
+    border-top-style: groove;
+    border-color: black;
+    bottom: 0;
+}
+/*###################################*/
