@@ -4,7 +4,6 @@
 /*############# COMUN ###############*/
 *{
     font-family:  'Work Sans', sans-serif;
-    background-color: #eae9e8;
 }
 
 body {
@@ -12,8 +11,13 @@ body {
     padding: 0;
     min-height: 100vh;
     position: relative;
+    background-color: #f5f5f5;
 }
 
+a{
+    text-decoration: none;
+    color: white;
+}
 a:hover{
     text-decoration: underline;
 }
@@ -54,9 +58,12 @@ a:hover{
 /*############# HEADER ##############*/
 header{
     padding: 5px;
-    padding-bottom: 45px;
-    border-bottom-style: solid;
+    padding-top: 15px;
+    padding-bottom: 50px;
+    border-bottom-style: groove;
     border-color: black;
+    color: white;
+    background-color: #333333;
 }
 
 .menu-hamburguesa{
@@ -81,6 +88,12 @@ h1{ padding: 0; margin: 0;}
 /*###################################*/
 
 /*############ CONTINGUT ############*/
+.boto-cerca{
+    padding-top: 1px;
+    margin-bottom:0;
+    padding-bottom: 0;
+    
+}
 section{
     margin-top: 70px;
 }
@@ -88,6 +101,8 @@ section{
 
 /*############# FOOTER ##############*/
 footer {
+    color: white;
+    background-color: #333333;
     border-top-style: groove;
     border-color: black;
     bottom: 0;
