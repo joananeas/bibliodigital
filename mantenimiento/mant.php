@@ -2,7 +2,7 @@
     # © Joan Aneas
     #################################
     # Variables globales ############
-        $version = "v1.0.2 (alpha)";
+        $version = "v1.0.3 (alpha)";
         $nomBiblioteca = "vedruna vall";
         $titolWeb = "Biblio Digital";
         $favicon = "./ruta";
