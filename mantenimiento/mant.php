@@ -2,7 +2,7 @@
     # © Joan Aneas
     #################################
     # Variables globales ############
-        $version = "v1.0.3 (alpha)";
+        $version = "v1.0.4 (alpha)";
         $nomBiblioteca = "vedruna vall";
         $titolWeb = "Biblio Digital";
         $favicon = "./ruta";
@@ -11,7 +11,7 @@
         $textError;
     #################################
 
-    include "db.php"; # Datos para la conexión a la BBDD
+    require_once "db.php"; # Datos para la conexión a la BBDD
     try {
         $conexion = mysqli_connect(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
     

@@ -2,7 +2,11 @@
 <?php include 'mantenimiento/mant.php'; ?>
 
 <!-- Header DINAMICO -->
-<?php require "dynamo/header-dinamico.php"; ?>
+<?php 
+    require "dynamo/header-dinamico.php"; 
+    # Variables de dinámicos.
+    $estilos = ["principal.css", "componentes.css"];
+?>
 
 <body>
 <!-- Nav DINAMICO -->

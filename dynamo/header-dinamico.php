@@ -4,7 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" type="text/css" href="./estilos/index.css">
-    <link rel="stylesheet" type="text/css" href="./estilos/principal.css">
+<?php  
+    $espPagina = array();
+
+    if (isset($estilos)) {
+        foreach ($estilos as $value) {
+            echo "<link rel='stylesheet' type='text/css' href='./estilos/$value'>
+            ";
+        }
+    }
+?>
     <title><?php echo $titolWeb; ?></title><!--OK--><!--Debe de ser dinámico-->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Staatliches&display=swap" rel="stylesheet"> 
 </head>
+<!-- 
+    $estilos = [""];
+    $titolWeb = ;
+-->

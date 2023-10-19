@@ -1,0 +1,12 @@
+main{
+    font-family: 'Inter', sans-serif;
+    color: #333333 ;
+}
+section{
+    margin-top: 20px;
+}
+.header-libros, .libros {
+    display: block; /* Cambia a display: block para que se muestren uno encima del otro */
+    width: 100%; /* Ocupan todo el ancho disponible */
+    margin: 0; /* Elimina cualquier margen que pueda estar causando un espacio adicional */
+}
