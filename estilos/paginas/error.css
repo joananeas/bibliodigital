@@ -1,0 +1,38 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #4A68A0; /* Morado */
+}
+main{
+    text-align: center;
+    display: block;
+}
+h1{
+    font-size: 48px;
+    color: white;
+    margin-top: 10px;
+    font-family: 'Staatliches', sans-serif;
+    margin-bottom: 15px;
+}
+p{
+    color: white;
+}
+footer{
+    border:none;
+}
+.copyright{
+    text-align: center;
+    color: white;
+    font-family: 'Staatliches', sans-serif;
+}
+@media (max-width: 768px) {
+    .izquierda{
+        display: none;
+    }
+    .central{
+        text-align: left;
+    }
+}

@@ -29,3 +29,4 @@
     </main>
     <?php require "dynamo/footer-dinamico.php"; ?>
 </body>
+

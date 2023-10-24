@@ -2,13 +2,14 @@
     # © Joan Aneas
     #################################
     # Variables globales ############
-        $version = "v1.0.4 (alpha)";
+        $version = "v1.0.5 (alpha)";
         $nomBiblioteca = "vedruna vall";
         $titolWeb = "Biblio Digital";
         $favicon = "./ruta";
         $h1Web = "Biblio Digital";
         $numError; # Control de errores
         $textError;
+        $fueraDeRango = false;
     #################################
 
     require_once "db.php"; # Datos para la conexión a la BBDD

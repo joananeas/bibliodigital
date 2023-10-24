@@ -16,3 +16,7 @@ h1{
     width: 100%; /* Ocupan todo el ancho disponible */
     margin: 0; /* Elimina cualquier margen que pueda estar causando un espacio adicional */
 }
+textarea{
+    max-width: 300px;
+    max-height: 300px;
+}

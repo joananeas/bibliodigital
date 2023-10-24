@@ -13,6 +13,13 @@
             ";
         }
     }
+    // Si se encuentran fuera del directorio raíz
+    if (isset($estilosFueraRango)) {
+        foreach ($estilosFueraRango as $value) {
+            echo "<link rel='stylesheet' type='text/css' href='$value'>
+            ";
+        }
+    }
 ?>
     <title><?php echo $titolWeb; ?></title><!--OK--><!--Debe de ser dinámico-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
