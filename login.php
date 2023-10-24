@@ -21,7 +21,7 @@
                 <label>Usuari</label><br>
                 <input type="text" placeholder="nom_usuari"><br>
                 <label>Contrasenya&nbsp;</label><br>
-                <input type="text" placeholder="c0ntrasenya"><br>
+                <input type="password" placeholder="c0ntrasenya"><br>
                 <input class="submit" type="submit" value="Login">
             </form>
         </div>
