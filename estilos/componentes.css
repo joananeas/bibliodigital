@@ -40,6 +40,9 @@ body{
 }
 
 /* old.principal.css */
+input::placeholder{
+    font-family: 'Inter', sans-serif;
+}
 input:focus, textarea:focus {
     font-family: 'Inter', sans-serif;
     outline: none; 
