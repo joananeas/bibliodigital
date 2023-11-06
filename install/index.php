@@ -34,7 +34,6 @@
         <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Biblio Digital</span></a>
     </main>
     <?php
-    header('Content-Type: application/json');
     error_reporting(0);
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $servidor = $_POST['server'];
