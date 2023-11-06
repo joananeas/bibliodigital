@@ -1,0 +1,14 @@
+aside{
+    width: 50%;
+    display: inline-block;
+}
+article{
+    margin: 0;
+    padding: 0;
+    width: 30%;
+    display: inline-block;
+}
+/* img{
+    max-width:"400px";
+    max-height:"400";
+} */

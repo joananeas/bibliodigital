@@ -14,11 +14,18 @@
                 <a href="index.php">Home</a>
                 <a href="./install/">Install</a>';
             }
+            
         ?>
     </div>
     <span class="derecha">&copy; <a href="https://github.com/joananeas">Joan Aneas</a></span>
 </footer> 
-
+<?php
+    if (isset($scripts)) {
+        foreach ($scripts as $value) {
+            echo $value . "</script>";
+        }
+    }
+?>
 <!-- 
     $estilos = [""];
     $titolWeb = ;

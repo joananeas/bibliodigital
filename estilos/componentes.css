@@ -18,7 +18,7 @@ body{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 
-.boton{
+/* .boton{
     font-family: 'Staatliches', sans-serif;
     text-align: center;
     float: none;
@@ -32,7 +32,7 @@ body{
     padding-right: 8px;
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+} */
 .enFocus:focus{
     outline: none; 
     border: 2px solid #4A68A0; 
@@ -40,6 +40,9 @@ body{
 }
 
 /* old.principal.css */
+input{
+    font-family: 'Inter', sans-serif;
+}
 input::placeholder{
     font-family: 'Inter', sans-serif;
 }
@@ -82,6 +85,29 @@ a:hover{
     text-align: center; /* Alinea el texto al centro */
     margin: 0; /* Elimina el margen para que no haya espacio adicional */
 }
+
+.botonUniversal{
+    font-family: 'Staatliches', sans-serif;
+    text-align: center;
+    float: none;
+    margin-top: 20px;
+    background-color: #4A68A0;
+    color: white;
+    border: none;
+    font-size: 18px;
+    padding: 4px;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 4px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: 0.3s;
+}
+.botonUniversal:hover{
+    padding-left: 12px;
+    padding-right: 12px;
+    transition: 0.3s;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
 /* ############################################# */
 
 
@@ -104,7 +130,6 @@ a:hover{
 
 
 /* ################# Fuentes #################### */
-@import url('fuentes/Inter/');
 .fuenteH1{ font-family: 'Staatliches', sans-serif; }
 .fuenteTexto{ font-family: 'Inter', sans-serif; }
 /* ############################################# */

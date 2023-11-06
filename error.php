@@ -1,19 +1,19 @@
 <?php
-include './../mantenimiento/mant.php'; 
+include './mantenimiento/mant.php'; 
 # Variables de dinámicos.
 $estilos = ["componentes.css", "paginas/error.css"];
 $espPagina = ["<meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1 '>"];
 error_reporting(0);
 
 // Comprueba si existen las cookies de error
-if (isset($_COOKIE['numError']) && isset($_COOKIE['textError'])) {
-    $numError = $_COOKIE['numError']; 
-    $textError = $_COOKIE['textError'];
-    // Limpia las cookies para evitar mostrar los errores nuevamente en futuras cargas de la página
-    setcookie('numError', '', time() - 3600, '/');
-    setcookie('textError', '', time() - 3600, '/');
-}
-?>
+// if (isset($_COOKIE['numError']) && isset($_COOKIE['textError'])) {
+//     $numError = $_COOKIE['numError']; 
+//     $textError = $_COOKIE['textError'];
+//     // Limpia las cookies para evitar mostrar los errores nuevamente en futuras cargas de la página
+//     setcookie('numError', '', time() - 3600, '/');
+//     setcookie('textError', '', time() - 3600, '/');
+// }
+// ?>
 
 <!-- Header DINAMICO -->
 <?php require "dynamo/header-dinamico.php"; ?>
@@ -26,7 +26,7 @@ if (isset($_COOKIE['numError']) && isset($_COOKIE['textError'])) {
 
     <main>
         <h1>🛠️Error <?php echo $numError; ?>🛠️</h1>
-        <p><?php echo $textError;?><a href="./index.php">Torna a l'inici...</a></p>
+        <p><?php echo $textError." ";?><a style="text-decoration:underline;" href="./index.php">Torna a l'inici...</a></p>
     </main>
     <?php require "dynamo/footer-dinamico.php"; ?>
 </body>

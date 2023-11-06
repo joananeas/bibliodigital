@@ -2,26 +2,14 @@
     # © Joan Aneas
     #################################
     # Variables globales ############
-        $version = "v1.0.5 (alpha)";
+        $version = "v1.0.6 (alpha)";
         $nomBiblioteca = "vedruna vall";
         $titolWeb = "Biblio Digital";
         $favicon = "./ruta";
         $h1Web = "Biblio Digital";
-        $numError; # Control de errores
-        $textError;
+        $numError = "E-0003"; # Control de errores
+        $textError = "Error de connexió amb la base de dades.";
         $fueraDeRango = false;
-
-        // Ruta al archivo README.md
-        $readmePath = './../README.md';
-
-        // Contenido del README.md
-        $readmeContent = file_get_contents($readmePath);
-
-        // Reemplaza el marcador en el contenido del README.md con el valor de $version
-        $readmeContent = str_replace('<!-- VERSION -->', $version, $readmeContent);
-
-        // Guarda el contenido modificado en el archivo README.md
-        file_put_contents($readmePath, $readmeContent);
     #################################
 
     require_once "db.php"; # Datos para la conexión a la BBDD

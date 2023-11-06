@@ -12,7 +12,33 @@ h1{
     transform: translateX(-8px) translateY(8px);
 }
 .header-libros, .libros {
-    display: block; /* Cambia a display: block para que se muestren uno encima del otro */
+    display: inline-block; /* Cambia a display: block para que se muestren uno encima del otro */
     width: 100%; /* Ocupan todo el ancho disponible */
     margin: 0; /* Elimina cualquier margen que pueda estar causando un espacio adicional */
+}
+.header-libros{
+    margin-bottom: 10px;
+}
+
+.libros{
+    text-align: center;
+    justify-content: center;
+    width: 200px;
+    height: 320px;
+    overflow-x: hidden;
+    /* border-style: solid;
+    border-color: #333333;
+    border-width: 1px;
+    border-radius: 5px; */
+    margin-right: 15px;
+    border-radius: 4px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;}
+.descrip{
+    height: 30px;
+    padding-left: 4px;
+    padding-right: 4px;
+    font-size: 13px;
+}
+.botonLibros{
+    display: inline-block;
 }
