@@ -1,4 +1,5 @@
 # Biblio Digital 📚 (alpha)
+*** Encara NO és funcional ***
 És un projecte per a fi de curs del meu grau superior, DAM.
 Consisteix en un "repositori" digital dels llibres físics d'una biblioteca, obert per a totes les escoles/biblioteques.
 El seu propòsit no és una biblioteca per a llibres digitals (aka kindle) o altra multimèdia digital.
