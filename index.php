@@ -1,9 +1,9 @@
 <!--© Joan Aneas-->
 <?php 
-    include 'mantenimiento/mant.php'; 
-    # Variables de dinámicos.
-    $estilos = ["componentes.css", "paginas/index.css"];
-    $espPagina = ["<meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1 '>"];
+    // include 'mantenimiento/mant.php'; 
+    // # Variables de dinámicos.
+    // $estilos = ["componentes.css", "paginas/index.css"];
+    // $espPagina = ["<meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1 '>"];
 ?>
 
 <!-- Header DINAMICO -->
@@ -63,5 +63,6 @@
 
 <!-- Footer DINAMICO -->
 <?php require "dynamo/footer-dinamico.php"; ?>
+<!-- <script src="mantenimiento/scripts/index.js"></script> -->
 </body>
 </html>

@@ -1,6 +1,6 @@
 <header>
     <button class="menu-hamburguesa"><!--Hamburguesa-->📚</button>
-    <span class="titulo"><h1><?php echo $h1Web; ?></h1></span><!--OK--><!--Debe de ser dinámico-->
+    <span class="titulo"><h1 id="titulo"></h1></span>
     <div class="cuenta-logout">
         <a class="logout">Logout</a>
     </div>

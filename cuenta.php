@@ -1,10 +1,10 @@
 <!--© Joan Aneas-->
 <?php 
-    include 'mantenimiento/mant.php'; 
-    # Variables de dinámicos.
-    $h1Web = "Compte d'usuari";
-    $estilos = ["componentes.css", "paginas/cuenta.css"];
-    $espPagina = ["<meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1 '>"];
+    // include 'mantenimiento/mant.php'; 
+    // # Variables de dinámicos.
+    // $h1Web = "Compte d'usuari";
+    // $estilos = ["componentes.css", "paginas/cuenta.css"];
+    // $espPagina = ["<meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1 '>"];
 ?>
 
 <!-- Header DINAMICO -->

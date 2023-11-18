@@ -1,31 +1,23 @@
 <footer class="centrado">
-    <span class="izquierda"><?php echo $version; ?></span><!--OK--><!--dinamico-->
+    <span class="izquierda" id="version"></span><!--OK--><!--dinamico-->
     <div class="central">
-        <?php 
-            if($fueraDeRango === true) {
-                echo '<a href="'.$ruta.'login.php">Login</a>
-                <a href="'.$ruta.'cuenta.php">Cuenta</a>
-                <a href="'.$ruta.'index.php">Home</a>
-                <a href="'.$ruta.'install/">Install</a>';
-            }
-            else{
-                echo '<a href="login.php">Login</a>
-                <a href="cuenta.php">Cuenta</a>
-                <a href="index.php">Home</a>
-                <a href="./install/">Install</a>';
-            }
-            
-        ?>
+        <a href="login.php">Login</a>
+        <a href="cuenta.php">Cuenta</a>
+        <a href="index.php">Home</a>
+        <a href="./install/">Install</a>
     </div>
     <span class="derecha">&copy; <a href="https://github.com/joananeas">Joan Aneas</a></span>
+    <script src="mantenimiento/scripts/index.js">
+        // const urlFueraRango = window.location.href;
+        // const script = document.createElement("script");
+        // let ruta;
+        // if (urlFueraRango.includes("install")) ruta = "./../";
+        // else ruta = "./";
+        // script.type = "text/javascript";
+        // script.src = ruta + "mantenimiento/scripts/index.js";
+        // document.head.appendChild(script);
+    </script>
 </footer> 
-<?php
-    if (isset($scripts)) {
-        foreach ($scripts as $value) {
-            echo $value . "</script>";
-        }
-    }
-?>
 <!-- 
     $estilos = [""];
     $titolWeb = ;
