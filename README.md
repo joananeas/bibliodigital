@@ -4,8 +4,8 @@ _**❌[Encara NO és funcional]❌**_.
 Consisteix en un "repositori" digital dels llibres físics d'una biblioteca, obert per a totes les escoles/biblioteques.
 El seu propòsit no és una biblioteca per a llibres digitals (aka kindle) o altra multimèdia digital.
 
-### -> Pròximament traduït en CAT i ESP 🌍.
-### -> Suggeriments a joananeas@icloud.com // Feu una nova _ISSUE_ 🧠💡.
+##### -> Pròximament traduït en CAT i ESP 🌍.
+##### -> Suggeriments a joananeas@icloud.com // Feu una nova _ISSUE_ 🧠💡.
 
 # [SPONSOR] 💰
 Busco sponsor per a patrocinar la pàgina que allotjarà el codi font d'aquest SW. Aquest sponsor es podria emportar un % dels beneficis. Per a contactar amb mi: joananeas@icloud.com
