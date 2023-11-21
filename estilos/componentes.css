@@ -1,7 +1,7 @@
 /* Para facilitarme la vida y optimizar los estilos */
 /* ################# Otros ###################### */
 body{
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', sans-serif !important;
 }
 
 .debug{
@@ -149,37 +149,47 @@ a:hover{
 
 /* ############### Head/Foot ################### */
 header{
-    padding-top: 5px;
-    padding-bottom: 50px;
+    padding-bottom: 42px;
+    padding-top: 10px;
     border-color: black;
     color: white;
     background-color: #4A68A0;
+    margin-left: 22px;
+    margin-right: 22px;
 }
+
+.menu-links{
+    margin-top: 10px;
+    margin-right: 10px; /* Espaciado entre links */
+    float: left;
+}
+
 h1{ 
     font-family: 'Staatliches', sans-serif; 
     margin-top: 0;
     padding: 0;
+    margin-right: 10px;
 }
 .menu-hamburguesa{
-        margin-top: 10px;
-    width: 20px;
+    border-style: none;
+    background-color: transparent;
+    padding-top: 1px; /* Sesnsación de título en el centro del menú hamburguesa*/
+    margin-left: 0;
     float: left;
 }
 
 .titulo{
-    padding: 0%;
     float: left;
-    margin-left: 30px;
-    max-width: fit-content;
+    margin-left: 15px;
 }
 
-.cuenta-logout{
-    max-width: fit-content;
+.logout{
+    padding-top: 10px;
     float: right;
 }
 
 footer {
-    font-family:'Staatliches', sans-serif !important;
+    font-family:'Staatliches', sans-serif;
     color: white;
     background-color: #4A68A0;
     border-color: black;

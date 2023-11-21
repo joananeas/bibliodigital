@@ -7,7 +7,7 @@
         <a href="./install/">Install</a>
     </div>
     <span class="derecha">&copy; <a href="https://github.com/joananeas">Joan Aneas</a></span>
-    <script src="mantenimiento/scripts/index.js">
+    <script src="mantenimiento/scripts/mGlobales.js">
         // const urlFueraRango = window.location.href;
         // const script = document.createElement("script");
         // let ruta;

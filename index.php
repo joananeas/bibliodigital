@@ -1,11 +1,4 @@
 <!--© Joan Aneas-->
-<?php 
-    // include 'mantenimiento/mant.php'; 
-    // # Variables de dinámicos.
-    // $estilos = ["componentes.css", "paginas/index.css"];
-    // $espPagina = ["<meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1 '>"];
-?>
-
 <!-- Header DINAMICO -->
 <?php require "dynamo/header-dinamico.php"; ?>
 
