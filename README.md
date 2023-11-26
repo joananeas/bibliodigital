@@ -7,7 +7,7 @@ El seu propòsit no és una biblioteca per a llibres digitals (aka kindle) o alt
 **-> Pròximament traduït en CAT i ESP 🌍**.
 
 # [SPONSOR] 💰
-Busco sponsor per a patrocinar la pàgina que allotjarà el codi font d'aquest SW. Aquest sponsor es podria emportar un % dels beneficis. Per a contactar amb mi: joananeas@icloud.com
+Busco sponsor per a patrocinar la pàgina que allotjarà el codi font d'aquest SW. Aquest sponsor es podria emportar un % dels beneficis. Per a contactar amb mi: joananeas@icloud.com.
 
 # Open-Source 🛰️
 El projecte és totalment gratuït, però ofereix suport a les escoles/centres que no disposen de servidors per a allotjar aquest SW. 
