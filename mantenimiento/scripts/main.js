@@ -1,9 +1,20 @@
-// Realizo un fetch de mantenimiento para recibir todos los datos.
+console.log("[LOAD] main.js");
 
-fetch("mantenimiento/api.php")
-    .then(response => response.json())
-    .then(data => { 
-        console.log(data);
+
+
+loadGlobals = async () => {
+    try {
+        const response = await $.ajax({
+            url: "./mantenimiento/api.php",
+            method: "POST",
+            data: {
+                pttn: 0,
+            }
+        });
+
+        const data = JSON.parse(response);
+        console.log("[RESPONSE] ", data);
+
         let tituloFavicon = document.getElementById("tituloTab");
         let tituloH1 = document.getElementById("titulo");
         const versionElement = document.getElementById("version");
@@ -12,15 +23,28 @@ fetch("mantenimiento/api.php")
         // Solo lo imprime si existe (en login no).
         tituloH1 !== null ? tituloH1.textContent = data.h1Web : null;
         versionElement.textContent = data.version;
-    })
-    .catch(error => console.error('Error:', error));
+    } catch (error) {
+        console.log("[ERROR (API_Request)] ", error);
+    }
+}
 
+// Realizo un fetch de mantenimiento para recibir todos los datos
 
 const estilosIndex = ["componentes.css", "paginas/index.css"];
 const estilosCuenta = ["componentes.css", "paginas/cuenta.css"];
 const estilosLogin = ["componentes.css", "paginas/login.css"];
 const estilosError = ["componentes.css", "paginas/error.css"];
 const estilosInstall = ["./../estilos/componentes.css", "./../estilos/paginas/instalacion.css"];
+
+const cargarEstilos = (estilos) => {
+    for (let i = 0; i < estilos.length; i++) {
+        let linkEstilos = document.createElement("link");
+        linkEstilos.rel = "stylesheet";
+        linkEstilos.type = "text/css";
+        linkEstilos.href = "estilos/" + estilos[i];
+        document.head.appendChild(linkEstilos);
+    }
+}
 
 const url = window.location.href;
 
@@ -47,12 +71,13 @@ switch (true) {
     // Agregar más casos según sea necesario
 }
 
-function cargarEstilos(estilos) {
-    for (let i = 0; i < estilos.length; i++) {
-        let linkEstilos = document.createElement("link");
-        linkEstilos.rel = "stylesheet";
-        linkEstilos.type = "text/css";
-        linkEstilos.href = "estilos/" + estilos[i];
-        document.head.appendChild(linkEstilos);
-    }
-}
+// Aplica estilos de carga
+document.documentElement.style.display = 'block';
+document.documentElement.className += ' loading';
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Reemplaza los estilos de carga con los estilos completos cuando el DOM está completamente cargado
+    document.documentElement.className = document.documentElement.className.replace('loading', '');
+});
+
+document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
