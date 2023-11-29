@@ -7,16 +7,8 @@
         <a href="./install/">Install</a>
     </div>
     <span class="derecha">&copy; <a href="https://github.com/joananeas">Joan Aneas</a></span>
-    <script src="mantenimiento/scripts/mGlobales.js">
-        // const urlFueraRango = window.location.href;
-        // const script = document.createElement("script");
-        // let ruta;
-        // if (urlFueraRango.includes("install")) ruta = "./../";
-        // else ruta = "./";
-        // script.type = "text/javascript";
-        // script.src = ruta + "mantenimiento/scripts/index.js";
-        // document.head.appendChild(script);
-    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> 
+    <script src="mantenimiento/scripts/main.js"></script>
 </footer> 
 <!-- 
     $estilos = [""];

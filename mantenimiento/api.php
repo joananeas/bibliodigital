@@ -32,7 +32,6 @@
     $apiGlobales = new API_Globales("v1.0.7 (alpha)", "vedruna vall", "Biblio Digital", "./ruta", "Biblio Digital");
     
     // Obtener y mostrar los datos en formato JSON
-    echo $apiGlobales->obtenerDatos();
 
     class API_Libro{
         public $nombreLibro;
@@ -57,5 +56,13 @@
         }
 
 
+    }
+
+    $peticion = $_GET["pttn"] ?? null;
+
+    switch($peticion){
+        case 0:
+            echo $apiGlobales->obtenerDatos();
+            break;
     }
 ?>
