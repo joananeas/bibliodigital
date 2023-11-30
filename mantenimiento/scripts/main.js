@@ -2,17 +2,15 @@ console.log("[LOAD] main.js");
 
 
 
-loadGlobals = async () => {
-    try {
-        const response = await $.ajax({
-            url: "./mantenimiento/api.php",
-            method: "POST",
-            data: {
-                pttn: 0,
-            }
-        });
-
-        const data = JSON.parse(response);
+const loadGlobals = () => {
+    fetch("./mantenimiento/api.php", {
+        method: "POST",
+        body: JSON.stringify({
+            pttn: 0,
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
         console.log("[RESPONSE] ", data);
 
         let tituloFavicon = document.getElementById("tituloTab");
@@ -21,11 +19,12 @@ loadGlobals = async () => {
 
         tituloFavicon.textContent = data.titolWeb;
         // Solo lo imprime si existe (en login no).
-        tituloH1 !== null ? tituloH1.textContent = data.h1Web : null;
+        tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
         versionElement.textContent = data.version;
-    } catch (error) {
+    })
+    .catch(error => {
         console.log("[ERROR (API_Request)] ", error);
-    }
+    });
 }
 
 // Realizo un fetch de mantenimiento para recibir todos los datos
