@@ -3,11 +3,12 @@ console.log("[LOAD] main.js");
 
 
 const loadGlobals = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getGlobals');
+
     fetch("./mantenimiento/api.php", {
         method: "POST",
-        body: JSON.stringify({
-            pttn: 0,
-        }),
+        body: formData
     })
     .then(response => response.json())
     .then(data => {

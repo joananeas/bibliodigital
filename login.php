@@ -19,10 +19,10 @@
         <h1>Inicia Sessió</h1>
             <form>
                 <label>Usuari</label><br>
-                <input type="text" placeholder="nom_usuari"><br>
+                <input id="email" type="text" placeholder="nom_usuari"><br>
                 <label>Contrasenya&nbsp;</label><br>
-                <input type="password" placeholder="c0ntrasenya"><br>
-                <input class="submit" type="submit" value="Login">
+                <input id="password" type="password" placeholder="c0ntrasenya"><br>
+                <input id="login" class="submit" type="submit" value="Login">
             </form>
         </div>
         <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Biblio Digital</span></a>

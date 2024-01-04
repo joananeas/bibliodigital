@@ -5,7 +5,7 @@
     $peticion = $_GET["pttn"] ?? null;
     function conn_db($conn){
         $conn == true ? $msg = "Conexión exitosa" : $msg = "Error: No se pudo conectar a MySQL.";
-        echo json_encode($msg);
+        //echo json_encode($msg);
     }
 
     function auth_users($conn, $user, $pass){
@@ -31,11 +31,11 @@
     switch($peticion){
         case 0:
             conn_db($conn);
-            echo json_encode("[pttn::0]");
+            //echo json_encode("[pttn::0]");
             break;
         case 1:
             auth_users($conn, $user, $pass);
-            echo json_encode("[pttn::1]");
+            //echo json_encode("[pttn::1]");
             break;
         default:
             echo json_encode("Error: No se ha encontrado la petición.");
