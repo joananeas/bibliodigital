@@ -1,51 +1,5 @@
 console.log("[LOAD] main.js");
 
-let inputCerca = false;
-document.getElementById("inputCercaLlibres").addEventListener("change", function() {
-    if (inputCerca === false) {
-        document.getElementById("buscadorLlibres").style.display = "block";
-        inputCerca = true;
-    } else {
-        document.getElementById("buscadorLlibres").style.display = "none";
-        inputCerca = false;
-    }
-});
-
-document.getElementById("inputCercaLlibres").addEventListener("input", function() {
-    console.log("Input: ", this.value);
-    let formData = new FormData();
-    formData.append('pttn', 'cercaLlibres');
-    formData.append('llibre', this.value);
-    if (this.value !== "") {
-        fetch("./mantenimiento/api.php", {
-            method: "POST",
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log("[RESPONSE: Cerca] ", data);
-            if(data.response === "OK") {
-                let llibres = data.llibres;
-                let llibresDiv = document.getElementById("buscadorLlibres");
-                llibresDiv.innerHTML = "";
-                for(let i = 0; i < llibres.length; i++) {
-                    let llibre = llibres[i];
-                    let llibreLi = document.createElement("li");
-                    llibreLi.className = "llibre";
-                    llibreLi.textContent = llibre.nom; // Cambia 'titol' a 'nom'
-                    llibresDiv.appendChild(llibreLi);
-                    if (i === llibres.length - 1) {
-                        llibreLi.style.borderBottom = "none";
-                    }
-                }
-            }
-        })
-        .catch(error => {
-            console.log("[ERROR (API_Request)] ", error);
-        });
-    }
-});
-
 const loadGlobals = () => {
     let formData = new FormData();
     formData.append('pttn', 'getGlobals');
@@ -78,7 +32,22 @@ const estilosIndex = ["componentes.css", "paginas/index.css"];
 const estilosCuenta = ["componentes.css", "paginas/cuenta.css"];
 const estilosLogin = ["componentes.css", "paginas/login.css"];
 const estilosError = ["componentes.css", "paginas/error.css"];
+const estilosLibro = ["componentes.css", "paginas/libro.css"];
 const estilosInstall = ["./../estilos/componentes.css", "./../estilos/paginas/instalacion.css"];
+
+const scriptsIndex = ["home.js"];
+//const scriptsCuenta = ["cuenta.js"];
+const scriptsLogin = ["login.js"];
+//const scriptsError = ["error.js"];
+const scriptsInstall = ["install.js"];
+
+const cargarScripts = (scripts) => {
+    for (let i = 0; i < scripts.length; i++) {
+        let script = document.createElement("script");
+        script.src = "mantenimiento/scripts/" + scripts[i];
+        document.body.appendChild(script);
+    }
+}
 
 const cargarEstilos = (estilos) => {
     for (let i = 0; i < estilos.length; i++) {
@@ -95,22 +64,32 @@ const url = window.location.href;
 switch (true) {
     case url.includes("index"):
         cargarEstilos(estilosIndex);
+        cargarScripts(scriptsIndex);
         console.log("indice");
         break;
     case url.includes("cuenta"):
         cargarEstilos(estilosCuenta);
+        cargarScripts(scriptsCuenta);
         console.log("cuenta");
         break;
     case url.includes("login"):
         cargarEstilos(estilosLogin); 
+        cargarScripts(scriptsLogin);
         console.log("login");
         break;
     case url.includes("install"):
         cargarEstilos(estilosInstall); 
-        console.log("login");
+        cargarScripts(scriptsInstall);
+        console.log("install");
+        break;
+    case url.includes("libro"):
+        cargarEstilos(estilosIndex);
+        cargarScripts(scriptsIndex);
+        console.log("libro");
         break;
     default:
         cargarEstilos(estilosIndex); // normalmente sale / en vez de /index.php
+        cargarScripts(scriptsIndex);
         break;
     // Agregar más casos según sea necesario
 }

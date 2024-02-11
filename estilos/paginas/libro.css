@@ -1,14 +1,19 @@
-aside{
-    width: 50%;
-    display: inline-block;
+.container {
+    display: flex;
+    flex-wrap: wrap;
 }
-article{
-    margin: 0;
-    padding: 0;
-    width: 30%;
-    display: inline-block;
+
+.aside-image, .aside-text {
+    flex: 1 0 50%; /* Esto significa que cada aside tendrá un ancho base del 50%, pero puede crecer para llenar el espacio disponible si es necesario */
+    box-sizing: border-box; /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
 }
-/* img{
-    max-width:"400px";
-    max-height:"400";
-} */
+
+.book-image {
+    max-width: 100%; /* Esto asegura que la imagen no se desborde de su contenedor */
+    height: auto; /* Esto mantiene la relación de aspecto de la imagen */
+}
+
+article {
+    flex: 1 0 100%; /* Esto significa que el artículo tendrá un ancho base del 100%, pero puede crecer para llenar el espacio disponible si es necesario */
+    box-sizing: border-box; /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
+}

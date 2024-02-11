@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.1.1");
+    define("VERSION", "v1.1.2");
 
     function peticionSQL(){
         require_once "db.php";
@@ -148,20 +148,21 @@
                 echo json_encode('La contraseña no es válida! (hashed: '.$hashedPassword.', passwd: '.$password.')');
             }
             break;
+
         case 'authUsuario':
             $email = $_POST["email"];
             $password = $_POST["password"];
             $resp = $apiUsuarios->autenticarUsuario($email, $password);
-            echo $resp;
+            echo $resp; # No hace falta json_encode, ya que el método lo hace.
             break;
+
         case 'headerAuthUsuario':
             $auth = $_SESSION["email"];
-            $resp = $apiUsuarios->autenticarUsuario($email, $password);
-            echo $resp;
-            break;
-    
+            $resp = $apiUsuarios->headerAuthUsuario();
+            echo $resp; # No hace falta json_encode, ya que el método lo hace.
+            break; 
+            
         default:
             echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
             break;
     }
-?>
