@@ -1,6 +1,50 @@
 console.log("[LOAD] main.js");
 
+let inputCerca = false;
+document.getElementById("inputCercaLlibres").addEventListener("change", function() {
+    if (inputCerca === false) {
+        document.getElementById("buscadorLlibres").style.display = "block";
+        inputCerca = true;
+    } else {
+        document.getElementById("buscadorLlibres").style.display = "none";
+        inputCerca = false;
+    }
+});
 
+document.getElementById("inputCercaLlibres").addEventListener("input", function() {
+    console.log("Input: ", this.value);
+    let formData = new FormData();
+    formData.append('pttn', 'cercaLlibres');
+    formData.append('llibre', this.value);
+    if (this.value !== "") {
+        fetch("./mantenimiento/api.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log("[RESPONSE: Cerca] ", data);
+            if(data.response === "OK") {
+                let llibres = data.llibres;
+                let llibresDiv = document.getElementById("buscadorLlibres");
+                llibresDiv.innerHTML = "";
+                for(let i = 0; i < llibres.length; i++) {
+                    let llibre = llibres[i];
+                    let llibreLi = document.createElement("li");
+                    llibreLi.className = "llibre";
+                    llibreLi.textContent = llibre.nom; // Cambia 'titol' a 'nom'
+                    llibresDiv.appendChild(llibreLi);
+                    if (i === llibres.length - 1) {
+                        llibreLi.style.borderBottom = "none";
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
+    }
+});
 
 const loadGlobals = () => {
     let formData = new FormData();
@@ -76,7 +120,6 @@ document.documentElement.style.display = 'block';
 document.documentElement.className += ' loading';
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Reemplaza los estilos de carga con los estilos completos cuando el DOM está completamente cargado
     document.documentElement.className = document.documentElement.className.replace('loading', '');
 });
 

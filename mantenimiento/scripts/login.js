@@ -11,6 +11,12 @@ const authUsuario = (email, password) => {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        if (data.response === 'ok') {
+            window.location.href = './index.php';
+        }
+        else {
+            alert("Los datos introducidos no son correctos."); // TODO: Mejorar el mensaje de error.
+        }
     })
     .catch(error => {
         console.error('Error al procesar la solicitud', error);

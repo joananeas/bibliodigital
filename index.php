@@ -6,7 +6,21 @@
 
 <!-- Nav DINAMICO -->
 <?php require "dynamo/nav-dinamico.php"; ?>
+    <nav class="frame" style="margin-left:0; margin-right:0; margin-top:20px; padding:0;">
+        <li><a href="index.php">🏠 Inici</a></li>
+        <li><a href="llibres.php">🔍 Cerca de llibres</a></li>
+        <li><a href="prestecs.php">💡 Buffet lectura</a></li>
+        <li><a href="perfil.php">📚 Gestió de reserves</a></li>
+        <li><a href="perfil.php">🚩 Enquestes </a></li>
+        <li><a href="perfil.php">⚙️ Gestió del compte</a></li>
+        <li style="border: none;"><a href="perfil.php">📬 Bústia suggerim.</a>
+    </nav>
     <main>
+        <section class="frame" style="padding: 0;">
+            <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">    
+            <!-- <button class="botonUniversal" id="btnCercaLlibres">Cerca</button> -->
+            <div class="buscadorLlibres" id="buscadorLlibres"></div>
+        </section>
         <section class="carroussel">
             <button class="anterior">Anterior</button>
             <img class="carroussel-img" src="media/prueba.jpg">
@@ -56,6 +70,5 @@
 
 <!-- Footer DINAMICO -->
 <?php require "dynamo/footer-dinamico.php"; ?>
-<!-- <script src="mantenimiento/scripts/index.js"></script> -->
 </body>
 </html>
