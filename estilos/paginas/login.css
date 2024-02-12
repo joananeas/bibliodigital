@@ -59,6 +59,10 @@ input:focus {
     transition: 0.3s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+.submit:focus{
+    font-family: 'Staatliches', sans-serif;
+}
+
 footer{
     border:none;
 }
@@ -74,4 +78,18 @@ footer{
     .central{
         text-align: left;
     }
+}
+
+#loginConfirmacion {
+    transition: cubic-bezier(0.19, 1, 0.22, 1);
+    display: none;
+    text-align: center;
+    padding: 8px;
+    color: white;
+    border-radius: 4px;
+    margin-top: -25px;
+    z-index: 1;
+    position: fixed;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }

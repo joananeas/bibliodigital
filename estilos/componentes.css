@@ -1,7 +1,7 @@
 /* Para facilitarme la vida y optimizar los estilos */
 /* ################# Otros ###################### */
 body{
-    font-family: 'Inter', sans-serif !important;
+    font-family: 'Inter', sans-serif;
 }
 
 .debug{
@@ -107,6 +107,9 @@ a:hover{
     padding-right: 12px;
     transition: 0.3s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+.botonUniversal:focus{
+    font-family: 'Staatliches', sans-serif;
 }
 /* ############################################# */
 

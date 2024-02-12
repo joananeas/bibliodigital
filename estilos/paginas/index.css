@@ -198,3 +198,10 @@ nav a:hover{
     list-style: none;
     border-bottom: 1px solid #333333;
 }
+
+.estadoLlibro{
+    margin-left: 5px;
+    margin-right: 12px;
+    list-style: none;
+    font-family: 'Staatliches', sans-serif;
+}

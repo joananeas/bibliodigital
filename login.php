@@ -15,6 +15,7 @@
     </style>
 
     <main>
+        <span id="loginConfirmacion">Login Correcte.</span>
         <div class="login">
         <h1>Inicia Sessió</h1>
             <form>

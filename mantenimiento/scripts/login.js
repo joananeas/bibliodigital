@@ -11,11 +11,25 @@ const authUsuario = (email, password) => {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        /* #00A550 (verde) #C51E3A (rojo) */
+        let confirmacion = document.getElementById("loginConfirmacion");
         if (data.response === 'ok') {
-            window.location.href = './index.php';
+            confirmacion.style.transition = "all 0.5s ease-in-out";
+            confirmacion.style.backgroundColor = "#00A550";
+            confirmacion.innerHTML = "Login Correcte";
+            confirmacion.style.display = "block";
+            setTimeout(() => {
+                window.location.href = './index.php';
+            }, 1000);
         }
         else {
-            alert("Los datos introducidos no son correctos."); // TODO: Mejorar el mensaje de error.
+            confirmacion.style.transition = "all 0.5s ease-in-out";
+            confirmacion.style.display = "block";
+            confirmacion.style.backgroundColor = "#C51E3A";
+            confirmacion.innerHTML = "Les dades no són correctes";
+            setTimeout(() => {
+                confirmacion.style.display = "none";
+            }, 3000);
         }
     })
     .catch(error => {
@@ -23,24 +37,24 @@ const authUsuario = (email, password) => {
     });
 }
 
-const genPasswd = () => {
-    let formData = new FormData();
-    formData.append('pttn', 'genPasswd');
+// const genPasswd = () => {
+//     let formData = new FormData();
+//     formData.append('pttn', 'genPasswd');
 
-    fetch('./mantenimiento/api.php', {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error('Error al procesar la solicitud', error);
-    });
-}
+//     fetch('./mantenimiento/api.php', {
+//         method: 'POST',
+//         body: formData
+//     })
+//     .then(response => response.json())
+//     .then(data => {
+//         console.log(data);
+//     })
+//     .catch(error => {
+//         console.error('Error al procesar la solicitud', error);
+//     });
+// }
 
-genPasswd();
+// genPasswd();
 
 document.getElementById("login").addEventListener("click", function(e){
     e.preventDefault();

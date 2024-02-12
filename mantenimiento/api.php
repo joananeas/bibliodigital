@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.1.2");
+    define("VERSION", "v1.1.3"); # Mejora del buscador + Peticiones a libro.php OK
 
     function peticionSQL(){
         require_once "db.php";
@@ -46,18 +46,18 @@
         // private $apellido;
         private $email;
         private $password;
-        // private $rol;
+        private $rol; # Admin, Bibliotecario, Moderador y Usuario
         // private $estado;
         // private $fechaRegistro;
         // private $fechaActualizacion;
 
-        public function __construct($email, $password){
+        public function __construct($email, $password, $rol){
             // $this->id = $id;
             // $this->nombre = $nombre;
             // $this->apellido = $apellido;
             $this->email = $email;
             $this->password = $password;
-            // $this->rol = $rol;
+            $this->rol = $rol;
             // $this->estado = $estado;
             // $this->fechaRegistro = $fechaRegistro;
             // $this->fechaActualizacion = $fechaActualizacion;
@@ -70,7 +70,7 @@
                 // "apellido" => $this->apellido,
                 "email" => $this->email,
                 "password" => $this->password,
-                // "rol" => $this->rol,
+                "rol" => $this->rol,
             );
             return json_encode($datos);
         }
@@ -113,7 +113,7 @@
         }
     }
 
-    $apiUsuarios = new API_Usuarios(null, null);
+    $apiUsuarios = new API_Usuarios(null, null, null);
     $peticion = $_POST["pttn"] ?? null;
 
     switch($peticion){
@@ -121,10 +121,10 @@
             echo $apiGlobales->obtenerDatos();
             break;
 
-        case 'cercaLlibres':
+        case 'cercaLlibresLite': # Solo busca por nombre y estado, para el buscador.
             $conn = peticionSQL();
             $llibre = $_POST["llibre"];
-            $sql = "SELECT * FROM llibres WHERE nom LIKE '%$llibre%'";
+            $sql = "SELECT nom, estadoActual FROM llibres WHERE nom LIKE '%$llibre%'";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
                 $rows = array();
@@ -135,7 +135,22 @@
             } else {
                 echo json_encode(['response' => 'ERROR']);
             }
-
+            break;
+        
+        case 'cercaLlibresFull': # Busca por todos los campos, para libro.php.
+            $conn = peticionSQL();
+            $llibre = $_POST["llibre"];
+            $sql = "SELECT * FROM llibres WHERE nom = $llibre";
+            $result = mysqli_query($conn, $sql);
+            if (mysqli_num_rows($result) > 0) {
+                $rows = array();
+                while ($row = mysqli_fetch_assoc($result)) {
+                    $rows[] = $row;
+                }
+                echo json_encode(['response' => 'OK', 'llibres' => $rows]);
+            } else {
+                echo json_encode(['response' => 'ERROR']);
+            }
             break;
 
         case 'genPasswd':
@@ -157,7 +172,6 @@
             break;
 
         case 'headerAuthUsuario':
-            $auth = $_SESSION["email"];
             $resp = $apiUsuarios->headerAuthUsuario();
             echo $resp; # No hace falta json_encode, ya que el método lo hace.
             break; 

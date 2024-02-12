@@ -36,7 +36,7 @@ const estilosLibro = ["componentes.css", "paginas/libro.css"];
 const estilosInstall = ["./../estilos/componentes.css", "./../estilos/paginas/instalacion.css"];
 
 const scriptsIndex = ["home.js"];
-//const scriptsCuenta = ["cuenta.js"];
+const scriptsLibro = ["libro.js"];
 const scriptsLogin = ["login.js"];
 //const scriptsError = ["error.js"];
 const scriptsInstall = ["install.js"];
@@ -83,8 +83,8 @@ switch (true) {
         console.log("install");
         break;
     case url.includes("libro"):
-        cargarEstilos(estilosIndex);
-        cargarScripts(scriptsIndex);
+        cargarEstilos(estilosLibro);
+        cargarScripts(scriptsLibro);
         console.log("libro");
         break;
     default:
