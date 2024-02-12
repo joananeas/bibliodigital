@@ -1,5 +1,5 @@
 
-// document.getElementById("inputCercaLlibres").addEventListener("focusout", function() {
+// document.getElementById("buscador").addEventListener("focusout", function() {
 //     document.getElementById("buscadorLlibres").style.display = "none";
 // });
 document.getElementById("inputCercaLlibres").addEventListener("focus", function() {

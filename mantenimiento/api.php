@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.1.3"); # Mejora del buscador + Peticiones a libro.php OK
+    define("VERSION", "v1.2.0"); # Mejora del buscador + Peticiones a libro.php OK
 
     function peticionSQL(){
         require_once "db.php";

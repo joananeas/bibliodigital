@@ -16,7 +16,7 @@
         <li style="border: none;"><a href="perfil.php">📬 Bústia suggerim.</a>
     </nav>
     <main>
-        <section class="frame" style="padding: 0;">
+        <section id="buscador" class="frame" style="padding: 0;">
             <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">    
             <!-- <button class="botonUniversal" id="btnCercaLlibres">Cerca</button> -->
             <div class="buscadorLlibres" id="buscadorLlibres"></div>
