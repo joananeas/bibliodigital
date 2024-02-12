@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.2.0"); # Mejora del buscador + Peticiones a libro.php OK
+    define("VERSION", "v1.2.0-1"); # Mejora del buscador + Peticiones a libro.php OK
 
     function peticionSQL(){
         require_once "db.php";
@@ -41,33 +41,18 @@
     // Obtener y mostrar los datos en formato JSON
 
     class API_Usuarios{
-        // private $id;
-        // private $nombre;
-        // private $apellido;
         private $email;
         private $password;
         private $rol; # Admin, Bibliotecario, Moderador y Usuario
-        // private $estado;
-        // private $fechaRegistro;
-        // private $fechaActualizacion;
 
         public function __construct($email, $password, $rol){
-            // $this->id = $id;
-            // $this->nombre = $nombre;
-            // $this->apellido = $apellido;
             $this->email = $email;
             $this->password = $password;
             $this->rol = $rol;
-            // $this->estado = $estado;
-            // $this->fechaRegistro = $fechaRegistro;
-            // $this->fechaActualizacion = $fechaActualizacion;
         }
 
         public function obtenerDatos(){
             $datos = array(
-                // "id" => $this->id,
-                // "nombre" => $this->nombre,
-                // "apellido" => $this->apellido,
                 "email" => $this->email,
                 "password" => $this->password,
                 "rol" => $this->rol,
