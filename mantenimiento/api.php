@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.2.1"); # Mejora del buscador + Peticiones a libro.php OK
+    define("VERSION", "v1.2.2"); # Logout OK (refactor a JS necesario)
 
     function peticionSQL(){
         require_once "db.php";
@@ -184,6 +184,16 @@
             $resp = $apiUsuarios->headerAuthUsuario();
             echo $resp; # No hace falta json_encode, ya que el método lo hace.
             break; 
+        
+        case 'logout':
+            session_start();
+            session_destroy();
+            echo json_encode([
+                "api" => null,
+                "response" => "ok",
+                "message" => "Usuario desautenticado"
+            ]);
+            break;
             
         default:
             echo json_encode("[ERROR (API)] No se ha encontrado la petición.");

@@ -98,7 +98,6 @@ switch (true) {
         break;
     // Agregar más casos según sea necesario
 }
-
 // Aplica estilos de carga
 document.documentElement.style.display = 'block';
 document.documentElement.className += ' loading';

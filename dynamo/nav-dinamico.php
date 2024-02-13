@@ -3,8 +3,32 @@
     <span class="titulo"><h1 id="titulo"></h1></span>
     <a class="menu-links" href="libro.php">Cercar llibres</a>
     <a class="menu-links" href="#">Pjt Carlos</a>
-    <!-- <a class="logout"><img src="./media/icons/menuHamburguesa.png" width="35px" height="35px" alt="icono del usuario, accedo a la cuenta."></a> -->
+    <button id="logoutBoton" class="logout">Logout</button>
 </header>
+
+<script>
+    document.getElementById("logoutBoton").addEventListener("click", () => {
+        console.log("[LOGOUT] Cerrando sesión...");
+        let formData = new FormData();
+        formData.append('pttn', 'logout');
+        fetch("./mantenimiento/api.php", {
+            method: "POST",
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if(data.response === "ok") {
+                console.log("[LOGOUT] Sesión cerrada.");
+                window.location.href = "./login.php";
+            } else {
+                console.log("[LOGOUT] Error al cerrar sesión.");
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
+    });
+</script>
 
 <script>
     let menuImg = document.getElementById("menuTogglerImg");
