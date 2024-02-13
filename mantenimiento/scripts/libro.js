@@ -28,7 +28,7 @@ else {
             console.log(data.llibres.estadoActual);
         }
     })
-        .catch(error => {
-            console.log("[ERROR (API_Request)] ", error);
-        });
+    .catch(error => {
+        console.log("[ERROR (API_Request)] ", error);
+    });
 }

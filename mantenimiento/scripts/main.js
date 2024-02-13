@@ -31,14 +31,14 @@ const loadGlobals = () => {
 const estilosIndex = ["componentes.css", "paginas/index.css"];
 const estilosCuenta = ["componentes.css", "paginas/cuenta.css"];
 const estilosLogin = ["componentes.css", "paginas/login.css"];
-const estilosError = ["componentes.css", "paginas/error.css"];
+const estilosReservas = ["componentes.css", "paginas/reservas.css"];
 const estilosLibro = ["componentes.css", "paginas/libro.css"];
 const estilosInstall = ["./../estilos/componentes.css", "./../estilos/paginas/instalacion.css"];
 
 const scriptsIndex = ["home.js"];
 const scriptsLibro = ["libro.js"];
 const scriptsLogin = ["login.js"];
-//const scriptsError = ["error.js"];
+const scriptsReservas = ["reservas.js"];
 const scriptsInstall = ["install.js"];
 
 const cargarScripts = (scripts) => {
@@ -76,6 +76,11 @@ switch (true) {
         cargarEstilos(estilosLogin); 
         cargarScripts(scriptsLogin);
         console.log("login");
+        break;
+    case url.includes("reservas"):
+        cargarEstilos(estilosReservas);
+        cargarScripts(scriptsReservas);
+        console.log("reservas");
         break;
     case url.includes("install"):
         cargarEstilos(estilosInstall); 

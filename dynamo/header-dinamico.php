@@ -19,7 +19,9 @@
 </head>
 
 <?php 
-    // include_once "./mantenimiento/api.php"; 
-    // $apiUsuarios = new API_Usuarios($email, $password);
-    //$auth = headerAuthUsuario();
+    session_start();
+    $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    if((!isset($_SESSION['email']) && strpos($url, 'login') === false)) { 
+        header("Location: ./login.php"); 
+    }
 ?>
