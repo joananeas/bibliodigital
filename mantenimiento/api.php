@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.2.2"); # Logout OK (refactor a JS necesario)
+    define("VERSION", "v1.2.3"); # Roles + libros
 
     function peticionSQL(){
         require_once "db.php";
@@ -73,11 +73,29 @@
             }  
 
             session_start();
-            $_SESSION['email'] = $email;
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['rol'] = $row['rol'];
 
             return json_encode([
                 "api" => $row,
                 "response" => "ok"
+            ]);
+        }
+
+        public function getRol(){
+            session_start();
+            if (!isset($_SESSION['rol'])) {
+                return json_encode([
+                    "api" => null,
+                    "response" => "error",
+                    "message" => "Usuario no autenticado"
+                ]);
+            }
+
+            return json_encode([
+                "api" => $_SESSION['rol'],
+                "response" => "ok",
+                "message" => "Usuario autenticado"
             ]);
         }
 
@@ -102,6 +120,10 @@
     $peticion = $_POST["pttn"] ?? null;
 
     switch($peticion){
+        case 'getRol':
+            echo $apiUsuarios->getRol();
+            break;
+
         case 'getGlobals':
             echo $apiGlobales->obtenerDatos();
             break;
@@ -125,7 +147,7 @@
         case 'cercaLlibresFull': # Busca por todos los campos, para libro.php.
             $conn = peticionSQL();
             $llibre = $_POST["llibre"];
-            $sql = "SELECT * FROM llibres WHERE nom = $llibre";
+            $sql = "SELECT * FROM llibres WHERE nom = '$llibre'";
             $result = mysqli_query($conn, $sql);
             if (mysqli_num_rows($result) > 0) {
                 $rows = array();

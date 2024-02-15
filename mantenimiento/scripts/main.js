@@ -26,6 +26,20 @@ const loadGlobals = () => {
     });
 }
 
+const getRol = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getRol');
+    fetch("./mantenimiento/api.php", {
+        method: "POST",
+        body: formData
+    }).then(response => response.json())
+    .then(data => {
+        console.log("[ROL] ", data);
+    }).catch(error => {
+        console.log("[ERROR (API_Request)] ", error);
+    });
+}
+
 // Realizo un fetch de mantenimiento para recibir todos los datos
 
 const estilosIndex = ["componentes.css", "paginas/index.css"];
@@ -107,3 +121,4 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
+document.addEventListener("DOMContentLoaded", () => { getRol(); });

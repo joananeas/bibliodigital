@@ -24,8 +24,11 @@ else {
     .then(response => response.json())
     .then(data => {
         if(data.response === "OK") {
-            console.log(data.llibres.nom);
-            console.log(data.llibres.estadoActual);
+            console.log(data);
+            data.llibres.forEach(libro => {
+                document.getElementById('tituloLibro').innerHTML = libro.nom;
+                document.getElementById('estrellas').innerHTML = libro.estrellas;
+            });
         }
     })
     .catch(error => {

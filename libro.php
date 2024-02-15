@@ -16,11 +16,11 @@
                 <img src="./media/sistema/pruebas.jpg" class="book-image">
             </aside>
             <aside class="aside-text">
-                <p>Titol: <span class="fuenteH1"></span></p>
+                <p>Títol: <span id="tituloLibro" class="fuenteH1"></span></p>
             </aside>    
             <article>
                 <h3 class="fuenteH1"></h3>
-                <span>Estrellas</span>
+                <span>Estrellas: </span><span id="estrellas" class="fuenteH1"></span>
             </article>
         </div>
     </section>

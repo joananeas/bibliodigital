@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-02-2024 a las 08:23:43
+-- Tiempo de generación: 15-02-2024 a las 19:29:23
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -29,17 +29,20 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `llibres` (
   `nom` varchar(255) NOT NULL,
-  `estadoActual` tinyint(1) DEFAULT NULL
+  `estadoActual` tinyint(1) DEFAULT NULL,
+  `estrellas` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `llibres`
 --
 
-INSERT INTO `llibres` (`nom`, `estadoActual`) VALUES
-('El libro de la selva', 1),
-('Viaje al centro de la Tierra', 0),
-('Los tres cerditos', 0);
+INSERT INTO `llibres` (`nom`, `estadoActual`, `estrellas`) VALUES
+('El libro de la selva', 1, NULL),
+('Viaje al centro de la Tierra', 1, 7.5),
+('Los tres cerditos', 0, NULL),
+('Les tres bessones', 0, 6.7),
+('Les tres bessones', 0, 6.7);
 
 -- --------------------------------------------------------
 
@@ -72,15 +75,19 @@ INSERT INTO `reserves` (`reserva`, `nomLlibre`, `dataInici`, `dataFi`) VALUES
 
 CREATE TABLE `usuaris` (
   `email` varchar(255) NOT NULL,
-  `passwd` varchar(255) NOT NULL
+  `passwd` varchar(255) NOT NULL,
+  `rol` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `usuaris`
 --
 
-INSERT INTO `usuaris` (`email`, `passwd`) VALUES
-('joananeas', '1234');
+INSERT INTO `usuaris` (`email`, `passwd`, `rol`) VALUES
+('joananeas', '1234', ''),
+('admin', '1234', 'admin'),
+('admin', '1234', 'admin'),
+('usuari', '1234', 'user');
 
 --
 -- Índices para tablas volcadas
