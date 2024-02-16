@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.2.3"); # Roles + libros
+    define("VERSION", "v1.2.4"); # Creación archivo db.php (instalación) aun no implementada.
 
     function peticionSQL(){
         require_once "db.php";

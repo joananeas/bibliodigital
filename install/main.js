@@ -9,6 +9,7 @@ const error = () => {
     f.style.border = "2px solid red";
 }
 
+console.log("hola");
 const comprobarConn = () => {
     let form = {
         "host": document.getElementById("server").value,
@@ -25,9 +26,10 @@ const comprobarConn = () => {
     fetch('./db-conn.php', {
         method: 'POST',
         body: JSON.stringify(form),
-    }).then(response => {
-        if(response.status === "ok") {
-            console.log(response);
+    }).then(response => response.json()) // Primero, analiza la respuesta en JSON
+      .then(data => { // Luego, maneja los datos
+        console.log(data); // Esto debería mostrar {"status":"ok","message":"Connexi\u00f3 a la base de dades correcta"}
+        if(data.status == "ok") {
             success();
         } else {
             error();
