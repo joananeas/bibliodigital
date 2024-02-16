@@ -12,20 +12,20 @@
 </head>
 <body>
     <main>
-        <div style="display: none;" id="formInstalacionNormal" class="login">
+        <div style="display: block;" id="formInstalacionNormal" class="login">
             <h1>Instal·lació</h1>
             <h4>(BBDD)</h4>
             <form method="POST" id="mainForm" action="">
                 <label>Servidor</label><br>
-                <input type="text" name="server" placeholder="localhost"><br>
+                <input type="text" id="server" placeholder="localhost"><br>
                 <label>Nom BBDD</label><br>
-                <input type="text" name="nom" placeholder="bibliodigitalDB"><br>
+                <input type="text" id="nom" placeholder="bibliodigitalDB"><br>
                 <label>Usuari</label><br>
-                <input type="text" name="usuari" placeholder="nom_usuari"><br>
+                <input type="text" id="usuari" placeholder="nom_usuari"><br>
                 <label>Contrasenya</label><br>
-                <input type="password" name="passwd" placeholder="c0ntrasenya"><br>
+                <input type="password" id="passwd" placeholder="c0ntrasenya"><br>
                 <!-- Evita que el formulario se envíe automáticamente y maneja el evento onclick con JavaScript -->
-                <input class="submit" id="submit" type="button" value="Enviar🛠️" onclick="enviarFormulario();">
+                <input class="submit" id="submit" type="button" value="Enviar🛠️">
             </form>
         </div>
         <div style="display: none;" id="formInstalacionLoading" class="login">
@@ -33,7 +33,6 @@
         </div>
         <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Biblio Digital</span></a>
     </main> 
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

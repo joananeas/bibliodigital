@@ -161,6 +161,41 @@ header{
     margin-right: 22px;
 }
 
+nav{
+    box-sizing: border-box;
+    width: auto; /* Cambia esto a auto */
+    left: 20px; /* Añade esta línea */
+    right: 20px; /* Añade esta línea */
+    position: absolute;
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    z-index: 1;
+    padding: 0;
+}
+
+nav li{
+    box-sizing: border-box; /* Añade esta línea */
+    width: 100%;
+    padding:10px;
+    list-style: none;
+    display: inline-block;
+    border-bottom: 1px solid #333333;
+}
+
+nav a{
+    font-family: 'Staatliches', sans-serif;
+    font-size: 24px;
+    text-decoration: none;
+    color: #333333;
+}
+
+nav a:hover{
+    text-decoration: none;
+}
+
 .menu-links{
     margin-top: 10px;
     margin-right: 10px; /* Espaciado entre links */
