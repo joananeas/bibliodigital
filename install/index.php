@@ -30,6 +30,7 @@
         </div>
         <div style="display: none;" id="formInstalacionLoading" class="login">
             <h1>Instal·lant </h1>
+            <p id="statusInstalacion"></p>
         </div>
         <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Biblio Digital</span></a>
     </main> 

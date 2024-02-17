@@ -1,10 +1,20 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.2.5"); # Error.php OK
+    require_once "mant.php"; # Importa las constantes de mantenimiento.
 
+    # Conexión a la base de datos, constantes de db.php.
     function peticionSQL(){
         require_once "db.php";
-        $conn = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+        ob_start();
+        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
+        $key = 'bibliodigital';
+        
+        $host = openssl_decrypt(DB_HOST, 'aes-256-cbc', $key, 0, $iv);
+        $user = openssl_decrypt(DB_USER, 'aes-256-cbc', $key, 0, $iv);
+        $password = openssl_decrypt(DB_PASSWORD, 'aes-256-cbc', $key, 0, $iv);
+        $db = openssl_decrypt(DB_NAME, 'aes-256-cbc', $key, 0, $iv);
+
+        $conn = new mysqli($host, $user, $password, $db);
         return $conn;
     }
 
@@ -36,7 +46,7 @@
     }
     
     // Crear una instancia de la clase API_Globales
-    $apiGlobales = new API_Globales(VERSION, "vedruna vall", "Biblio Digital", "./media/sistema/favicon.svg", "Biblio Digital");
+    $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB);
     
     // Obtener y mostrar los datos en formato JSON
 
