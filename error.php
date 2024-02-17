@@ -1,32 +1,50 @@
-<?php
-include './mantenimiento/mant.php'; 
-# Variables de dinámicos.
-$estilos = ["componentes.css", "paginas/error.css"];
-$espPagina = ["<meta name='viewport' content='width=device-width, user-scalable=no, initial-scale=1 '>"];
-error_reporting(0);
-
-// Comprueba si existen las cookies de error
-// if (isset($_COOKIE['numError']) && isset($_COOKIE['textError'])) {
-//     $numError = $_COOKIE['numError']; 
-//     $textError = $_COOKIE['textError'];
-//     // Limpia las cookies para evitar mostrar los errores nuevamente en futuras cargas de la página
-//     setcookie('numError', '', time() - 3600, '/');
-//     setcookie('textError', '', time() - 3600, '/');
-// }
-// ?>
 
 <!-- Header DINAMICO -->
 <?php require "dynamo/header-dinamico.php"; ?>
 <body>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
-        
-        /* Aquí puedes agregar estilos específicos para centrar el contenido */
-    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const errorList = {
+                "0001": "Conexió a la base de dades fallida.",
+            };
 
+            const getError = () => {
+                let urlString = window.location.href;
+                let paramString = urlString.split('?')[1];
+                let queryString = new URLSearchParams(paramString);
+                let e = queryString.get('error');
+                console.log("Error is:" + e);
+                return e;
+            };
+
+            const assignError = (error) => {
+                let errorElement = document.getElementById('error');
+                let txtErrorElement = document.getElementById('txt-error');
+
+                Object.keys(errorList).forEach(key => {
+                    if (key === error) {
+                        txtErrorElement.innerHTML = errorList[key];
+                    }    
+                })
+
+                if (errorElement) {
+                    // La E- es para que se vea E-0001 en vez de 0001
+                    errorElement.innerHTML = error ? "E-" + error : "Error desconocido";
+                } else {
+                    console.log("Elemento de error no encontrado");
+                }
+            }
+
+            let e = getError();
+            assignError(e);
+        });
+    </script>
     <main>
-        <h1>🛠️Error <?php echo $numError; ?>🛠️</h1>
-        <p><?php echo $textError." ";?><a style="text-decoration:underline;" href="./index.php">Torna a l'inici...</a></p>
+        <section class="frame">
+            <h1>🛠️<span id="error"></span>🛠️</h1>
+            <p id="txt-error" style="background-color:#333333; color:white;"></p>
+            <p><a style="text-decoration:underline; color: #333333;" href="./index.php">Torna a l'inici...</a></p>
+        </section>
     </main>
     <?php require "dynamo/footer-dinamico.php"; ?>
 </body>

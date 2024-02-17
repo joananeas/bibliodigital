@@ -1,5 +1,28 @@
 console.log("[LOAD] main.js");
 
+const comprobarConexionBBDD = () => {  
+    if (window.location.href.includes("install") || window.location.href.includes("error")) return;
+    console.log("[CONEXION_BBDD] Comprobando conexión con la base de datos...");
+    let formData = new FormData();
+    formData.append('pttn', 'checkDB');
+    fetch("./mantenimiento/api.php", {
+        method: "POST",
+        body: formData
+    }).then(response => {
+        if (!response.ok) {
+            throw new Error('Respuesta no válida');
+        }
+        return response.json();
+    }).then(data => {
+        console.log("[CONEXION_BBDD] ", data);
+        if (data.response !== "ok") {
+            window.location.href = "./error.php?error=0001&msg=" + data;
+        }
+    }).catch(error => {
+        console.log("[ERROR (API_Request)] ", error);
+        window.location.href = "./error.php?error=0001&msg=" + error;
+    });
+}
 const loadGlobals = () => {
     let formData = new FormData();
     formData.append('pttn', 'getGlobals');
@@ -47,6 +70,7 @@ const estilosCuenta = ["componentes.css", "paginas/cuenta.css"];
 const estilosLogin = ["componentes.css", "paginas/login.css"];
 const estilosReservas = ["componentes.css", "paginas/reservas.css"];
 const estilosLibro = ["componentes.css", "paginas/libro.css"];
+const estilosError = ["componentes.css", "paginas/error.css"];
 const estilosInstall = ["./../estilos/componentes.css", "./../estilos/paginas/instalacion.css"];
 
 const scriptsIndex = ["home.js"];
@@ -54,6 +78,7 @@ const scriptsLibro = ["libro.js"];
 const scriptsLogin = ["login.js"];
 const scriptsReservas = ["reservas.js"];
 const scriptsInstall = ["install.js"];
+const scriptsError = ["error.js"];
 
 const cargarScripts = (scripts) => {
     for (let i = 0; i < scripts.length; i++) {
@@ -96,6 +121,13 @@ switch (true) {
         cargarScripts(scriptsReservas);
         console.log("reservas");
         break;
+    
+    case url.includes("error"):
+        cargarEstilos(estilosError);
+        cargarScripts(scriptsError);
+        console.log("error");
+        break;    
+
     case url.includes("install"):
         cargarEstilos(estilosInstall); 
         cargarScripts(scriptsInstall);
@@ -120,5 +152,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.documentElement.className = document.documentElement.className.replace('loading', '');
 });
 
+document.addEventListener("DOMContentLoaded", () => { comprobarConexionBBDD(); });
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
 document.addEventListener("DOMContentLoaded", () => { getRol(); });

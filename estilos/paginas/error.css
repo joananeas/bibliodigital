@@ -12,13 +12,13 @@ main{
 }
 h1{
     font-size: 52px;
-    color: white;
+    color: #333333;
     margin-top: 10px;
     font-family: 'Staatliches', sans-serif;
     margin-bottom: 15px;
 }
 p{
-    color: white;
+    color: #333333;
 }
 footer{
     border:none;

@@ -21,7 +21,7 @@
 <?php 
     session_start();
     $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    if((!isset($_SESSION['email']) && strpos($url, 'login') === false)) { 
+    if((!isset($_SESSION['email']) && (strpos($url, 'login') === false) && (strpos($url, 'error') === false))) { 
         header("Location: ./login.php"); 
     }
 ?>

@@ -1,6 +1,6 @@
 <?php
     # © Joan Aneas
-    define("VERSION", "v1.2.4"); # Creación archivo db.php (instalación) aun no implementada.
+    define("VERSION", "v1.2.5"); # Error.php OK
 
     function peticionSQL(){
         require_once "db.php";
@@ -120,6 +120,23 @@
     $peticion = $_POST["pttn"] ?? null;
 
     switch($peticion){
+        case 'checkDB':
+            if (($conn = peticionSQL())->connect_error) {
+                die(json_encode([
+                    "api" => null,
+                    "response" => "error",
+                    "message" => "Fallo en la conexion: " . $conn->connect_error
+                ]));
+            }
+            else {
+                echo json_encode([
+                    "api" => null,
+                    "response" => "ok",
+                    "message" => "Conexión a la base de datos exitosa"
+                ]);
+            }
+            break;
+
         case 'getRol':
             echo $apiUsuarios->getRol();
             break;
