@@ -1,3 +1,5 @@
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen) ![Version](https://img.shields.io/github/v/release/USER/REPO)
+
 _**❌[Encara NO és funcional]❌**_.  
 # Biblio Digital 📚 (alpha)
 És un projecte per a fi de curs del meu grau superior, DAM.
@@ -20,3 +22,9 @@ Modificar el codi per a personalitzar la pàgina web o accedir a funcions "premi
 # Qui sóc? 💻
 Em dic Joan. Tinc 19 anys i estudio Desenvolupament d'Aplicacions Multiplataforma. M'apassiona el desenvolupament web, sobre tot PHP.
 Em podeu buscar a LinkedIn per a més informació. No tinc més xarxes socials.
+
+# Documentació
+| Error                | Descripción                                                        | Solución                                   |
+|----------------------|--------------------------------------------------------------------|--------------------------------------------|
+| E-0001              | Connexió a la BBDD fallida.                                             | Re-run instal·lació / comprovar servidor mysql. Arxiu db.php no trobat.                   |
+| E-0002              | Configuració del site extraviada.                                             | Re-run instal·lació. Arxiu mant.php no trobat.                   |

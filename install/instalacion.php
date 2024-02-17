@@ -41,7 +41,9 @@
             # Es una buena práctica no cerrar con '? >'
             # los archivos php que no contienen código html 
             # fuente: https://www.php.net/basic-syntax.instruction-separation
-            $key = 'bibliodigital';
+            
+            # DEBUG (borrar en producción)
+            /*$key = 'bibliodigital';
             $host = openssl_decrypt($db_server, 'aes-256-cbc', $key, 0, $iv);
             $user = openssl_decrypt($db_user, 'aes-256-cbc', $key, 0, $iv);
             $password = openssl_decrypt($db_pass, 'aes-256-cbc', $key, 0, $iv);
@@ -50,7 +52,7 @@
             fwrite($archivo_db, "# host: ".$host."\n");
             fwrite($archivo_db, "# user: ".$user."\n");
             fwrite($archivo_db, "# password: ".$password."\n");
-            fwrite($archivo_db, "# db: ".$db."\n");
+            fwrite($archivo_db, "# db: ".$db."\n"); */
             
             fclose($archivo_db);
 
