@@ -36,7 +36,7 @@
     }
     
     // Crear una instancia de la clase API_Globales
-    $apiGlobales = new API_Globales(VERSION, "vedruna vall", "Biblio Digital", "./ruta", "Biblio Digital");
+    $apiGlobales = new API_Globales(VERSION, "vedruna vall", "Biblio Digital", "./media/sistema/favicon.svg", "Biblio Digital");
     
     // Obtener y mostrar los datos en formato JSON
 

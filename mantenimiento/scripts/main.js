@@ -40,6 +40,8 @@ const loadGlobals = () => {
         const versionElement = document.getElementById("version");
 
         tituloFavicon.textContent = data.titolWeb;
+        let favicon = document.getElementById("favicon");
+        favicon.href = data.favicon;
         // Solo lo imprime si existe (en login no).
         tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
         versionElement.textContent = data.version;
