@@ -23,6 +23,7 @@ const comprobarConexionBBDD = () => {
         window.location.href = "./error.php?error=0001&msg=" + error;
     });
 }
+
 const loadGlobals = () => {
     let formData = new FormData();
     formData.append('pttn', 'getGlobals');

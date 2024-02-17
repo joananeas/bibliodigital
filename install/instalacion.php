@@ -14,23 +14,26 @@
         * Se utiliza la función openssl_encrypt para encriptar el usuario, el nombre de la base de datos y el host.
         * La contraseña se encripta con password_hash.
         */
-
+        $randKey = openssl_random_pseudo_bytes(32);
         $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $db_server = openssl_encrypt($db_server, 'aes-256-cbc', 'bibliodigital', 0, $iv);
-        $db_user = openssl_encrypt($db_user, 'aes-256-cbc', 'bibliodigital', 0, $iv);
-        $db_name = openssl_encrypt($db_name, 'aes-256-cbc', 'bibliodigital', 0, $iv);
-        $db_pass = openssl_encrypt($db_pass, 'aes-256-cbc', 'bibliodigital', 0, $iv);
+        $db_server = openssl_encrypt($db_server, 'aes-256-cbc', $randKey, 0, $iv);
+        $db_user = openssl_encrypt($db_user, 'aes-256-cbc', $randKey, 0, $iv);
+        $db_name = openssl_encrypt($db_name, 'aes-256-cbc', $randKey, 0, $iv);
+        $db_pass = openssl_encrypt($db_pass, 'aes-256-cbc', $randKey, 0, $iv);
 
         if (file_exists("../mantenimiento/db.php")) {
             return json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
         }
 
         else {
+            sleep(1);
             $archivo_db = fopen("../mantenimiento/db.php", "w");
             fwrite($archivo_db, "<?php\n");
             fwrite($archivo_db, "# © Joan Aneas\n"); # (Comentario) Copyright
             fwrite($archivo_db, "# Este archivo fue generado automáticamente por el instalador de Bibliodigital.\n"); # (Comentario) Aviso.
             fwrite($archivo_db, "# NO MODIFICAR SI SE DESCONOCE EL FUNCIONAMIENTO.\n"); # (Comentario) Aviso.
+            fwrite($archivo_db, "define('DB_SERVER_IV', '".base64_encode($iv)."');\n"); # (Constante) IV, cifrado openssl.
+            fwrite($archivo_db, "define('DB_SERVER_KEY', '".base64_encode($randKey)."');\n"); # (Constante) KEY, cifrado openssl.
             fwrite($archivo_db, "define('DB_HOST', '".$db_server."');\n"); # (Constante) HOST, cifrado openssl.
             fwrite($archivo_db, "define('DB_USER', '".$db_user."');\n"); # (Constante) USER, cifrado openssl.
             fwrite($archivo_db, "define('DB_PASSWORD', '".$db_pass."');\n"); # (Constante) PASSWORD, cifrado openssl.
@@ -58,7 +61,6 @@
         case 'comprobarConn':
             if ($db_server == null || $db_user == null || $db_name == null) {
                 echo json_encode(["status" => "error", "message" => "Faltan datos."]);
-                return;
             }
 
             $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);

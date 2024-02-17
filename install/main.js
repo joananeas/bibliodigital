@@ -10,8 +10,9 @@ const crearArchivoDB = () => {
     formData.append("passwd", document.getElementById("passwd").value);
     formData.append("db", document.getElementById("nom").value);
     formData.append("peticion", "crearArchivoDb");
-
-    s.innerHTML = "Creando archivo de configuración...";
+    setTimeout(() => {
+        s.innerHTML = "Creando archivo de configuración...";
+    }, 1000);
 
     fetch('instalacion.php', {
         method: 'POST',
@@ -20,13 +21,20 @@ const crearArchivoDB = () => {
     .then(data => { // Luego, maneja los datos
         console.log(data); // Esto debería mostrar {"status":"ok","message":"Connexi\u00f3 a la base de dades correcta"}
         if(data.status == "ok") {
-                
+            s.innerHTML = "Archivo de configuración creado correctamente.";
+            s.style.backgroundColor = "green";
+            s.style.color = "white";
         } else {
             s.innerHTML = "Error al crear el archivo de configuración.";
             s.style.backgroundColor = "red";
             s.style.color = "white";
         }
+    }).catch(function() {
+        s.innerHTML = "Error al crear el archivo de configuración.";
+        s.style.backgroundColor = "red";
+        s.style.color = "white";
     });
+
 }
 
 
@@ -34,7 +42,9 @@ const success = () => {
     f.style.border = "2px solid green";
     document.getElementById("formInstalacionNormal").style.display = "none";
     document.getElementById("formInstalacionLoading").style.display = "block";
-    crearArchivoDB();
+    setTimeout(() => {
+        crearArchivoDB();
+    } , 1000);
 }
 
 const error = () => {

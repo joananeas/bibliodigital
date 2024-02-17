@@ -5,15 +5,15 @@
     # Conexión a la base de datos, constantes de db.php.
     function peticionSQL(){
         require_once "db.php";
-        ob_start();
-        $iv = openssl_random_pseudo_bytes(openssl_cipher_iv_length('aes-256-cbc'));
-        $key = 'bibliodigital';
+        // ob_start();
         
+        $key = base64_decode(DB_SERVER_KEY);
+        $iv = base64_decode(DB_SERVER_IV);
         $host = openssl_decrypt(DB_HOST, 'aes-256-cbc', $key, 0, $iv);
         $user = openssl_decrypt(DB_USER, 'aes-256-cbc', $key, 0, $iv);
         $password = openssl_decrypt(DB_PASSWORD, 'aes-256-cbc', $key, 0, $iv);
         $db = openssl_decrypt(DB_NAME, 'aes-256-cbc', $key, 0, $iv);
-
+        // ob_end_flush();
         $conn = new mysqli($host, $user, $password, $db);
         return $conn;
     }
@@ -132,11 +132,11 @@
     switch($peticion){
         case 'checkDB':
             if (($conn = peticionSQL())->connect_error) {
-                die(json_encode([
+                echo json_encode([
                     "api" => null,
                     "response" => "error",
                     "message" => "Fallo en la conexion: " . $conn->connect_error
-                ]));
+                ]);
             }
             else {
                 echo json_encode([

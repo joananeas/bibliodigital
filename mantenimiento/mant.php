@@ -14,7 +14,7 @@
     * mant.php [OK]
     * conexión a BBDD [OK] (realmente esta no se comprueba aquí, sino en api.php)
     */
-    define('INSTALLED', true); # true | false 
+    define('INSTALLED', false); # true | false 
 
     # Normalmente es el nombre institucional de la biblioteca / centro educativo
     define('NOM_BIBLIOTECA', 'vedruna vall');
@@ -32,4 +32,4 @@
     */
     define('FAVICON', './media/sistema/favicon.svg');
     # Versión del core.
-    define('VERSION', 'v1.2.6'); # Commit: Instalación 40% (encriptación cred.)
+    define('VERSION', 'v1.2.7'); # Commit: Instalación 60% (creación de db.php, falta mant.php)
