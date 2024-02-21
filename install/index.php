@@ -30,7 +30,10 @@
         </div>
         <div style="display: none;" id="formInstalacionLoading" class="login">
             <h1>Instal·lant </h1>
-            <p id="statusInstalacion"></p>
+            <p id="check-1">Comprobar archivo db.php<span id="cargando-1"></span></p>
+            <p id="check-2">Creando archivo db.php<span id="cargando-2">...</span></span></p>
+            <p id="check-3">Creando tablas<span id="cargando-3">...</span></p>
+            <p id="check-4">Creando usuario admin<span id="cargando-4">...</span></span></p>
         </div>
         <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Biblio Digital</span></a>
     </main> 

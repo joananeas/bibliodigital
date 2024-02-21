@@ -38,17 +38,12 @@ CREATE TABLE `llibres` (
 --
 
 INSERT INTO `llibres` (`nom`, `estadoActual`, `estrellas`) VALUES
-('El libro de la selva', 1, NULL),
+('El libro de la selva', 1, 4.5),
 ('Viaje al centro de la Tierra', 1, 7.5),
-('Los tres cerditos', 0, NULL),
-('Les tres bessones', 0, 6.7),
+('Los tres cerditos', 0, 9.4),
 ('Les tres bessones', 0, 6.7);
 
--- --------------------------------------------------------
 
---
--- Estructura de tabla para la tabla `reserves`
---
 
 CREATE TABLE `reserves` (
   `reserva` int(5) NOT NULL,
@@ -57,9 +52,6 @@ CREATE TABLE `reserves` (
   `dataFi` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Volcado de datos para la tabla `reserves`
---
 
 INSERT INTO `reserves` (`reserva`, `nomLlibre`, `dataInici`, `dataFi`) VALUES
 (1, 'prueba', '2024-02-01', '2024-02-15'),

@@ -7,6 +7,29 @@
     $db_pass = $_POST['passwd'] ?? ""; # Si la contraseña está vacía
     # se conectará sin contraseña (mala práctica, pero para pruebas está bien).
     
+    function crearTablasDB($db_server, $db_user, $db_name, $db_pass){
+        $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
+        $sql = file_get_contents("../min-bibliodigital.sql");
+        if ($conn->multi_query($sql)) {
+            // Ciclo a través de cada resultado para asegurarse de que se ejecuten todas las consultas
+            while ($conn->more_results() && $conn->next_result()) {
+                // Liberar cada conjunto de resultados para liberar memoria
+                $result = $conn->use_result();
+                if ($result instanceof mysqli_result) {
+                    $result->free();
+                }
+            }
+        
+            if ($conn->errno) {
+                return json_encode(["status" => "error", "message" => "Error al crear las tablas: " . $conn->error]);
+            } else {
+                return json_encode(["status" => "ok", "message" => "Tablas creadas con éxito."]);
+            }
+        } else {
+            return json_encode(["status" => "error", "message" => "Error al crear las tablas: " . $conn->error]);
+        }
+    }
+
     function crearFicheroDB($db_server, $db_user, $db_name, $db_pass, $randKey, $iv){
         sleep(1);
         $archivo_db = fopen("../mantenimiento/db.php", "w");
@@ -53,12 +76,11 @@
         
         fclose($archivo_db);            
 
-        if (file_exists("../mantenimiento/db.php")) {
-            return json_encode(["status" => "ok", "message" => "Archivo db.php creado con éxito."]);
-        }
-        else {
+        if (!file_exists("../mantenimiento/db.php")) {
             return json_encode(["status" => "error", "message" => "Error al crear el archivo db.php."]);
         }
+
+        return json_encode(["status" => "ok", "message" => "Archivo db.php creado con éxito."]);
     }
 
     function installation($db_server, $db_user, $db_name, $db_pass){
@@ -75,15 +97,13 @@
         $db_name = openssl_encrypt($db_name, 'aes-256-cbc', $randKey, 0, $iv);
         $db_pass = openssl_encrypt($db_pass, 'aes-256-cbc', $randKey, 0, $iv);
 
-        if (file_exists("../mantenimiento/db.php")) {
-            return json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
-        }
+        file_exists("../mantenimiento/db.php") ? unlink("../mantenimiento/db.php") : null;
+        //return json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
         
-        else {
-            $msg = crearFicheroDB($db_server, $db_user, $db_name, $db_pass, $randKey, $iv);
-            return $msg;
+        $msg = crearFicheroDB($db_server, $db_user, $db_name, $db_pass, $randKey, $iv);
+        return $msg;
+
         }
-    }
 
     switch ($peticion){
         case 'comprobarConn':
@@ -99,6 +119,13 @@
             }
             break;
 
+        case 'comprobarArchivoDb':
+            if (file_exists("../mantenimiento/db.php")) {
+                echo json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
+            } else {
+                echo json_encode(["status" => "ok", "message" => "El archivo db.php no existe."]);
+            }
+            break;
 
         case 'crearArchivoDb':
             $db_server = $_POST['host'] ?? null;
@@ -109,8 +136,15 @@
             $msg = installation($db_server, $db_user, $db_name, $db_pass);
             echo $msg;
             break;
+
+        case 'crearTablasDb':
+            $db_server = $_POST['host'] ?? null;
+            $db_user = $_POST['user'] ?? null;  
+            $db_name = $_POST['db'] ?? null;
+            $db_pass = $_POST['passwd'] ?? "";
+            echo crearTablasDB($db_server, $db_user, $db_name, $db_pass);
+            break;
         default:
             echo json_encode(["status" => "error", "message" => "Petición no reconocida: $peticion"]);
             break;
-
     }

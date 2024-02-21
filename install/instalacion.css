@@ -80,3 +80,11 @@ footer{
         text-align: left;
     }
 }
+
+.login p{
+    text-align: left;
+}
+
+.login .status{
+    text-align: right;
+}

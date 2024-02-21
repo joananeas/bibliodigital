@@ -31,5 +31,3 @@
     * Se recomienda que sea un SVG,ICO o PNG.
     */
     define('FAVICON', './media/sistema/favicon.svg');
-    # Versión del core.
-    define('VERSION', 'v1.2.8'); # Commit: Instalación 60% (creación de db.php, falta mant.php)
