@@ -3,7 +3,7 @@
     require_once "mant.php"; # Importa las constantes de mantenimiento.
 
     # Versión del core.
-    define('VERSION', 'v1.2.9'); # Commit: Instalación 70% (creación de tablas OK, falta mant.php y usuario admin).
+    define('VERSION', 'v1.2.9'); # Commit: Instalación 75% (html otros formularios) | /admin.
     # Conexión a la base de datos, constantes de db.php.
     function peticionSQL(){
         require_once "db.php";

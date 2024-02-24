@@ -12,7 +12,7 @@
 </head>
 <body>
     <main>
-        <div style="display: block;" id="formInstalacionNormal" class="login">
+        <div style="display: none;" id="formInstalacionNormal" class="login">
             <h1>Instal·lació</h1>
             <h4>(BBDD)</h4>
             <form method="POST" id="mainForm" action="">
@@ -28,6 +28,7 @@
                 <input class="submit" id="submit" type="button" value="Enviar🛠️">
             </form>
         </div>
+        
         <div style="display: none;" id="formInstalacionLoading" class="login">
             <h1>Instal·lant </h1>
             <p id="check-1">Comprobar archivo db.php<span id="cargando-1"></span></p>
@@ -35,6 +36,35 @@
             <p id="check-3">Creando tablas<span id="cargando-3">...</span></p>
             <p id="check-4">Creando usuario admin<span id="cargando-4">...</span></span></p>
         </div>
+
+        <div style="display: none;" id="formInstalacionAdmin" class="login">
+            <h1>Instal·lació</h1>
+            <h4>(Admin)</h4>
+            <form method="POST" id="adminForm" action="">
+                <p>Crea un compte d'usuari</p>
+                <label>Usuari</label><br>
+                <input type="text" id="admin" placeholder="admin"><br>
+                <label>Contrasenya</label><br>
+                <input type="password" id="adminPass" placeholder="admin"><br>
+                <input class="submit" id="submitAdmin" type="button" value="Enviar🛠️">
+            </form>
+        </div>
+
+        <div style="display: block;" id="formInstalacionFinal" class="login">
+            <h1>Instal·lació</h1>
+            <h4>(Config. site)</h4>
+            <form method="POST" id="finalForm" action="">
+                <p>Configura el teu lloc web</p>
+                <label>Nom del lloc</label><br>
+                <input type="text" id="nomLloc" placeholder="Biblio Digital"><br>
+                <label>Descripció</label><br>
+                <input type="text" id="descLloc" placeholder="Biblioteca digital"><br>
+                <label>Tema<span style="background-color:#4A68A0; border-radius:4px; color: white; padding-left: 3px; padding-right:3px; margin-left: 10px">soon</span></label><br>
+                <input class="submit" id="submitFinal" type="button" value="Enviar🛠️">
+            </form>
+        </div>
+        
+
         <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Biblio Digital</span></a>
     </main> 
     <script src="main.js"></script>

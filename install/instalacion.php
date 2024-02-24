@@ -106,6 +106,7 @@
         }
 
     switch ($peticion){
+        
         case 'comprobarConn':
             if ($db_server == null || $db_user == null || $db_name == null) {
                 echo json_encode(["status" => "error", "message" => "Faltan datos."]);
@@ -144,6 +145,7 @@
             $db_pass = $_POST['passwd'] ?? "";
             echo crearTablasDB($db_server, $db_user, $db_name, $db_pass);
             break;
+
         default:
             echo json_encode(["status" => "error", "message" => "Petición no reconocida: $peticion"]);
             break;
