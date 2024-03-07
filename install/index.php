@@ -14,6 +14,15 @@
     <main>
         <div style="display: none;" id="formInstalacionNormal" class="login">
             <h1>Instal·lació</h1>
+            <form method="POST" id="mainForm" action="">
+                <label>L'arxiu de configuració ja existeix. Vols continuar de totes formes?</label><br>
+                <input class="submit" type="button" value="↩️ Tornar">
+                <input class="submit" type="button" value="Continuar🛠️">
+            </form>
+        </div>
+
+        <div style="display: block;" id="formInstalacionNormal" class="login">
+            <h1>Instal·lació</h1>
             <h4>(BBDD)</h4>
             <form method="POST" id="mainForm" action="">
                 <label>Servidor</label><br>
@@ -50,7 +59,7 @@
             </form>
         </div>
 
-        <div style="display: block;" id="formInstalacionFinal" class="login">
+        <div style="display: none;" id="formInstalacionFinal" class="login">
             <h1>Instal·lació</h1>
             <h4>(Config. site)</h4>
             <form method="POST" id="finalForm" action="">

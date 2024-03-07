@@ -6,6 +6,45 @@
     $db_name = $_POST['db'] ?? null;
     $db_pass = $_POST['passwd'] ?? ""; # Si la contraseña está vacía
     # se conectará sin contraseña (mala práctica, pero para pruebas está bien).
+
+    if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
+        // Redirigir al usuario a otra página o mostrar un error
+        header('Location: ../error.php?error=404');
+        exit;
+    }
+
+    function crearFicheroMant() {
+        sleep(1);
+        $archivo_mant = fopen("../mantenimiento/mant.php", "w");
+        fwrite($archivo_mant, "<?php\n");
+        fwrite($archivo_mant, "    # © Joan Aneas\n\n");
+        fwrite($archivo_mant, "    /*\n");
+        fwrite($archivo_mant, "    *  El 'config.php' de Bibliodigital.\n");
+        fwrite($archivo_mant, "    *  Este archivo contiene las variables globales que se utilizan en todo el sistema.\n");
+        fwrite($archivo_mant, "    *  Estas constantes se modifican en /admin, y sobreescriben el fichero.\n");
+        fwrite($archivo_mant, "    *  IMPORTANTE: No modificar este archivo si se desconoce su funcionamiento.\n");
+        fwrite($archivo_mant, "    */\n\n");
+        fwrite($archivo_mant, "    # Comprueba si se ha instalado el sistema:\n");
+        fwrite($archivo_mant, "    /*\n");
+        fwrite($archivo_mant, "    * db.php [OK]\n");
+        fwrite($archivo_mant, "    * mant.php [OK]\n");
+        fwrite($archivo_mant, "    * conexión a BBDD [OK] (realmente esta no se comprueba aquí, sino en api.php)\n");
+        fwrite($archivo_mant, "    */\n");
+        fwrite($archivo_mant, "    define('INSTALLED', false); # true | false\n\n");
+        fwrite($archivo_mant, "    define('NOM_BIBLIOTECA', 'vedruna vall');\n");
+        fwrite($archivo_mant, "    define('TITOL_WEB', 'Biblio Digital');\n");
+        fwrite($archivo_mant, "    define('H1_WEB', 'Biblio Digital');\n");
+        fwrite($archivo_mant, "    define('FAVICON', './media/sistema/favicon.svg');\n");
+    
+        // Cierra el archivo y comprueba si se ha creado correctamente
+        fclose($archivo_mant);            
+    
+        if (!file_exists("../mantenimiento/mant.php")) {
+            return json_encode(["status" => "error", "message" => "Error al crear el archivo mant.php."]);
+        }
+    
+        return json_encode(["status" => "ok", "message" => "Archivo mant.php creado con éxito."]);
+    }
     
     function crearTablasDB($db_server, $db_user, $db_name, $db_pass){
         $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
@@ -120,6 +159,15 @@
             }
             break;
 
+        
+        case 'comprobarArchivoMant':
+            if (file_exists("../mantenimiento/mant.php")) {
+                echo json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
+            } else {
+                echo json_encode(["status" => "ok", "message" => "El archivo db.php no existe."]);
+            }
+            break;
+
         case 'comprobarArchivoDb':
             if (file_exists("../mantenimiento/db.php")) {
                 echo json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
@@ -147,6 +195,6 @@
             break;
 
         default:
-            echo json_encode(["status" => "error", "message" => "Petición no reconocida: $peticion"]);
+            echo json_encode(["status" => "error", "message" => "Peticion no reconocida: $peticion"]);
             break;
     }

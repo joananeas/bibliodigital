@@ -149,3 +149,19 @@ document.getElementById("submit").addEventListener("click", function(e) {
     e.preventDefault();
     comprobarConn();
 });
+
+document.addEventListener("DOMContentLoaded", function() {
+    fetch("instalacion.php?peticion=comprobarArchivoDb")
+    .then(response => response.json())
+    .then(data => {
+        if(data.status == "ok") {
+            document.getElementById("formInstalacionNormal").style.display = "none";
+            document.getElementById("formInstalacionLoading").style.display = "block";
+            comprobarArchivoDB("check-1");
+            crearArchivoDB("check-2");
+            crearTablas("check-3");
+        }
+    }).catch(function() {
+        console.log("Error");
+    });
+}); 

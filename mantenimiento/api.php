@@ -1,5 +1,12 @@
 <?php
     # © Joan Aneas
+    
+   /*___ ___ ___ _    ___ ___  
+    |   \_ _| _ ) |  |_ _/ _ \ 
+    | |) | || _ \ |__ | | (_) |
+    |___/___|___/____|___\___/  (ASCII art)*/
+
+
     require_once "mant.php"; # Importa las constantes de mantenimiento.
 
     # Versión del core.
