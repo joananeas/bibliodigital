@@ -6,170 +6,24 @@
     | |) | || _ \ |__ | | (_) |
     |___/___|___/____|___\___/  (ASCII art)*/
 
-
-    require_once "mant.php"; # Importa las constantes de mantenimiento.
+    ##################
+    #--- Includes ---#
+    ###########################################################################
+    /**/include_once "clases_api.php";                                        #
+    /**/require_once "mant.php"; # Importa las constantes de mantenimiento.   #
+    /**/include_once "func_api.php";                                          #
+    ###########################################################################
 
     # Versión del core.
     define('VERSION', 'v1.3.0'); # Commit: Carroussel semi automatizado.
     # Conexión a la base de datos, constantes de db.php.
-    function peticionSQL(){
-        require_once "db.php";
-        // ob_start();
-        
-        $key = base64_decode(DB_SERVER_KEY);
-        $iv = base64_decode(DB_SERVER_IV);
-        $host = openssl_decrypt(DB_HOST, 'aes-256-cbc', $key, 0, $iv);
-        $user = openssl_decrypt(DB_USER, 'aes-256-cbc', $key, 0, $iv);
-        $password = openssl_decrypt(DB_PASSWORD, 'aes-256-cbc', $key, 0, $iv);
-        $db = openssl_decrypt(DB_NAME, 'aes-256-cbc', $key, 0, $iv);
-        // ob_end_flush();
-        $conn = new mysqli($host, $user, $password, $db);
-        return $conn;
-    }
 
-    class API_Globales {
-        private $version;
-        private $nomBiblioteca;
-        private $titolWeb;
-        private $favicon;
-        private $h1Web;
-    
-        public function __construct($version, $nomBiblioteca, $titolWeb, $favicon, $h1Web) {
-            $this->version = $version;
-            $this->nomBiblioteca = $nomBiblioteca;
-            $this->titolWeb = $titolWeb;
-            $this->favicon = $favicon;
-            $this->h1Web = $h1Web;
-        }
-    
-        public function obtenerDatos() {
-            $datos = array(
-                "version" => $this->version,
-                "nomBiblioteca" => $this->nomBiblioteca,
-                "titolWeb" => $this->titolWeb,
-                "favicon" => $this->favicon,
-                "h1Web" => $this->h1Web
-            );
-            return json_encode($datos);
-        }
-    }
-    
-    // Crear una instancia de la clase API_Globales
+    // Instancias de las APIs
     $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB);
-    
-
-    class API_Carroussel {
-        private $foto;
-        private $ancho;
-        private $alto;
-        private $url;
-        public function __construct($url_fotos) {
-            $this->url = $url_fotos;
-        }
-    
-        public function obtenerDatos() {
-            $datos = array(
-                "foto" => $this->foto,
-                "ancho" => $this->ancho,
-                "alto" => $this->alto
-            );
-            return json_encode($datos);
-        }
-
-        public function obtenerFotos(){
-            $i = 0;
-            $flag = true;
-            if(!dir($this->url)) return json_encode(["api" => "url doesn't exist."]);
-            while($flag){
-                $i++;
-                if(!file_exists($this->url. 'prueba-' . $i . '.jpg')){
-                    $flag = false;
-                }
-                #echo "Fotos: ". $i;
-            }
-            return json_encode(["num_libros" => $i]);
-        }
-    }
     $apiCarroussel = new API_Carroussel("../media/sistema/carroussel/");
-    // Obtener y mostrar los datos en formato JSON
-
-    class API_Usuarios{
-        private $email;
-        private $password;
-        private $rol; # Admin, Bibliotecario, Moderador y Usuario
-
-        public function __construct($email, $password, $rol){
-            $this->email = $email;
-            $this->password = $password;
-            $this->rol = $rol;
-        }
-
-        public function obtenerDatos(){
-            $datos = array(
-                "email" => $this->email,
-                "password" => $this->password,
-                "rol" => $this->rol,
-            );
-            return json_encode($datos);
-        }
-        public function autenticarUsuario($email, $password){
-            //$password = md5($password);
-            $conn = peticionSQL();
-            $sql = "SELECT * FROM usuaris WHERE email = '$email' AND passwd = '$password'";
-            $result = mysqli_query($conn, $sql);
-            $row = mysqli_fetch_assoc($result);
-            if(!$row){
-                return json_encode([
-                    "api" => null,
-                    "response" => "error"
-                ]);
-            }  
-
-            session_start();
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['rol'] = $row['rol'];
-
-            return json_encode([
-                "api" => $row,
-                "response" => "ok"
-            ]);
-        }
-
-        public function getRol(){
-            session_start();
-            if (!isset($_SESSION['rol'])) {
-                return json_encode([
-                    "api" => null,
-                    "response" => "error",
-                    "message" => "Usuario no autenticado"
-                ]);
-            }
-
-            return json_encode([
-                "api" => $_SESSION['rol'],
-                "response" => "ok",
-                "message" => "Usuario autenticado"
-            ]);
-        }
-
-        public function headerAuthUsuario(){
-            session_start();
-            if (!isset($_SESSION['email'])) {
-                return json_encode([
-                    "api" => null,
-                    "response" => "error",
-                    "message" => "Usuario no autenticado"
-                ]);
-            }
-            return json_encode([
-                "api" => $_SESSION['email'],
-                "response" => "ok",
-                "message" => "Usuario autenticado"
-            ]);
-        }
-    }
-
     $apiUsuarios = new API_Usuarios(null, null, null);
+
+
     $peticion = $_POST["pttn"] ?? null;
 
     switch($peticion){
@@ -201,33 +55,13 @@
         case 'cercaLlibresLite': # Solo busca por nombre y estado, para el buscador.
             $conn = peticionSQL();
             $llibre = $_POST["llibre"];
-            $sql = "SELECT nom, estadoActual FROM llibres WHERE nom LIKE '%$llibre%'";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                $rows = array();
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $rows[] = $row;
-                }
-                echo json_encode(['response' => 'OK', 'llibres' => $rows]);
-            } else {
-                echo json_encode(['response' => 'ERROR']);
-            }
+            cercaLlibresLite($conn, $llibre);
             break;
         
         case 'cercaLlibresFull': # Busca por todos los campos, para libro.php.
             $conn = peticionSQL();
             $llibre = $_POST["llibre"];
-            $sql = "SELECT * FROM llibres WHERE nom = '$llibre'";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) > 0) {
-                $rows = array();
-                while ($row = mysqli_fetch_assoc($result)) {
-                    $rows[] = $row;
-                }
-                echo json_encode(['response' => 'OK', 'llibres' => $rows]);
-            } else {
-                echo json_encode(['response' => 'ERROR']);
-            }
+            cercaLlibresFull($conn, $llibre);
             break;
 
         case 'reservarLibro':
@@ -292,7 +126,6 @@
             echo $resp;
             break;
         default:
-            echo $apiCarroussel->obtenerFotos();
             echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
             break;
     }
