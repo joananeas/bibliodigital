@@ -46,13 +46,14 @@ class API_Carroussel {
     }
 
     public function obtenerFotos(){
-        $i = 1;
+        $i = 0;
         $flag = true;
         if(!dir($this->url)) return json_encode(["api" => "url doesn't exist."]);
         while($flag){
             $i++;
             if(!file_exists($this->url . 'prueba-' . $i . '.jpg')){
                 $flag = false;
+                $i--; # Compensa la vuelta extra
             }
             #echo "Fotos: ". $i;
         }

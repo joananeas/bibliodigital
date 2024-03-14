@@ -7,11 +7,11 @@
     $db_pass = $_POST['passwd'] ?? ""; # Si la contraseña está vacía
     # se conectará sin contraseña (mala práctica, pero para pruebas está bien).
 
-    if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
+    /*if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] != 'XMLHttpRequest') {
         // Redirigir al usuario a otra página o mostrar un error
         header('Location: ../error.php?error=404');
         exit;
-    }
+    }*/
 
     function crearFicheroMant() {
         sleep(1);

@@ -73,7 +73,40 @@ document.getElementById("inputCercaLlibres").addEventListener("input", function(
 const cBack = document.getElementById("c-anterior");
 const cNext = document.getElementById("c-siguiente"); 
 const cPhoto = document.getElementById("c-foto");
-let numFotos = getFotos();
+let tmpData;
+
+const getFotos = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getFotos');
+    fetch('./mantenimiento/api.php', {
+        method: "POST",
+        body: formData
+    }).then(response => response.json())
+    .then(data => {
+        console.log("[RESPONSE: Cerca] ", data);
+        tmpData = data.num_libros
+        const puntosCarroussel = document.getElementById("puntos-carroussel");
+        for(let i = 0; i < data.num_libros; i++){
+            let li = document.createElement("li");
+            li.id = "c-dot-" + i;
+            if (i === 0) li.className = "activo";
+            puntosCarroussel.appendChild(li);
+        }
+        console.log(data) 
+    })
+    .catch(error => {
+        console.log("[ERROR (API_Request)] ", error);
+    });
+};
+
+document.addEventListener("DOMContentLoaded", getFotos());
+
+const updateActiveDot = (newActiveIndex) => {
+    const dots = document.querySelectorAll("#puntos-carroussel li");
+    dots.forEach(dot => dot.classList.remove("activo"));
+    const newActiveDot = document.getElementById("c-dot-" + newActiveIndex);
+    if (newActiveDot) newActiveDot.classList.add("activo");
+};
 
 cBack.addEventListener("click", function() {
     let src = cPhoto.src;
@@ -82,8 +115,12 @@ cBack.addEventListener("click", function() {
     let partesPuntos = srcNumericoConExtension.split('.');
     let srcNumericoSinExtension = partesPuntos.slice(0, -1).join('.');
     srcNumericoSinExtension = parseInt(srcNumericoSinExtension);
-    srcNumericoSinExtension--;
-
+    if ((srcNumericoSinExtension < tmpData+1) && (srcNumericoSinExtension > 1)) srcNumericoSinExtension--;
+    else srcNumericoSinExtension = tmpData;
+    
+    console.log("num: ", tmpData, " actual: ", srcNumericoSinExtension);
+    let newActiveIndex = srcNumericoSinExtension - 1;
+    updateActiveDot(newActiveIndex);
     //console.log("nombre", partes,"Ext", partesPuntos[1], "Num: ", srcNumericoSinExtension);
     console.log("SRC: ", partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1]);
     cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
@@ -96,37 +133,13 @@ cNext.addEventListener("click", function() {
     const partesPuntos = srcNumericoConExtension.split('.');
     let srcNumericoSinExtension = partesPuntos.slice(0, -1).join('.');
     srcNumericoSinExtension = parseInt(srcNumericoSinExtension);
-    srcNumericoSinExtension++;
+    console.log("num: ", tmpData, " actual: ", srcNumericoSinExtension);
+    if (tmpData > srcNumericoSinExtension) srcNumericoSinExtension++;
+    else srcNumericoSinExtension = 1;
 
+    let newActiveIndex = srcNumericoSinExtension - 1;
+    updateActiveDot(newActiveIndex);
     //console.log("nombre", partes,"Ext", partesPuntos[1], "Num: ", srcNumericoSinExtension);
     console.log("SRC: ", partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1]);
     cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
 });
-
-const getFotos = () => {
-    console.log("test")
-    let formData = new FormData();
-    formData.append('pttn', 'getFotos');
-    fetch('./mantenimiento/api.php', {
-        method: "POST",
-        body: formData
-    }).then(response => response.json())
-    .then(data => {
-        console.log("[RESPONSE: Cerca] ", data);
-        const puntosCarroussel = document.getElementById("puntos-carroussel");
-        for(let i = 1; i < data.num_libros; i++){
-            let li = document.createElement("li");
-            li.id = "c-dot-" + i;
-            if (i === 1) li.className = "activo";
-            puntosCarroussel.appendChild(li);
-        }
-        console.log(data) 
-    })
-    .catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
-    });
-    return data.num_libros;
-};
-
-document.addEventListener("DOMContentLoaded", getFotos());
-

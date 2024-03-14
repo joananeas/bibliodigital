@@ -40,3 +40,22 @@ function cercaLlibresFull($conn, $llibre){
         echo json_encode(['response' => 'ERROR']);
     }
 }
+
+function reservarLibro($conn, $titulo, $fechaInicio, $fechaFin){
+    // Primero, verifica si el libro existe en la base de datos
+    $sql = "SELECT * FROM llibres WHERE nom = '$titulo'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        // Si el libro existe, inserta la reserva en la base de datos
+        $sql = "INSERT INTO `reserves` (`reserva`, `nomLlibre`, `dataInici`, `dataFi`) VALUES (NULL, ?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "sss", $titulo, $fechaInicio, $fechaFin);
+        if (mysqli_stmt_execute($stmt)) {
+            echo json_encode(['response' => 'OK']);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar la reserva en la base de datos']);
+        }
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'El libro no existe']);
+    }
+}
