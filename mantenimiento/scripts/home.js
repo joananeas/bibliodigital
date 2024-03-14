@@ -69,3 +69,58 @@ document.getElementById("inputCercaLlibres").addEventListener("input", function(
             });
     }
 });
+
+const cBack = document.getElementById("c-anterior");
+const cNext = document.getElementById("c-siguiente"); 
+const cPhoto = document.getElementById("c-foto");
+
+cBack.addEventListener("click", function() {
+    let src = cPhoto.src;
+    let partes = src.split('-');
+    let srcNumericoConExtension = partes.slice(1).join('-');
+    let partesPuntos = srcNumericoConExtension.split('.');
+    let srcNumericoSinExtension = partesPuntos.slice(0, -1).join('.');
+    srcNumericoSinExtension = parseInt(srcNumericoSinExtension);
+    srcNumericoSinExtension--;
+
+    //console.log("nombre", partes,"Ext", partesPuntos[1], "Num: ", srcNumericoSinExtension);
+    console.log("SRC: ", partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1]);
+    cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
+});
+
+cNext.addEventListener("click", function() {
+    const src = cPhoto.src;
+    const partes = src.split('-');
+    const srcNumericoConExtension = partes.slice(1).join('-');
+    const partesPuntos = srcNumericoConExtension.split('.');
+    let srcNumericoSinExtension = partesPuntos.slice(0, -1).join('.');
+    srcNumericoSinExtension = parseInt(srcNumericoSinExtension);
+    srcNumericoSinExtension++;
+
+    //console.log("nombre", partes,"Ext", partesPuntos[1], "Num: ", srcNumericoSinExtension);
+    console.log("SRC: ", partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1]);
+    cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
+});
+
+
+let formData = new FormData();
+formData.append('pttn', 'getFotos');
+fetch('./mantenimiento/api.php', {
+    method: "POST",
+    body: formData
+}).then(response => response.json())
+.then(data => {
+        // console.log("[RESPONSE: Cerca] ", data);
+    const puntosCarroussel = document.getElementById("puntos-carroussel");
+    for(let i = 1; i < data.num_libros; i++){
+        let li = document.createElement("li");
+        li.id = "c-dot-" + i;
+        if (i === 1) li.className = "activo";
+        puntosCarroussel.appendChild(li);
+    }
+    console.log(data) 
+})
+.catch(error => {
+    console.log("[ERROR (API_Request)] ", error);
+});
+

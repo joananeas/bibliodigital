@@ -10,7 +10,7 @@
     require_once "mant.php"; # Importa las constantes de mantenimiento.
 
     # Versión del core.
-    define('VERSION', 'v1.2.9'); # Commit: Instalación 75% (html otros formularios) | /admin.
+    define('VERSION', 'v1.3.0'); # Commit: Carroussel semi automatizado.
     # Conexión a la base de datos, constantes de db.php.
     function peticionSQL(){
         require_once "db.php";
@@ -57,6 +57,40 @@
     // Crear una instancia de la clase API_Globales
     $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB);
     
+
+    class API_Carroussel {
+        private $foto;
+        private $ancho;
+        private $alto;
+        private $url;
+        public function __construct($url_fotos) {
+            $this->url = $url_fotos;
+        }
+    
+        public function obtenerDatos() {
+            $datos = array(
+                "foto" => $this->foto,
+                "ancho" => $this->ancho,
+                "alto" => $this->alto
+            );
+            return json_encode($datos);
+        }
+
+        public function obtenerFotos(){
+            $i = 0;
+            $flag = true;
+            if(!dir($this->url)) return json_encode(["api" => "url doesn't exist."]);
+            while($flag){
+                $i++;
+                if(!file_exists($this->url. 'prueba-' . $i . '.jpg')){
+                    $flag = false;
+                }
+                #echo "Fotos: ". $i;
+            }
+            return json_encode(["num_libros" => $i]);
+        }
+    }
+    $apiCarroussel = new API_Carroussel("../media/sistema/carroussel/");
     // Obtener y mostrar los datos en formato JSON
 
     class API_Usuarios{
@@ -252,8 +286,13 @@
                 "message" => "Usuario desautenticado"
             ]);
             break;
-            
+        
+        case 'getFotos':
+            $resp = $apiCarroussel->obtenerFotos();
+            echo $resp;
+            break;
         default:
+            echo $apiCarroussel->obtenerFotos();
             echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
             break;
     }

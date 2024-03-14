@@ -13,15 +13,11 @@
             <div class="buscadorLlibres" id="buscadorLlibres"></div>
         </section>
         <section class="carroussel">
-            <button class="anterior">Anterior</button>
-            <img class="carroussel-img" src="media/prueba.jpg">
-            <button class="siguiente">Siguiente</button>
-            <ul class="carroussel-puntos">
-                <li class="activo"></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
+            <button id="c-anterior" class="c-boton anterior"><</button>
+            <img id="c-foto" class="carroussel-img" src="media/sistema/carroussel/prueba-1.jpg">
+            <button id="c-siguiente" class="c-boton siguiente">></button>
+            <ul id="puntos-carroussel" class="carroussel-puntos">
+                <!-- Aquí se generan de forma automática-->
             </ul>
         </section>
         
