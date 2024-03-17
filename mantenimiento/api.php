@@ -15,7 +15,7 @@
     ###########################################################################
 
     # Versión del core.
-    define('VERSION', 'v1.3.1'); # Commit: Carroussel 100%.
+    define('VERSION', 'v1.3.2'); # UI changes + role displaying.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs

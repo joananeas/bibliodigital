@@ -3,7 +3,10 @@
     <a href="./index.php" class="titulo"><h1 id="titulo"></h1></a>
     <a class="menu-links" href="libro.php">Cercar llibres</a>
     <a class="menu-links" href="#">Pjt Carlos</a>
-    <button id="logoutBoton" class="botonUniversal_alt logout" style="margin-top:0;">Logout</button>
+    <div class="logout">
+        <span id="info-usuari"></span>
+        <button id="logoutBoton" class="botonUniversal_alt" style="margin-top:0;">Logout</button>
+    </div>
 </header>
 
 <nav class="frame" style="margin-left:0; margin-right:0; margin-top:20px; padding:0;">

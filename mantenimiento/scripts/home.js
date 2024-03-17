@@ -108,7 +108,7 @@ const updateActiveDot = (newActiveIndex) => {
     if (newActiveDot) newActiveDot.classList.add("activo");
 };
 
-cBack.addEventListener("click", function() {
+const r = () =>{
     let src = cPhoto.src;
     let partes = src.split('-');
     let srcNumericoConExtension = partes.slice(1).join('-');
@@ -124,9 +124,13 @@ cBack.addEventListener("click", function() {
     //console.log("nombre", partes,"Ext", partesPuntos[1], "Num: ", srcNumericoSinExtension);
     console.log("SRC: ", partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1]);
     cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
+}
+
+cBack.addEventListener("click", function() {
+    r()
 });
 
-cNext.addEventListener("click", function() {
+const l = () => {
     const src = cPhoto.src;
     const partes = src.split('-');
     const srcNumericoConExtension = partes.slice(1).join('-');
@@ -142,4 +146,28 @@ cNext.addEventListener("click", function() {
     //console.log("nombre", partes,"Ext", partesPuntos[1], "Num: ", srcNumericoSinExtension);
     console.log("SRC: ", partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1]);
     cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
+}
+
+cNext.addEventListener("click", function() {
+    l()
 });
+
+
+// Controla el swipe para moviles
+
+let touchstartX = 0
+let touchendX = 0
+    
+function checkDirection() {
+  if (touchendX < touchstartX) l()
+  if (touchendX > touchstartX) r()
+}
+
+cPhoto.addEventListener('touchstart', e => {
+  touchstartX = e.changedTouches[0].screenX
+})
+
+cPhoto.addEventListener('touchend', e => {
+  touchendX = e.changedTouches[0].screenX
+  checkDirection()
+})

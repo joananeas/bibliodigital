@@ -1,4 +1,12 @@
 <?php
+# © Joan Aneas
+    
+   /*___ ___ ___ _    ___ ___  
+    |   \_ _| _ ) |  |_ _/ _ \ 
+    | |) | || _ \ |__ | | (_) |
+    |___/___|___/____|___\___/  (ASCII art)*/
+
+    
 function peticionSQL(){
     require_once "db.php";
     

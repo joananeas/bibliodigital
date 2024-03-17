@@ -1,4 +1,14 @@
 <?php
+# © Joan Aneas
+    
+   /*___ ___ ___ _    ___ ___  
+    |   \_ _| _ ) |  |_ _/ _ \ 
+    | |) | || _ \ |__ | | (_) |
+    |___/___|___/____|___\___/  (ASCII art)*/
+
+
+#TODO: Añadir autoloader
+#TODO: Crear clase para las sesiones
 class API_Globales {
     private $version;
     private $nomBiblioteca;
@@ -96,7 +106,12 @@ class API_Usuarios{
 
         session_start();
         $_SESSION['email'] = $row['email'];
-        $_SESSION['rol'] = $row['rol'];
+
+        #FIXME: Revisar si cookie es la mejor practica
+        if (isset($row['rol']) && $row['rol'] != "") $cookie = $row['rol'];
+        else $cookie = 'lector'; # Lo seteo a lector por seguridad, no puede interactuar con la página (anónimo??)
+
+        setcookie('rol', $cookie, time() + (86400 * 30), "/");
 
         return json_encode([
             "api" => $row,
@@ -106,16 +121,16 @@ class API_Usuarios{
 
     public function getRol(){
         session_start();
-        if (!isset($_SESSION['rol'])) {
-            return json_encode([
-                "api" => null,
-                "response" => "error",
-                "message" => "Usuario no autenticado"
-            ]);
-        }
-
+        // if (!isset($_COOKIE['rol'])) {
+        //     return json_encode([
+        //         "api" => null,
+        //         "response" => "error",
+        //         "message" => "Usuario no autenticado"
+        //     ]);
+        // }
         return json_encode([
-            "api" => $_SESSION['rol'],
+            "rol" => $_COOKIE['rol'],
+            "username" => $_SESSION['email'],
             "response" => "ok",
             "message" => "Usuario autenticado"
         ]);

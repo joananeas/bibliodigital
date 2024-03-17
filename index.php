@@ -9,7 +9,8 @@
     <main>
         <section id="buscador" class="frame" style="padding: 0;">
             <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">    
-            <!-- <button class="botonUniversal" id="btnCercaLlibres">Cerca</button> -->
+
+            <!-- <button id="btnCercaLlibres">x</button> -->
             <div class="buscadorLlibres" id="buscadorLlibres"></div>
         </section>
         <section class="carroussel">

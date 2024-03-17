@@ -249,8 +249,23 @@ h1{
     margin-left: 15px;
 }
 
+#info-usuari{
+    margin-right: 5px;
+    background-color: #f5f5f5;
+    color: #333333;  
+    padding: 3px;
+    padding-left: 6px;
+    padding-right: 6px;  
+    border-radius: 4px;
+    border: 2px solid #333333;
+}
+
+.info-usuari-conf {
+    transition: 0.2s;
+}
+
 .logout{
-    padding-top: 10px;
+    /* padding-top: 10px; */
     float: right;
 }
 
@@ -262,3 +277,18 @@ footer {
     bottom: 0;
 }
 /* ############################################# */
+
+
+/* Móviles here!!! */
+
+@media screen and (max-width: 480px) {
+    .menu-links{
+        display: none;
+    }
+    #logoutBoton{
+        display: none;
+    }
+    .logout{
+        display: none;
+    }
+}

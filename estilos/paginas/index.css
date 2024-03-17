@@ -1,6 +1,7 @@
 main {
     font-family: 'Inter', sans-serif;
     color: #333333;
+    padding-bottom: 50px; /* Espacio para el footer*/
 }
 
 section {
@@ -59,7 +60,7 @@ section {
 .carroussel-img {
     border-radius: 13px;
     width: 100%;
-    height: 100%;
+    height: 500px;
     max-height: 700px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
@@ -130,13 +131,31 @@ section {
     box-shadow: none;
 }
 
-#btnCercaLlibres{
-    float: right;
+/* #btnCercaLlibres{
+    font-family: 'Staatliches', sans-serif;
+    background-color: #f5f5f5;
+    font-size: medium;
+    color: #4A68A0;
+    border: 2.5px solid #4A68A0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 1);
+    cursor: pointer;
+    border-radius: 14px;
+    padding-left: 8px;
+    padding-right: 8px;
+    font-size: large;
+    font-weight: bolder;
+    transition: 0.3s ease-in-out;
+    float:right;
+    margin-top: 12px;
     margin-right: 20px;
-    display: flex;
-    align-items: center;
-    margin-top: 0;
-} 
+}
+
+#btnCercaLlibres:hover{
+    transition: 0.3s ease-in-out;
+    background-color: #4A68A0;
+    border: 2.5px solid #f5f5f5;
+    color: white;
+} */
 
 .buscadorLlibres li{
     box-sizing: border-box;

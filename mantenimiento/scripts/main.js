@@ -39,10 +39,12 @@ const loadGlobals = () => {
         let tituloFavicon = document.getElementById("tituloTab");
         let tituloH1 = document.getElementById("titulo");
         const versionElement = document.getElementById("version");
+        const escuelaFooter = document.getElementById("escuela-footer");
 
         tituloFavicon.textContent = data.titolWeb;
         let favicon = document.getElementById("favicon");
         favicon.href = data.favicon;
+        escuelaFooter.textContent = data.nomBiblioteca + " 📚";
         // Solo lo imprime si existe (en login no).
         tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
         versionElement.textContent = data.version;
@@ -60,7 +62,36 @@ const getRol = () => {
         body: formData
     }).then(response => response.json())
     .then(data => {
-        console.log("[ROL] ", data);
+        const r = document.getElementById("info-usuari");
+        // Agrega primero el texto
+        let rol;
+        switch(data.rol){
+            case "lector":
+                rol = "🕵️ (unknown)"; // anonimo
+                break;
+            case "user":
+                rol = "👨‍🎓 (estudiant)"; // Alumno
+                break;
+            case "bibliotecari":
+                rol = "👨‍🏫 (bibliotecari)"; // Profe / bibliotecario
+                break;
+            case "admin":
+                rol = "👨‍💻 (administrador)"; // Admin
+                break;
+            default:
+                rol = "🕵️ (unknown)"; // anonimo
+                break;
+        }
+
+        r.textContent = data.username + " - " + rol + " ";
+
+        // Luego crea y agrega el enlace
+        // const l = document.createElement("a");
+        // l.textContent = "⚙️";
+        // l.href = "cuenta.php";  
+        // l.className = "info-usuari-conf";
+        // r.appendChild(l);
+        
     }).catch(error => {
         console.log("[ERROR (API_Request)] ", error);
     });
