@@ -1,6 +1,8 @@
 <?php
     # © Joan Aneas
-    $peticion = $_POST['peticion'] ?? null;
+    if(isset($_POST['peticion'])) $peticion = $_POST['peticion'];
+    else if(isset($_GET['peticion'])) $peticion = $_GET['peticion'];  
+    
     $db_server = $_POST['host'] ?? null;
     $db_user = $_POST['user'] ?? null;  
     $db_name = $_POST['db'] ?? null;
@@ -116,10 +118,10 @@
         fclose($archivo_db);            
 
         if (!file_exists("../mantenimiento/db.php")) {
-            return json_encode(["status" => "error", "message" => "Error al crear el archivo db.php."]);
+            return json_encode(["status" => "error", "message" => "archivo-no-creado"]);
         }
 
-        return json_encode(["status" => "ok", "message" => "Archivo db.php creado con éxito."]);
+        return json_encode(["status" => "ok", "message" => "archivo-creado"]);
     }
 
     function installation($db_server, $db_user, $db_name, $db_pass){
@@ -145,7 +147,6 @@
         }
 
     switch ($peticion){
-        
         case 'comprobarConn':
             if ($db_server == null || $db_user == null || $db_name == null) {
                 echo json_encode(["status" => "error", "message" => "Faltan datos."]);
@@ -153,30 +154,27 @@
 
             $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
             if ($conn->connect_error) {
-                echo json_encode(["status" => "error", "message" => "Error de conexión: " . $conn->connect_error]);
+                echo json_encode(["status" => "error", "message" => "conex-bad" . $conn->connect_error]);
             } else {
-                echo json_encode(["status" => "ok", "message" => "Conexión establecida con éxito."]);
+                echo json_encode(["status" => "ok", "message" => "conex-ok"]);
+            }
+
+            break;
+
+        case 'comprobarArchivos':
+            # Comprueba si existen los archivos necesarios para la instalación.
+            if (file_exists("../mantenimiento/mant.php") && file_exists("../mantenimiento/db.php")) {
+                echo json_encode(["status" => "ok", "message" => "existen-2"]);
+            } else if (file_exists("../mantenimiento/mant.php")) {
+                echo json_encode(["status" => "ok", "message" => "existe-mant"]);
+            } else if (file_exists("../mantenimiento/db.php")) {
+                echo json_encode(["status" => "ok", "message" => "existe-db"]);
+            } else {
+                echo json_encode(["status" => "error", "message" => "no-existen"]);
             }
             break;
 
-        
-        case 'comprobarArchivoMant':
-            if (file_exists("../mantenimiento/mant.php")) {
-                echo json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
-            } else {
-                echo json_encode(["status" => "ok", "message" => "El archivo db.php no existe."]);
-            }
-            break;
-
-        case 'comprobarArchivoDb':
-            if (file_exists("../mantenimiento/db.php")) {
-                echo json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
-            } else {
-                echo json_encode(["status" => "ok", "message" => "El archivo db.php no existe."]);
-            }
-            break;
-
-        case 'crearArchivoDb':
+        case 'instalacion-db':
             $db_server = $_POST['host'] ?? null;
             $db_user = $_POST['user'] ?? null;  
             $db_name = $_POST['db'] ?? null;
@@ -194,7 +192,11 @@
             echo crearTablasDB($db_server, $db_user, $db_name, $db_pass);
             break;
 
+
         default:
             echo json_encode(["status" => "error", "message" => "Peticion no reconocida: $peticion"]);
             break;
-    }
+  
+
+    }  
+exit;

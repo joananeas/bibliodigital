@@ -15,7 +15,7 @@
     ###########################################################################
 
     # Versión del core.
-    define('VERSION', 'v1.3.2'); # UI changes + role displaying.
+    define('VERSION', 'v1.3.3'); # Refactor de Instalacion.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs

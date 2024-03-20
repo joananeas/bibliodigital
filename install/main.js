@@ -1,6 +1,7 @@
-
 let f = document.getElementById("formInstalacionNormal");
 let s = document.getElementById("statusInstalacion");
+/*
+
 
 const miniAnimacion = (id) => {
     let e = document.getElementById(id);
@@ -123,6 +124,28 @@ const error = () => {
 
 console.log("hola");
 
+*/
+const instalacion = () => {
+    fetch('instalacion.php?peticion=instalacion-db', function(){
+        method: 'GET'
+    }).then(response => response.json())
+    .then(data => {
+        let t = document.getElementById("formInstalacionLoading-text");
+        if (data.status !== "ok") return; 
+        switch(data.message){
+            case "archivo-no-creado":
+                t.textContent = "Error al crear l'arxiu de configuració.";
+                error();
+                break;
+            case "archivo-creado":
+                t.textContent = "Arxiu de connexió a la BBDD creat correctament.";
+                break;
+        }
+    }).catch(function(){
+        console.log("Error");
+    });
+}
+
 const comprobarConn = () => {
     let formData = new FormData();
     formData.append("host", document.getElementById("server").value);
@@ -137,31 +160,72 @@ const comprobarConn = () => {
     }).then(response => response.json()) // Primero, analiza la respuesta en JSON
     .then(data => { // Luego, maneja los datos
         console.log(data); // Esto debería mostrar {"status":"ok","message":"Connexi\u00f3 a la base de dades correcta"}
-        if(data.status == "ok") {
-            success();
+        if(data.status === "ok" && data.message === "conex-ok") {
+            document.getElementById("formInstalacionNormal").style.display = "none";
+            document.getElementById("formInstalacionLoading").style.display = "block";
         } else {
-            error();
+            f.style.border = "2px solid red";
+            setTimeout(() => {
+                f.style.border = "none";
+            }, 2500);
         }
+    }).catch(function() {
+        f.style.border = "2px solid red";
+        setTimeout(() => {
+            f.style.border = "none";
+        }, 2500);
+    });
+    document.getElementById("formInstalacionLoading-start").addEventListener("click", function(){
+        document.getElementById("formInstalacionLoading-start").style.display = "none";
+        instalacion();
     });
 }
 
-document.getElementById("submit").addEventListener("click", function(e) {
-    e.preventDefault();
-    comprobarConn();
-});
-
-document.addEventListener("DOMContentLoaded", function() {
-    fetch("instalacion.php?peticion=comprobarArchivoDb")
-    .then(response => response.json())
+const peticionAntesDeEmpezar = () => {
+    fetch('instalacion.php?peticion=comprobarArchivos', function(){
+        method: 'GET'
+    }).then(response => response.json())
     .then(data => {
-        if(data.status == "ok") {
-            document.getElementById("formInstalacionNormal").style.display = "none";
-            document.getElementById("formInstalacionLoading").style.display = "block";
-            comprobarArchivoDB("check-1");
-            crearArchivoDB("check-2");
-            crearTablas("check-3");
+        let l = document.getElementById("formAntesDeEmpezar-label");
+        if (data.status !== "ok") return; 
+        switch(data.message){
+            case "no-existen":
+                document.getElementById("formAntesDeEmpezar").style.display = "none";
+                document.getElementById("formInstalacionNormal").style.display = "block";
+                break;
+            case "existen-2":
+                document.getElementById("formAntesDeEmpezar").style.display = "block";
+                document.getElementById("formInstalacionNormal").style.display = "none";
+                l.textContent = "Ja existeixen els arxius de configuració. Segur que vols continuar?";
+                break;
+            case "existe-mant":
+                document.getElementById("formAntesDeEmpezar").style.display = "block";
+                document.getElementById("formInstalacionNormal").style.display = "none";
+                l.textContent = "Ja existeix l'arxiu de configuració (manteniment). Segur que vols continuar?";
+                break;
+            case "existe-db":
+                document.getElementById("formAntesDeEmpezar").style.display = "block";
+                document.getElementById("formInstalacionNormal").style.display = "none";
+                l.textContent = "Ja existeix l'arxiu de configuració (connexió-bbdd). Segur que vols continuar?";
+                break;
         }
-    }).catch(function() {
+
+    }).catch(function(){
         console.log("Error");
     });
-}); 
+
+    document.getElementById("formAntesDeEmpezar-tornar").addEventListener("click", function(){
+        window.location.href = "../index.php"
+    });
+    document.getElementById("formAntesDeEmpezar-continuar").addEventListener("click", function(){
+        document.getElementById("formAntesDeEmpezar").style.display = "none";
+        document.getElementById("formInstalacionNormal").style.display = "block";
+    });
+
+    document.getElementById("formInstalacionNormal-submit").addEventListener("click", function(e) {
+        e.preventDefault();
+        comprobarConn();
+    });
+}
+
+document.addEventListener("DOMContentLoaded", peticionAntesDeEmpezar());

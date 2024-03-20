@@ -12,16 +12,16 @@
 </head>
 <body>
     <main>
-        <div style="display: none;" id="formInstalacionNormal" class="login">
+        <div style="display: none;" id="formAntesDeEmpezar" class="login">
             <h1>Instal·lació</h1>
             <form method="POST" id="mainForm" action="">
-                <label>L'arxiu de configuració ja existeix. Vols continuar de totes formes?</label><br>
-                <input class="submit" type="button" value="↩️ Tornar">
-                <input class="submit" type="button" value="Continuar🛠️">
+                <label id="formAntesDeEmpezar-label"></label><br>
+                <input id="formAntesDeEmpezar-tornar" class="submit" type="button" value="↩️ Tornar">
+                <input id="formAntesDeEmpezar-continuar" class="submit" type="button" value="Continuar🛠️">
             </form>
         </div>
 
-        <div style="display: block;" id="formInstalacionNormal" class="login">
+        <div style="display: none;" id="formInstalacionNormal" class="login">
             <h1>Instal·lació</h1>
             <h4>(BBDD)</h4>
             <form method="POST" id="mainForm" action="">
@@ -34,16 +34,14 @@
                 <label>Contrasenya</label><br>
                 <input type="password" id="passwd" placeholder="c0ntrasenya"><br>
                 <!-- Evita que el formulario se envíe automáticamente y maneja el evento onclick con JavaScript -->
-                <input class="submit" id="submit" type="button" value="Enviar🛠️">
+                <input class="submit" id="formInstalacionNormal-submit" type="button" value="Enviar🛠️">
             </form>
         </div>
         
         <div style="display: none;" id="formInstalacionLoading" class="login">
-            <h1>Instal·lant </h1>
-            <p id="check-1">Comprobar archivo db.php<span id="cargando-1"></span></p>
-            <p id="check-2">Creando archivo db.php<span id="cargando-2">...</span></span></p>
-            <p id="check-3">Creando tablas<span id="cargando-3">...</span></p>
-            <p id="check-4">Creando usuario admin<span id="cargando-4">...</span></span></p>
+            <h1>Instal·lació</h1>
+            <button class="submit" id="formInstalacionLoading-start">Instal·lam!</button>
+            <p id="formInstalacionLoading-text"></p>
         </div>
 
         <div style="display: none;" id="formInstalacionAdmin" class="login">
