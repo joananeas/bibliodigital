@@ -62,9 +62,8 @@ const getRol = () => {
         body: formData
     }).then(response => response.json())
     .then(data => {
-        const r = document.getElementById("info-usuari");
         // Agrega primero el texto
-        let rol;
+        let r = document.getElementById("info-usuari");
         switch(data.rol){
             case "lector":
                 rol = "🕵️ (unknown)"; // anonimo
@@ -96,6 +95,22 @@ const getRol = () => {
         console.log("[ERROR (API_Request)] ", error);
     });
 }
+
+
+// Esto es para el slider de información dinámica
+document.addEventListener("DOMContentLoaded", function() {
+    const info = document.getElementById("info-dinamica");
+    const header = document.getElementById("h");
+    const style = window.getComputedStyle(info);
+    console.log(style.display);
+    if (style.display === "block") {
+        console.log("Añadiendo padding al header...");
+        header.style.paddingTop = "30px";
+    } else {
+        console.log("Quitando padding al header...");
+        header.style.marginTop = "0px";
+    }
+});
 
 // Realizo un fetch de mantenimiento para recibir todos los datos
 

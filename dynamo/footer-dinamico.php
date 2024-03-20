@@ -1,3 +1,11 @@
+<!-- El popup estará disponible en cada página --->
+<section class="popup">
+    <div class="popup-content">
+        <span class="close">&times;</span>
+        <p>Some text in the Modal..</p>
+    </div>
+</section>
+
 <footer class="centrado">
     <span class="izquierda" id="version"></span><!--OK--><!--dinamico-->
     <div class="central">

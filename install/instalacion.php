@@ -62,12 +62,12 @@
             }
         
             if ($conn->errno) {
-                return json_encode(["status" => "error", "message" => "Error al crear las tablas: " . $conn->error]);
+                return json_encode(["status" => "error", "message" => "tablas-no-creadas". $conn->error]);
             } else {
-                return json_encode(["status" => "ok", "message" => "Tablas creadas con éxito."]);
+                return json_encode(["status" => "ok", "message" => "tablas-creadas"]);
             }
         } else {
-            return json_encode(["status" => "error", "message" => "Error al crear las tablas: " . $conn->error]);
+            return json_encode(["status" => "ok", "message" => "tablas-no-creadas"]);
         }
     }
 
@@ -184,7 +184,7 @@
             echo $msg;
             break;
 
-        case 'crearTablasDb':
+        case 'instalacion-tablas':
             $db_server = $_POST['host'] ?? null;
             $db_user = $_POST['user'] ?? null;  
             $db_name = $_POST['db'] ?? null;

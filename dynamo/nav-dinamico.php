@@ -1,4 +1,12 @@
-<header>
+
+<div id="info-dinamica" class="news-bar" style="">
+    <div class="news-content">
+        <span>Noticia importante 📰</span>
+        <!-- Dinamico!!! -->
+    </div>
+</div>
+
+<header id="h">
     <a id="menuToggler" href="#" class="menu-hamburguesa"><img id="menuTogglerImg" src="./media/icons/menuHamburguesa.png" width="35px" height="35px" alt="icono menú hamburguesa (desplegable)"></a>
     <a href="./index.php" class="titulo"><h1 id="titulo"></h1></a>
     <a class="menu-links" href="libro.php">Cercar llibres</a>
