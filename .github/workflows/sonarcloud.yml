@@ -13,8 +13,29 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      
+      # Instalar PHP y cualquier extensión necesaria
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4' # Reemplaza con la versión que necesites
+          extensions: mbstring, xml # Asegúrate de añadir las extensiones que tu proyecto necesite
+          coverage: pcov # Si estás generando cobertura, puede ser xdebug o pcov
+        env:
+          fail-fast: true
+
+      # Instalar dependencias de Composer, si las hay
+      - name: Install Composer dependencies
+        run: composer install --prefer-dist --no-progress --no-suggest
+      
+      # Ejecutar pruebas de PHP y generar reporte de cobertura
+      - name: Run PHP tests
+        run: |
+          ./vendor/bin/phpunit --coverage-clover clover.xml
+
+      # Análisis de SonarCloud
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
