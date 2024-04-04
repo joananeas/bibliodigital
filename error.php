@@ -5,7 +5,11 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const errorList = {
-                "0001": "Conexió a la base de dades fallida.",
+                "404": "Pàgina no trobada.",
+                "403": "Accés denegat.",
+                "500": "Error intern de servidor.",
+                "0000": "Error desconegut.",
+                "0001": "Conexió a la base de dades fallida."
             };
 
             const getError = () => {
