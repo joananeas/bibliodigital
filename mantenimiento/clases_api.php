@@ -15,13 +15,15 @@ class API_Globales {
     private $titolWeb;
     private $favicon;
     private $h1Web;
+    private $rootPath;
 
-    public function __construct($version, $nomBiblioteca, $titolWeb, $favicon, $h1Web) {
+    public function __construct($version, $nomBiblioteca, $titolWeb, $favicon, $h1Web, $rootPath) {
         $this->version = $version;
         $this->nomBiblioteca = $nomBiblioteca;
         $this->titolWeb = $titolWeb;
         $this->favicon = $favicon;
         $this->h1Web = $h1Web;
+        $this->rootPath = $rootPath;
     }
 
     public function obtenerDatos() {
@@ -30,7 +32,8 @@ class API_Globales {
             "nomBiblioteca" => $this->nomBiblioteca,
             "titolWeb" => $this->titolWeb,
             "favicon" => $this->favicon,
-            "h1Web" => $this->h1Web
+            "h1Web" => $this->h1Web,
+            "rootPath" => $this->rootPath
         );
         return json_encode($datos);
     }

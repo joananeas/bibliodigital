@@ -1,4 +1,5 @@
 console.log("[LOAD] main.js");
+let path = "";
 
 const comprobarConexionBBDD = () => {  
     if (window.location.href.includes("install") || window.location.href.includes("error")) return;
@@ -48,6 +49,7 @@ const loadGlobals = () => {
         // Solo lo imprime si existe (en login no).
         tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
         versionElement.textContent = data.version;
+        path = data.rootPath;
     })
     .catch(error => {
         console.log("[ERROR (API_Request)] ", error);
@@ -120,7 +122,7 @@ const estilosLogin = ["componentes.css", "paginas/login.css"];
 const estilosReservas = ["componentes.css", "paginas/reservas.css"];
 const estilosLibro = ["componentes.css", "paginas/libro.css"];
 const estilosError = ["componentes.css", "paginas/error.css"];
-const estilosInstall = ["./../estilos/componentes.css", "./../estilos/paginas/instalacion.css"];
+const estilosInstall = ["componentes.css", "instalacion.css"];
 
 const scriptsIndex = ["home.js"];
 const scriptsLibro = ["libro.js"];
@@ -132,7 +134,7 @@ const scriptsError = ["error.js"];
 const cargarScripts = (scripts) => {
     for (let i = 0; i < scripts.length; i++) {
         let script = document.createElement("script");
-        script.src = "mantenimiento/scripts/" + scripts[i];
+        script.src = path + "mantenimiento/scripts/" + scripts[i];
         document.body.appendChild(script);
     }
 }
@@ -142,7 +144,7 @@ const cargarEstilos = (estilos) => {
         let linkEstilos = document.createElement("link");
         linkEstilos.rel = "stylesheet";
         linkEstilos.type = "text/css";
-        linkEstilos.href = "estilos/" + estilos[i];
+        linkEstilos.href = path + "estilos/" + estilos[i];
         document.head.appendChild(linkEstilos);
     }
 }

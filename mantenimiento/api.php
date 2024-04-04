@@ -9,17 +9,17 @@
     ##################
     #--- Includes ---#
     ###########################################################################
-    /**/include_once "clases_api.php";                                        #
+    /**/require_once "clases_api.php";                                        #
     /**/require_once "mant.php"; # Importa las constantes de mantenimiento.   #
-    /**/include_once "func_api.php";                                          #
+    /**/require_once "func_api.php";                                          #
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.3.4'; # Refactor de Instalacion.
+    const VERSION =  'v1.3.5'; # hotfix - rutas absolutas.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
-    $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB);
+    $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB, $GLOBALS['paths']['root']);
     $apiCarroussel = new API_Carroussel("../media/sistema/carroussel/");
     $apiUsuarios = new API_Usuarios(null, null, null);
 
