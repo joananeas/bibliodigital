@@ -1,5 +1,5 @@
 
-<div id="info-dinamica" class="news-bar" style="">
+<div id="info-dinamica" class="news-bar">
     <div class="news-content">
         <span>Noticia importante 📰</span>
         <!-- Dinamico!!! -->
@@ -7,7 +7,7 @@
 </div>
 
 <header id="h">
-    <a id="menuToggler" href="#" class="menu-hamburguesa"><img id="menuTogglerImg" src="./media/icons/menuHamburguesa.png" width="35px" height="35px" alt="icono menú hamburguesa (desplegable)"></a>
+    <a id="menuToggler" href="#" class="menu-hamburguesa"><img id="menuTogglerImg" width="35px" height="35px" alt="icono menú hamburguesa (desplegable)"></a>
     <a href="./index.php" class="titulo"><h1 id="titulo"></h1></a>
     <a class="menu-links" href="libro.php">Cercar llibres</a>
     <a class="menu-links" href="#">Pjt Carlos</a>
@@ -55,6 +55,12 @@
     let menuImg = document.getElementById("menuTogglerImg");
     let menuToggler = document.getElementById("menuToggler");
     let menuActivo = false;
+    if (window.location.href.includes("admin")) {
+        menuImg.src = "../media/icons/menuHamburguesa.png";
+    }
+    else {
+        menuImg.src = "./media/icons/menuHamburguesa.png";
+    }
     menuToggler.addEventListener("click", function() {
         if (menuActivo) {
             console.log("Cerrando menú...");

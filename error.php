@@ -18,6 +18,8 @@
                 let queryString = new URLSearchParams(paramString);
                 let e = queryString.get('error');
                 console.log("Error is:" + e);
+                if (e === null) return "0000";
+                else if (e === "1") return "0001";
                 return e;
             };
 

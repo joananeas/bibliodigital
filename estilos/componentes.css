@@ -1,4 +1,9 @@
-/* Para facilitarme la vida y optimizar los estilos */
+:root {
+    --color-principal: #4A68A0; /* Valor predeterminado */
+    --color-secundario: #F5F5F5; /* Valor predeterminado */
+    --color-terciario: #333333; /* Valor predeterminado */
+}
+
 /* ################# Otros ###################### */
 body{
     font-family: 'Inter', sans-serif;
@@ -10,7 +15,7 @@ body{
 }
 
 .frame{
-    background-color: #f5f5f5;
+    background-color: var(--color-secundario);
     border-radius: 13px;
     margin-left: 20px;
     margin-right: 20px;
@@ -35,7 +40,7 @@ body{
 } */
 .enFocus:focus{
     outline: none; 
-    border: 2px solid #4A68A0; 
+    border: 2px solid var(--color-principal); 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -49,7 +54,7 @@ input::placeholder{
 input:focus, textarea:focus {
     font-family: 'Inter', sans-serif;
     outline: none; 
-    border: 2px solid #4A68A0; 
+    border: 2px solid var(--color-principal); 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 a{
@@ -91,8 +96,8 @@ a:hover{
     text-align: center;
     float: none;
     margin-top: 20px;
-    background-color: #4A68A0;
-    color: white;
+    background-color: var(--color-principal);
+    color: var(--color-secundario);
     border: none;
     font-size: 18px;
     padding: 4px;
@@ -117,9 +122,9 @@ a:hover{
     text-align: center;
     float: none;
     margin-top: 20px;
-    background-color: #f5f5f5;
-    color: #4A68A0;
-    border: 2px solid #333333;
+    background-color: var(--color-secundario);
+    color: var(--color-principal);
+    border: 2px solid var(--color-terciario);
     font-size: 18px;
     padding: 4px;
     padding-left: 8px;
@@ -168,14 +173,14 @@ a:hover{
 
 
 /* ################# Colores #################### */
-.colorPrincipalBg{ background-color: #4A68A0; }
-.colorPrincipalTx{ color: #4A68A0; }
+.colorPrincipalBg{ background-color: var(--color-principal); }
+.colorPrincipalTx{ color: var(--color-principal); }
 
-.colorSecundarioBg{ background-color: #f5f5f5; }
-.colorSecundarioTx{ color: #f5f5f5; }
+.colorSecundarioBg{ background-color: var(--color-secundario); }
+.colorSecundarioTx{ color: var(--color-secundario); }
 
-.colorTextoTx{ background-color: #333333; }
-.colorTextoBg{ background-color: #333333; }
+.colorTextoTx{ background-color: var(--color-terciario); }
+.colorTextoBg{ background-color: var(--color-terciario); }
 /* ############################################# */
 
 /* ############### Head/Foot ################### */
@@ -184,7 +189,7 @@ header{
     padding-top: 10px;
     border-color: black;
     color: white;
-    background-color: #4A68A0;
+    background-color: var(--color-principal);
     margin-left: 22px;
     margin-right: 22px;
 }
@@ -199,7 +204,7 @@ nav{
     justify-content: space-between;
     align-items: center;
     font-family: 'Inter', sans-serif;
-    background: #fff;
+    background: var(--color-secundario);
     z-index: 1;
     padding: 0;
 }
@@ -210,14 +215,14 @@ nav li{
     padding:10px;
     list-style: none;
     display: inline-block;
-    border-bottom: 1px solid #333333;
+    border-bottom: 1px solid var(--color-terciario);
 }
 
 nav a{
     font-family: 'Staatliches', sans-serif;
     font-size: 24px;
     text-decoration: none;
-    color: #333333;
+    color: var(--color-terciario);
 }
 
 nav a:hover{
@@ -251,13 +256,13 @@ h1{
 
 #info-usuari{
     margin-right: 5px;
-    background-color: #f5f5f5;
-    color: #333333;  
+    background-color: var(--color-secundario);
+    color: var(--color-terciario);  
     padding: 3px;
     padding-left: 6px;
     padding-right: 6px;  
     border-radius: 4px;
-    border: 2px solid #333333;
+    border: 2px solid var(--color-terciario);
 }
 
 .info-usuari-conf {
@@ -272,7 +277,7 @@ h1{
 footer {
     font-family:'Staatliches', sans-serif;
     color: white;
-    background-color: #4A68A0;
+    background-color: var(--color-principal);
     border-color: black;
     bottom: 0;
 }
@@ -296,7 +301,7 @@ footer {
 }
 .popup-content{
     display: block;
-    background-color: #f5f5f5;
+    background-color: var(--color-secundario);
     border-radius: 13px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -307,14 +312,14 @@ footer {
 .news-bar {
     width: 100%;
     left: 0;
-    background-color: #f5f5f5; /* Color de fondo */
-    color: #333333; /* Color del texto */
+    background-color: var(--color-secundario); /* Color de fondo */
+    color: var(--color-terciario); /* Color del texto */
     overflow: hidden; /* Esconde el contenido que se desborde */
     position: fixed; /* Fija la barra en la parte superior */
     top: 0; /* Posición en la parte superior */
     z-index: 2;
     padding: 2px;
-    border-bottom: 1px solid #333333; /* Añade un borde en la parte inferior */
+    border-bottom: 1px solid var(--color-terciario); /* Añade un borde en la parte inferior */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Añade una sombra */
     display: block;
 }

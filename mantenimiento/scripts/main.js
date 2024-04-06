@@ -1,12 +1,19 @@
 console.log("[LOAD] main.js");
-let path = "";
+let urlForFetch = window.location.href;
+
+if (urlForFetch.includes("install") || urlForFetch.includes("admin")) {
+    urlForFetch = "../mantenimiento/api.php";
+}
+else {
+    urlForFetch = "./mantenimiento/api.php";
+}
 
 const comprobarConexionBBDD = () => {  
     if (window.location.href.includes("install") || window.location.href.includes("error")) return;
     console.log("[CONEXION_BBDD] Comprobando conexión con la base de datos...");
     let formData = new FormData();
     formData.append('pttn', 'checkDB');
-    fetch("./mantenimiento/api.php", {
+    fetch(urlForFetch, {
         method: "POST",
         body: formData
     }).then(response => {
@@ -25,11 +32,69 @@ const comprobarConexionBBDD = () => {
     });
 }
 
+const getColores = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getColores'); 
+
+    return fetch(urlForFetch, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Respuesta de la red no fue ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        document.documentElement.style.setProperty('--color-principal', data.colorPrincipal);
+        document.documentElement.style.setProperty('--color-secundario', data.colorSecundario);
+        document.documentElement.style.setProperty('--color-terciario', data.colorTerciario);
+        return data; // Devuelve los datos para su uso posterior
+    });
+}
+
+const getBanner = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getBanner');
+    return fetch(urlForFetch, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Respuesta de la red no fue ok');
+        }
+        return response.json();
+    })
+    .then(data => {
+        const header = document.getElementById("h");
+        let banner = document.getElementById("info-dinamica");
+        let content = banner.querySelector(".news-content");
+    
+        if (data.bannerState === true) {
+            banner.innerHTML = `<div class="news-content"><span>${data.bannerText}</span></div>`;
+            banner.style.display = "block";
+            header.style.paddingTop = "30px";
+            
+            // Reiniciar la animación
+            content.classList.remove("news-content");
+            void banner.offsetWidth; // Truco para ayudar al navegador a reconocer el cambio
+            content.classList.add("news-content");
+        }
+        else {
+            banner.style.display = "none";
+            header.style.marginTop = "0px";
+        }
+        return data; // Devuelve los datos para su uso posterior
+    });
+}
+
 const loadGlobals = () => {
     let formData = new FormData();
     formData.append('pttn', 'getGlobals');
 
-    fetch("./mantenimiento/api.php", {
+    fetch(urlForFetch, {
         method: "POST",
         body: formData
     })
@@ -44,12 +109,15 @@ const loadGlobals = () => {
 
         tituloFavicon.textContent = data.titolWeb;
         let favicon = document.getElementById("favicon");
-        favicon.href = data.favicon;
+        
+        // En caso de que sea admin, se añade un punto al inicio para que funcione correctamente (../)
+        if (window.location.href.includes("admin")) favicon.href = "." + data.favicon;
+        else favicon.href = data.favicon;
         escuelaFooter.textContent = data.nomBiblioteca + " 📚";
         // Solo lo imprime si existe (en login no).
         tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
         versionElement.textContent = data.version;
-        path = data.rootPath;
+        let path = data.rootPath;
     })
     .catch(error => {
         console.log("[ERROR (API_Request)] ", error);
@@ -59,7 +127,7 @@ const loadGlobals = () => {
 const getRol = () => {
     let formData = new FormData();
     formData.append('pttn', 'getRol');
-    fetch("./mantenimiento/api.php", {
+    fetch(urlForFetch, {
         method: "POST",
         body: formData
     }).then(response => response.json())
@@ -92,27 +160,11 @@ const getRol = () => {
         // l.href = "cuenta.php";  
         // l.className = "info-usuari-conf";
         // r.appendChild(l);
-        
+        return data.username;
     }).catch(error => {
         console.log("[ERROR (API_Request)] ", error);
     });
 }
-
-
-// Esto es para el slider de información dinámica
-document.addEventListener("DOMContentLoaded", function() {
-    const info = document.getElementById("info-dinamica");
-    const header = document.getElementById("h");
-    const style = window.getComputedStyle(info);
-    console.log(style.display);
-    if (style.display === "block") {
-        console.log("Añadiendo padding al header...");
-        header.style.paddingTop = "30px";
-    } else {
-        console.log("Quitando padding al header...");
-        header.style.marginTop = "0px";
-    }
-});
 
 // Realizo un fetch de mantenimiento para recibir todos los datos
 
@@ -123,6 +175,7 @@ const estilosReservas = ["componentes.css", "paginas/reservas.css"];
 const estilosLibro = ["componentes.css", "paginas/libro.css"];
 const estilosError = ["componentes.css", "paginas/error.css"];
 const estilosInstall = ["componentes.css", "instalacion.css"];
+const estilosAdmin = ["componentes.css", "paginas/admin.css"];
 
 const scriptsIndex = ["home.js"];
 const scriptsLibro = ["libro.js"];
@@ -130,11 +183,15 @@ const scriptsLogin = ["login.js"];
 const scriptsReservas = ["reservas.js"];
 const scriptsInstall = ["install.js"];
 const scriptsError = ["error.js"];
+const scriptsAdmin = ["admin.js"];
+
+const url = window.location.href;
 
 const cargarScripts = (scripts) => {
     for (let i = 0; i < scripts.length; i++) {
         let script = document.createElement("script");
-        script.src = path + "mantenimiento/scripts/" + scripts[i];
+        if (url.includes("admin")) script.src = "../mantenimiento/scripts/" + scripts[i];
+        else script.src = "./mantenimiento/scripts/" + scripts[i];
         document.body.appendChild(script);
     }
 }
@@ -144,12 +201,13 @@ const cargarEstilos = (estilos) => {
         let linkEstilos = document.createElement("link");
         linkEstilos.rel = "stylesheet";
         linkEstilos.type = "text/css";
-        linkEstilos.href = path + "estilos/" + estilos[i];
+        if (url.includes("admin")) linkEstilos.href = "../estilos/" + estilos[i];
+        else linkEstilos.href = "./estilos/" + estilos[i];
         document.head.appendChild(linkEstilos);
     }
 }
 
-const url = window.location.href;
+
 
 switch (true) {
     case url.includes("index"):
@@ -189,6 +247,11 @@ switch (true) {
         cargarScripts(scriptsLibro);
         console.log("libro");
         break;
+    case url.includes("admin"):
+        cargarEstilos(estilosAdmin);
+        cargarScripts(scriptsAdmin);
+        console.log("admin");
+        break;
     default:
         cargarEstilos(estilosIndex); // normalmente sale / en vez de /index.php
         cargarScripts(scriptsIndex);
@@ -204,5 +267,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener("DOMContentLoaded", () => { comprobarConexionBBDD(); });
+document.addEventListener("DOMContentLoaded", () => { getColores(); });
+document.addEventListener("DOMContentLoaded", () => { getBanner(); });
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
 document.addEventListener("DOMContentLoaded", () => { getRol(); });

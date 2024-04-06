@@ -7,26 +7,7 @@
     *  Estas constantes se modifican en /admin, y sobreescriben el fichero.
     *  IMPORTANTE: No modificar este archivo si se desconoce su funcionamiento.
     */
-
-    $root = realpath(dirname(__FILE__));
-    $rootPath = str_replace('mantenimiento', "", $root); # Hay que bajar un directorio (estamos en mantenimiento/)
-    $mediaPath = $rootPath . '/media/';
-    $adminPath = $rootPath . '/admin/';
-    $stylesPath = $rootPath . '/styles/';
-    $jsPath = $rootPath . '/mantenimineto/scripts/';
-    $apiPath = $rootPath . '/mantenimineto/';
-    $dynaPath = $rootPath . '/dynamo/';
     
-    $GLOBALS['paths'] = [
-        'root' => $rootPath,
-        'media' => $mediaPath,
-        'admin' => $adminPath,
-        'styles' => $stylesPath,
-        'js' => $jsPath,
-        'api' => $apiPath,
-        'dyna' => $dynaPath
-    ];
-
     # Comprueba si se ha instalado el sistema:
     /*
     * db.php [OK]
@@ -34,7 +15,6 @@
     * conexión a BBDD [OK] (realmente esta no se comprueba aquí, sino en api.php)
     */
     const INSTALLED = false; # true | false 
-
     # Normalmente es el nombre institucional de la biblioteca / centro educativo
     const NOM_BIBLIOTECA = 'vedruna vall';
 
@@ -50,3 +30,17 @@
     * Se recomienda que sea un SVG,ICO o PNG.
     */
     const FAVICON = './media/sistema/favicon.svg';
+    
+    # Default: Color principal: #4A68A0, Color secundario: #F5F5F5, Color terciario: #333333
+    # Color principal
+    const COLOR_PRINCIPAL = '#810131';
+    # Color secundario
+    const COLOR_SECUNDARIO = '#F5F5F5';
+    # Color terciario / letra
+    const COLOR_TERCIARIO = '#000000';
+
+    # Banner de la web (dinámico).
+    const BANNER_STATE = false; # true | false (activo/inactivo)
+    const BANNER_TEXT = 'aasda'; # Texto del banner
+
+

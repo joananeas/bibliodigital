@@ -15,11 +15,31 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.3.5'; # hotfix - rutas absolutas.
+    const VERSION =  'v1.3.6'; # admin/, color and banner config.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
-    $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB, $GLOBALS['paths']['root']);
+    $root = realpath(dirname(__FILE__));
+    $rootPath = str_replace('mantenimiento', "", $root); # Hay que bajar un directorio (estamos en mantenimiento/)
+    $mediaPath = $rootPath . '/media/';
+    $adminPath = $rootPath . '/admin/';
+    $stylesPath = $rootPath . '/styles/';
+    $jsPath = $rootPath . '/mantenimineto/scripts/';
+    $apiPath = $rootPath . '/mantenimineto/';
+    $dynaPath = $rootPath . '/dynamo/';
+    
+    $GLOBALS['paths'] = [
+        'root' => $rootPath,
+        'media' => $mediaPath,
+        'admin' => $adminPath,
+        'styles' => $stylesPath,
+        'js' => $jsPath,
+        'api' => $apiPath,
+        'dyna' => $dynaPath
+    ];
+
+    $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB, $GLOBALS['paths']['root'], COLOR_PRINCIPAL, COLOR_SECUNDARIO, COLOR_TERCIARIO);
+    $apiBanner = new API_Banner(BANNER_STATE, BANNER_TEXT);
     $apiCarroussel = new API_Carroussel("../media/sistema/carroussel/");
     $apiUsuarios = new API_Usuarios(null, null, null);
 
@@ -27,6 +47,7 @@
     $peticion = $_POST["pttn"] ?? null;
 
     switch($peticion){
+
         case 'checkDB':
             if (($conn = peticionSQL())->connect_error) {
                 echo json_encode([
@@ -52,6 +73,27 @@
             echo $apiGlobales->obtenerDatos();
             break;
 
+        case 'getColores':
+            echo $apiGlobales->getColores();
+            break;
+
+        case 'setColores':
+            $colorPrincipal = $_POST["colorPrincipal"];
+            $colorSecundario = $_POST["colorSecundario"];
+            $colorTerciario = $_POST["colorTerciario"];
+            echo $apiGlobales->setColores($colorPrincipal, $colorSecundario, $colorTerciario);
+            break;
+
+        case 'getBanner':
+            echo $apiBanner->getBanner();
+            break;
+        
+        case 'setBanner':
+            $bannerState = $_POST["bannerState"];
+            $bannerText = $_POST["bannerText"];
+            echo $apiBanner->setBanner($bannerState, $bannerText);
+            break;
+            
         case 'cercaLlibresLite': # Solo busca por nombre y estado, para el buscador.
             $conn = peticionSQL();
             $llibre = $_POST["llibre"];
@@ -109,7 +151,9 @@
             $resp = $apiCarroussel->obtenerFotos();
             echo $resp;
             break;
+
         default:
             echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
+            header('Location: ../error.php?error=404');
             break;
     }

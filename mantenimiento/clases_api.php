@@ -16,16 +16,21 @@ class API_Globales {
     private $favicon;
     private $h1Web;
     private $rootPath;
+    private $colorPrincipal;
+    private $colorSecundario;
+    private $colorTerciario;
 
-    public function __construct($version, $nomBiblioteca, $titolWeb, $favicon, $h1Web, $rootPath) {
+    public function __construct($version, $nomBiblioteca, $titolWeb, $favicon, $h1Web, $rootPath, $colorPrincipal, $colorSecundario, $colorTerciario) {
         $this->version = $version;
         $this->nomBiblioteca = $nomBiblioteca;
         $this->titolWeb = $titolWeb;
         $this->favicon = $favicon;
         $this->h1Web = $h1Web;
         $this->rootPath = $rootPath;
+        $this->colorPrincipal = $colorPrincipal;
+        $this->colorSecundario = $colorSecundario;
+        $this->colorTerciario = $colorTerciario;
     }
-
     public function obtenerDatos() {
         $datos = array(
             "version" => $this->version,
@@ -36,6 +41,59 @@ class API_Globales {
             "rootPath" => $this->rootPath
         );
         return json_encode($datos);
+    }
+    public function getColores() {
+        $datos = array(
+            "colorPrincipal" => $this->colorPrincipal,
+            "colorSecundario" => $this->colorSecundario,
+            "colorTerciario" => $this->colorTerciario
+        );
+        return json_encode($datos);
+    }
+    public function setColores($colorPrincipal, $colorSecundario, $colorTerciario) {
+        $content = file_get_contents('mant.php');
+        $content = preg_replace("/const COLOR_PRINCIPAL = '.*?';/", "const COLOR_PRINCIPAL = '$colorPrincipal';", $content);
+        $content = preg_replace("/const COLOR_SECUNDARIO = '.*?';/", "const COLOR_SECUNDARIO = '$colorSecundario';", $content);
+        $content = preg_replace("/const COLOR_TERCIARIO = '.*?';/", "const COLOR_TERCIARIO = '$colorTerciario';", $content);
+    
+        file_put_contents('mant.php', $content);
+        return json_encode([
+            "response" => "ok",
+            "message" => "colors-changed"
+        ]);
+    }
+
+}
+
+class API_Banner {
+    private $bannerState;
+    private $bannerText;
+    public function __construct($bannerState, $bannerText) {
+        $this->bannerState = $bannerState;
+        $this->bannerText = $bannerText;
+    }
+    public function getBanner() {
+        $datos = array(
+            "bannerState" => $this->bannerState,
+            "bannerText" => $this->bannerText
+        );
+        return json_encode($datos);
+    }
+
+    public function setBanner($bannerState, $bannerText) {
+        $content = file_get_contents('mant.php');
+        if ($bannerState == "true") $bannerState = 'true';
+        else $bannerState = 'false';
+        $content = preg_replace("/const BANNER_STATE = '.*?';/", "const BANNER_STATE = '$bannerState';", $content);
+        $content = preg_replace("/const BANNER_TEXT = '.*?';/", "const BANNER_TEXT = '$bannerText';", $content);
+    
+        file_put_contents('mant.php', $content);
+        return json_encode([
+            "response" => "ok",
+            "banner-state" => $bannerState,
+            "banner-text" => $bannerText,
+            "message" => "banner-changed"
+        ]);
     }
 }
 
