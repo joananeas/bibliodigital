@@ -1,5 +1,9 @@
 <?php
     # © Joan Aneas
+    require '../mantenimiento/vendor/autoload.php';
+    use PhpOffice\PhpSpreadsheet\IOFactory;
+    use PhpOffice\PhpSpreadsheet\Writer\Csv;
+    
     if(isset($_POST['peticion'])) $peticion = $_POST['peticion'];
     else if(isset($_GET['peticion'])) $peticion = $_GET['peticion'];  
     
@@ -48,6 +52,152 @@
         return json_encode(["status" => "ok", "message" => "Archivo mant.php creado con éxito."]);
     }
     
+    function convertirXlsACsv($archivoEntrada, $archivoSalida) {
+        // Cargar el archivo .xls
+        $spreadsheet = IOFactory::load($archivoEntrada);
+    
+        // Crear un escritor de tipo CSV
+        $writer = new Csv($spreadsheet);
+    
+        // Configurar delimitador a coma
+        $writer->setDelimiter(',');  // Establecer el delimitador a coma
+        $writer->setEnclosure('"');  // Establecer el tipo de delimitador de texto
+        $writer->setLineEnding("\r\n");
+        $writer->setSheetIndex(0);   // Escribir la primera hoja del archivo .xls
+    
+        // Guardar archivo .csv
+        $writer->save($archivoSalida);
+        return file_exists($archivoSalida) ? $archivoSalida : false;
+    }
+    
+    function moverYConvertirArchivo($archivoEntrada, $nombreArchivo, $targetDir) {
+        $pathInfo = pathinfo($nombreArchivo);
+        $baseName = $pathInfo['filename']; // Obtener el nombre sin extensión
+        $destPath = $targetDir . '/' . $baseName . '.xls'; // Agregar la extensión .xls al archivo de destino
+    
+        // Intenta mover el archivo al directorio temporal
+        if (move_uploaded_file($archivoEntrada, $destPath)) {
+            // Define el path de salida para el archivo CSV
+            $outputPath = $targetDir . '/' . $baseName . '.csv'; // Agregar la extensión .csv al archivo de salida
+            if (convertirXlsACsv($destPath, $outputPath)) {
+                return $baseName; // Retorna el nombre base del archivo convertido
+            }
+        }
+        return false; // Retorna false si falla
+    }
+    
+    function subirXlsx($files, $db_server, $db_user, $db_name, $db_pass) {    
+        $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
+    
+        // Verificar la conexión
+        if ($conn->connect_error) {
+            die(json_encode(["status" => "error", "message" => "Conexión fallida: " . $conn->connect_error]));
+        }
+    
+        foreach ($files['name'] as $key => $filename) {
+            $targetDir = '../tmp'; // Asegúrate de que este directorio existe o crea uno si es necesario
+            
+            if (!file_exists($targetDir)) {
+                mkdir($targetDir, 0777, true);
+            }
+            
+            // Mover y convertir el archivo
+            $nombreArchivoSinExtension = moverYConvertirArchivo($files['tmp_name'][$key], $filename, $targetDir);
+            if (!$nombreArchivoSinExtension) {
+                $conn->close();
+                return json_encode(["status" => "error", "message" => "Error al mover y convertir el archivo"]);
+            }
+    
+            // Preparar la ruta al archivo CSV
+            $rutaCsv = $targetDir . '/' . $nombreArchivoSinExtension . ".csv";
+            $tabla = "dib_" . $nombreArchivoSinExtension;
+            
+            // Preparar la consulta SQL para cargar los datos desde el archivo CSV
+            $sql = "LOAD DATA LOCAL INFILE '".$conn->real_escape_string($rutaCsv)."'
+                    INTO TABLE ". $tabla ."
+                    FIELDS TERMINATED BY ',' 
+                    ENCLOSED BY '\"'
+                    LINES TERMINATED BY '\n'
+                    IGNORE 1 ROWS;";
+    
+            // Ejecutar la consulta
+            if (!$conn->query($sql)) {
+                $conn->close();
+                return json_encode(["status" => "error", "message" => "Error al subir datos: " . $conn->error]);
+            }
+        }
+    
+        $conn->close();
+        return json_encode(["status" => "ok", "message" => "Archivos subidos con éxito"]);
+    }
+
+    function config($db_server, $db_user, $db_name, $db_pass, $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario) {
+        // Crear una conexión a la base de datos
+        $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
+        // Verificar si la conexión fue exitosa
+        if ($conn->connect_error) {
+            return json_encode(["status" => "error", "message" => "Error de conexión: " . $conn->connect_error]);
+        }
+    
+        // Preparar la sentencia SQL
+        $stmt = $conn->prepare("INSERT INTO dib_config (INSTALLED, NOM_BIBLIOTECA, TITOL_WEB, H1_WEB, FAVICON, COLOR_PRINCIPAL, COLOR_SECUNDARIO, COLOR_TERCIARIO, BANNER_STATE, BANNER_TEXT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    
+        // Verificar si la sentencia se preparó correctamente
+        if (!$stmt) {
+            return json_encode(["status" => "error", "message" => "Error al preparar la consulta: " . $conn->error]);
+        }
+
+        # Harcodeamos el valor de INSTALLED a 1 para que no se pueda instalar de nuevo.
+        # El banner y el texto se dejan vacíos (se configura posteriormente).
+        $i = 1;
+        $b = 0;
+        $bT = "";
+        // Vincular los parámetros a la sentencia SQL
+        $stmt->bind_param("isssssssis", $i, $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario, $b, $bT);
+    
+        // Ejecutar la sentencia
+        if ($stmt->execute()) {
+            $stmt->close();
+            $conn->close();
+            return json_encode(["status" => "ok", "message" => "config-ok"]);
+        } else {
+            $stmt->close();
+            $conn->close();
+            return json_encode(["status" => "error", "message" => "error-config"]);
+        }
+    }
+
+    function crearAdmin($db_server, $db_user, $db_name, $db_pass, $admin, $adminPass){
+        $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
+    
+        // Verificar la conexión
+        if ($conn->connect_error) {
+            return json_encode(["status" => "error", "message" => "Error de conexión: " . $conn->connect_error]);
+        }
+    
+        // Hashear la contraseña antes de guardarla en la base de datos
+        $hashedPass = password_hash($adminPass, PASSWORD_DEFAULT);
+
+        // Preparar la sentencia SQL para evitar inyecciones SQL
+        $stmt = $conn->prepare("INSERT INTO `dib_usuaris` (`email`, `passwd`, `rol`) VALUES (?, ?, 'admin')");
+    
+        // Comprobar si la sentencia se preparó correctamente
+        if (!$stmt) {
+            return json_encode(["status" => "error", "message" => "Error al preparar la consulta: " . $conn->error]);
+        }
+    
+        $stmt->bind_param("ss", $admin, $hashedPass);
+    
+        if ($stmt->execute()) {
+            $stmt->close();
+            $conn->close();
+            return json_encode(["status" => "ok", "message" => "admin-creado"]);
+        } else {
+            $stmt->close();
+            $conn->close();
+            return json_encode(["status" => "error", "message" => "admin-no-creado: " . $stmt->error]);
+        }
+    }
     function crearTablasDB($db_server, $db_user, $db_name, $db_pass){
         $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
         $sql = file_get_contents("../min-bibliodigital.sql");
@@ -191,8 +341,45 @@
             $db_pass = $_POST['passwd'] ?? "";
             echo crearTablasDB($db_server, $db_user, $db_name, $db_pass);
             break;
+        
+        case 'creacion-admin':
+            $admin = $_POST['admin'] ?? null;
+            $adminPass = $_POST['adminPass'] ?? null;
 
+            $db_server = $_POST['host'] ?? null;
+            $db_user = $_POST['user'] ?? null;  
+            $db_name = $_POST['db'] ?? null;
+            $db_pass = $_POST['passwd'] ?? "";
 
+            echo crearAdmin($db_server, $db_user, $db_name, $db_pass, $admin, $adminPass);
+            break;
+        
+        case 'config':
+            $db_server = $_POST['host'] ?? null;
+            $db_user = $_POST['user'] ?? null;  
+            $db_name = $_POST['db'] ?? null;
+            $db_pass = $_POST['passwd'] ?? "";
+            
+            $nomBiblioteca = $_POST['nomBiblioteca'] ?? null;
+            $titolWeb = $_POST['titolWeb'] ?? null;
+            $h1Web = $_POST['h1Web'] ?? null;
+            $favicon = $_POST['favicon'] ?? null;
+            $colorPrincipal = $_POST['colorPrincipal'] ?? null;
+            $colorSecundario = $_POST['colorSecundario'] ?? null;
+            $colorTerciario = $_POST['colorTerciario'] ?? null;
+        
+            // Llamar a la función config con todos los parámetros
+            echo config($db_server, $db_user, $db_name, $db_pass, $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario);
+            break;
+        
+        case 'subir-xlsx':
+            $db_server = $_POST['host'] ?? null;
+            $db_user = $_POST['user'] ?? null;  
+            $db_name = $_POST['db'] ?? null;
+            $db_pass = $_POST['passwd'] ?? "";
+
+            echo subirXlsx($_FILES['uploads'], $db_server, $db_user, $db_name, $db_pass);
+            break;
         default:
             echo json_encode(["status" => "error", "message" => "Peticion no reconocida: $peticion"]);
             break;

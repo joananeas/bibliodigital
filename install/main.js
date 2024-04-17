@@ -1,137 +1,193 @@
+/*
+Fet per Joan Aneas.
+    ⣿⣿⣿⣿⣿⣿⡿⠛⠋⠉⠄⠄⠄⠄⠄⠄⠄⠄⠄⠈⠉⠛⠿⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⡿⠋⠁⠄⠄⢠⣴⣶⣿⣿⣶⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠈⠿⣿⣿⣿⣿
+    ⣿⣿⡟⠁⠄⠄⠄⠄⣿⣿⣿⣿⣿⣿⣇⡀⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⢹⣿⣿⣿
+    ⣿⣿⣧⠄⠄⠄⠄⢰⣿⣿⣿⣿⣿⣿⣿⡆⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⣸⣿⣿⣿
+    ⣿⣿⣿⣧⡀⠄⠄⢸⣿⣿⣿⣿⣿⣿⣿⣷⣆⠄⠄⠄⠄⠄⠄⠄⠄⣰⣿⣿⣿⣿
+    ⣿⣿⣿⣿⡿⣦⣀⣾⣿⣟⣉⠉⠙⢛⡏⠁⠄⠄⠄⠄⠄⠄⠄⠄⠚⢿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣯⣗⣻⣿⣯⣥⣦⠄⣀⣾⡇⠄⠄⠂⠄⠄⠄⠄⠄⠄⠄⣼⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡇⠄⠄⠂⠄⠄⠄⠄⠄⠄⠄⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣻⠋⠄⠄⠄⠄⠄⠄⠄⢀⠄⣸⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡁⡀⠄⠄⠄⠄⠄⠄⢸⣾⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣥⣾⣷⠶⠆⠄⠄⠄⢀⠄⠄⠄⠸⣿⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⣶⣄⡀⠄⠄⠄⠄⠄⢀⠄⠸⣿⣿⣿⣿⣿⣿
+    ⣿⣿⣿⣿⣿⣿⠟⠚⣿⣿⡻⠿⠿⠛⠙⠁⠄⠄⠄⠄⠠⠂⠄⠄⠘⠿⣿⣿⣿⣿
+    ⠿⠛⠉⠁⠁⠄⠄⠄⣻⣿⣿⣧⣠⣀⠄⠄⠄⠄⡀⠂⠄⠄⠄⠄⠄⠄⠈⠉⠿⢿
+    ⠄⠄⠄⠄⠄⠄⠄⠄⠄⠘⠿⣿⡿⠃⢀⡠⠄⠃⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄⠄
+
+    Zhong Xina, 1999.
+*/
+
 let f = document.getElementById("formInstalacionNormal");
 let s = document.getElementById("statusInstalacion");
-/*
-
-
-const miniAnimacion = (id) => {
-    let e = document.getElementById(id);
-    
-    setTimeout(() => {
-        e.innerHTML = ".";
-        setTimeout(() => {
-            e.innerHTML = "..";
-            setTimeout(() => {
-                e.innerHTML = "...";
-                // Agregar un último setTimeout con un tiempo de espera adecuado
-                setTimeout(() => {
-                    e.innerHTML = ".";
-                }, 500);
-            }, 1000);
-        }, 1000);
-    }, 1000);
-}
-
-
-// Instalación
-const crearArchivoDB = (a) => {
-    let s = document.getElementById(a);
-    let formData = new FormData();
-    formData.append("host", document.getElementById("server").value);
-    formData.append("user", document.getElementById("usuari").value);
-    formData.append("passwd", document.getElementById("passwd").value);
-    formData.append("db", document.getElementById("nom").value);
-    formData.append("peticion", "crearArchivoDb");
-    setTimeout(() => {
-        s.innerHTML = "Creando archivo de configuración...";
-    }, 1000);
-
-    fetch('instalacion.php', {
-        method: 'POST',
-        body: formData
-    }).then(response => response.json()) // Primero, analiza la respuesta en JSON
-    .then(data => { // Luego, maneja los datos
-        console.log(data); // Esto debería mostrar {"status":"ok","message":"Connexi\u00f3 a la base de dades correcta"}
-        if(data.status == "ok") {
-            s.style.backgroundColor = "green";
-            s.style.color = "white";
-        } else {
-            s.style.backgroundColor = "red";
-            s.style.color = "white";
-        }
-    }).catch(function() {
-        s.style.backgroundColor = "red";
-        s.style.color = "white";
-    });
-}
-
-const comprobarArchivoDB = (a) => {
-    let s = document.getElementById(a);
-    let formData = new FormData();
-    formData.append("peticion", "comprobarArchivoDb");
-
-    fetch('instalacion.php', {
-        method: 'POST',
-        body: formData
-    }).then(response => response.json()) // Primero, analiza la respuesta en JSON
-    .then(data => { // Luego, maneja los datos
-        console.log(data); // Esto debería mostrar {"status":"ok","message":"Connexi\u00f3 a la base de dades correcta"}
-        if(data.status == "ok") {
-            s.style.backgroundColor = "green";
-            s.style.color = "white";
-        } else {
-            s.style.backgroundColor = "red";
-            s.style.color = "white";
-        }
-    }).catch(function() {
-        s.style.backgroundColor = "red";
-        s.style.color = "white";
-    });
-}
-
-const crearTablas = (a) => {
-    let s = document.getElementById(a);
-    let formData = new FormData();
-    formData.append("host", document.getElementById("server").value);
-    formData.append("user", document.getElementById("usuari").value);
-    formData.append("passwd", document.getElementById("passwd").value);
-    formData.append("db", document.getElementById("nom").value);
-    formData.append("peticion", "crearTablasDb");
-
-    fetch('instalacion.php', {
-        method: 'POST',
-        body: formData
-    }).then(response => response.json()) // Primero, analiza la respuesta en JSON
-    .then(data => { // Luego, maneja los datos
-        console.log(data); // Esto debería mostrar {"status":"ok","message":"Connexi\u00f3 a la base de dades correcta"}
-        if(data.status == "ok") {
-            s.style.backgroundColor = "green";
-            s.style.color = "white";
-        } else {
-            s.style.backgroundColor = "red";
-            s.style.color = "white";
-        }
-    }).catch(function() {
-        s.style.backgroundColor = "red";
-        s.style.color = "white";
-    });
-}
-
-const success = () => {
-    f.style.border = "2px solid green";
-    document.getElementById("formInstalacionNormal").style.display = "none";
-    document.getElementById("formInstalacionLoading").style.display = "block";
-    miniAnimacion("cargando-1");
-    comprobarArchivoDB("check-1");
-    miniAnimacion("cargando-2");
-    crearArchivoDB("check-2");
-    miniAnimacion("cargando-3");
-    crearTablas("check-3");
-}
-
-const error = () => {
-    f.style.border = "2px solid red";
-}
-
-console.log("hola");
-
-*/
 let t = document.getElementById("formInstalacionLoading-text");
+
 const textoDeCarga = (texto, time) => {
     setTimeout(() => {}, time);
-    t.textContent = texto + ".";
+    t.textContent = texto;
 }
 
-const instalacionTablas = () => {
+const subirXlsx = async () => {
+    let formData = new FormData();
+    formData.append("host", document.getElementById("server").value);
+    formData.append("user", document.getElementById("usuari").value);
+    formData.append("passwd", document.getElementById("passwd").value);
+    formData.append("db", document.getElementById("nom").value);
+    formData.append("peticion", "subir-xlsx");
+    let files = document.getElementById('upload').files;
+
+    for (let i = 0; i < files.length; i++) {
+        formData.append('uploads[]', files[i]);
+    }
+
+    try {
+        const response = await fetch('instalacion.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (data.status !== "ok") return;
+        e = document.getElementById("errorUpload").value;
+
+        switch(data.message){
+            case "error-subir-xlsx":
+                textoDeCarga("Error al subir l'arxiu.", 500);
+                break;
+            case "subir-xlsx-ok":
+                textoDeCarga("Arxiu de dades pujat correctament.", 500);
+                // document.getElementById("formInstalacionLoading").style.display = "block";
+                // document.getElementById("formInstalacionUpload").style.display = "none";
+                // textoDeCarga("La truita de patates amb ceba o sense? - Tornant a l'inici.", 500);
+                //     setTimeout(() => {
+                //         window.location.href = "../index.php";
+                //     }, 2000);
+                break;
+            case "archivo-invalido":
+                e = "Arxiu invàlid. Només s'accepten arxius .xlsx";
+                break;
+            case "archivo-grande":
+                e = "Arxiu massa gran.";
+                break;
+        }
+        
+        // Manejar la respuesta del servidor aquí
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+const config = async () => {
+    let formData = new FormData();
+    // Añadir datos del servidor y base de datos
+    formData.append("host", document.getElementById("server").value);
+    formData.append("user", document.getElementById("usuari").value);
+    formData.append("passwd", document.getElementById("passwd").value);
+    formData.append("db", document.getElementById("nom").value);
+    
+    // Añadir datos de configuración del sitio web
+    formData.append("nomBiblioteca", document.getElementById("nomBiblioteca").value);
+    formData.append("titolWeb", document.getElementById("titolWeb").value);
+    formData.append("h1Web", document.getElementById("h1Web").value);
+    formData.append("favicon", document.getElementById("favicon").value);
+    formData.append("colorPrincipal", document.getElementById("colorPrincipal").value);
+    formData.append("colorSecundario", document.getElementById("colorSecundario").value);
+    formData.append("colorTerciario", document.getElementById("colorTerciario").value);
+    
+    // Indicar la petición de configuración
+    formData.append("peticion", "config");
+
+    document.getElementById("formInstalacionLoading").style.display = "none";
+    document.getElementById("formInstalacionFinal").style.display = "block";
+    textoDeCarga("Calculant el diàmetre Solar...", 500);
+    try {
+        const response = await fetch('instalacion.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        
+        if (data.status !== "ok") return; 
+        switch(data.message){
+            case "config-ok":
+                textoDeCarga("Error al crear l'arxiu de configuració.", 500);
+                document.getElementById("formInstalacionFinal").style.display = "none";
+                document.getElementById("formInstalacionUpload").style.display = "block";
+                
+                document.getElementById("submitUpload").addEventListener("click", function(e) {
+                    e.preventDefault();
+                    subirXlsx();
+                });
+
+                document.getElementById("skipUpload").addEventListener("click", function(e) {
+                    e.preventDefault();
+                    document.getElementById("formInstalacionLoading").style.display = "block";
+                    document.getElementById("formInstalacionUpload").style.display = "none";
+
+                    textoDeCarga("La truita de patates amb ceba o sense? - Tornant a l'inici.", 500);
+                    setTimeout(() => {
+                        window.location.href = "../index.php";
+                    }, 2000);
+                });
+                break;
+            case "error-config":
+                textoDeCarga("Arxiu de configuració creat correctament.", 500);
+                window.location.href = "../index.php";
+                break;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+const creacionAdmin = async () => {
+    let formData = new FormData();
+    formData.append("host", document.getElementById("server").value);
+    formData.append("user", document.getElementById("usuari").value);
+    formData.append("passwd", document.getElementById("passwd").value);
+    formData.append("db", document.getElementById("nom").value);
+
+    formData.append("admin", document.getElementById("admin").value);
+    formData.append("adminPass", document.getElementById("adminPass").value);
+    formData.append("peticion", "creacion-admin");
+
+    document.getElementById("formInstalacionLoading").style.display = "none";
+    document.getElementById("formInstalacionAdmin").style.display = "block";
+    textoDeCarga("Llegint documentació...", 500);
+
+    try {
+        const response = await fetch('instalacion.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        
+        if (data.status !== "ok") return; 
+        
+        switch(data.message){
+            case "admin-no-creado":
+                textoDeCarga("Error al crear l'administrador.", 500);
+                f.style.border = "2px solid red";
+                setTimeout(() => {
+                    f.style.border = "none";
+                }, 2500);
+                break;
+            case "admin-creado":
+                textoDeCarga("Administrador creat correctament.", 500);
+                document.getElementById("formInstalacionAdmin").style.display = "none";
+                document.getElementById("formInstalacionFinal").style.display = "block";
+                document.getElementById("submitFinal").addEventListener("click", function(e) {
+                    e.preventDefault();
+                    config();
+                });
+                break;
+        }
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+const instalacionTablas = async () => {
     let formData = new FormData();
     formData.append("host", document.getElementById("server").value);
     formData.append("user", document.getElementById("usuari").value);
@@ -141,28 +197,36 @@ const instalacionTablas = () => {
 
     textoDeCarga("Cercant als índex...", 500);
 
-    fetch('instalacion.php', {
-        method: 'POST',
-        body: formData
-    }).then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('instalacion.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        const data = await response.json();
         
         if (data.status !== "ok") return; 
         switch(data.message){
             case "tablas-no-creadas":
-                textoDeCarga("Error al crear l'arxiu de configuració.", 500);
+                textoDeCarga("Error al crear les taules.", 500);
                 break;
             case "tablas-creadas":
-                textoDeCarga("Arxiu de connexió a la BBDD creat correctament.", 500);
+                document.getElementById("formInstalacionLoading").style.display = "none";
+                document.getElementById("formInstalacionAdmin").style.display = "block";
+                
+                document.getElementById("submitAdmin").addEventListener("click", function(e) {
+                    e.preventDefault();
+                    creacionAdmin();
+                });
+
                 break;
         }
-
-    }).catch(function(error){
+    } catch (error) {
         console.error("Error:", error);
-    });
+    }
 }
 
-const instalacionDb = () => {
+const instalacionDb = async () => {
     let formData = new FormData();
     formData.append("host", document.getElementById("server").value);
     formData.append("user", document.getElementById("usuari").value);
@@ -172,26 +236,26 @@ const instalacionDb = () => {
     
     textoDeCarga("Validant dades...", 500);
 
-    fetch('instalacion.php', {
-        method: 'POST',
-        body: formData
-    }).then(response => response.json())
-    .then(data => {
+    try {
+        const response = await fetch('instalacion.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
         
-        if (data.status !== "ok") return; 
+        if (data.status !== "ok") return;
         switch(data.message){
             case "archivo-no-creado":
                 textoDeCarga("Error al crear l'arxiu de configuració.", 500);
                 break;
             case "archivo-creado":
                 textoDeCarga("Arxiu de connexió a la BBDD creat correctament.", 500);
+                instalacionTablas(); // Solo se ejecuta si el archivo fue creado correctamente
                 break;
         }
-
-    }).catch(function(error){
+    } catch (error) {
         console.error("Error:", error);
-    });
-    instalacionTablas();
+    }
 }
 
 const comprobarConn = () => {
@@ -212,6 +276,7 @@ const comprobarConn = () => {
             document.getElementById("formInstalacionNormal").style.display = "none";
             document.getElementById("formInstalacionLoading").style.display = "block";
             history.pushState(null, '', './index.php?fase=instalacion');
+            instalacionDb();
         } else {
             f.style.border = "2px solid red";
             setTimeout(() => {
@@ -223,10 +288,6 @@ const comprobarConn = () => {
         setTimeout(() => {
             f.style.border = "none";
         }, 2500);
-    });
-    document.getElementById("formInstalacionLoading-start").addEventListener("click", function(){
-        document.getElementById("formInstalacionLoading-start").style.display = "none";
-        instalacionDb();
     });
 }
 

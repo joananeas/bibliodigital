@@ -15,7 +15,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.3.6'; # admin/, color and banner config.
+    const VERSION =  'v1.3.7'; # admin acc, upload files, config.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs

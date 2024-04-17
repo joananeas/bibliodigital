@@ -1,1 +1,8 @@
 mantenimiento/db.php
+mantenimiento/vendor/*
+# mantenimiento/composer.lock
+mantenimiento/.composer/*
+composer.phar
+composer.phar.pubkey
+mantenimiento/composer-backups/*
+tmp/*
