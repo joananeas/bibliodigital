@@ -10,12 +10,11 @@
     #--- Includes ---#
     ###########################################################################
     /**/require_once "clases_api.php";                                        #
-    /**/require_once "mant.php"; # Importa las constantes de mantenimiento.   #
     /**/require_once "func_api.php";                                          #
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.3.8'; # get config from DB.
+    const VERSION =  'v1.3.8'; # hotfix.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
