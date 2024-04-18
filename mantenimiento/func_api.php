@@ -22,7 +22,7 @@ function peticionSQL(){
 }
 
 function cercaLlibresLite($conn, $llibre){
-    $sql = "SELECT nom, estadoActual FROM llibres WHERE nom LIKE '%$llibre%'";
+    $sql = "SELECT dib_cataleg.TITOL AS nom, dib_exemplars.ESTAT as estadoActual FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             $rows = array();
@@ -36,7 +36,7 @@ function cercaLlibresLite($conn, $llibre){
 }
 
 function cercaLlibresFull($conn, $llibre){
-    $sql = "SELECT * FROM llibres WHERE nom = '$llibre'";
+    $sql = "SELECT dib_cataleg.TITOL AS nom, dib_exemplars.ESTAT as estadoActual FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         $rows = array();

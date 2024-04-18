@@ -15,7 +15,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.3.7'; # admin acc, upload files, config.
+    const VERSION =  'v1.3.8'; # get config from DB.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
@@ -38,8 +38,8 @@
         'dyna' => $dynaPath
     ];
 
-    $apiGlobales = new API_Globales(VERSION, NOM_BIBLIOTECA, TITOL_WEB, FAVICON, H1_WEB, $GLOBALS['paths']['root'], COLOR_PRINCIPAL, COLOR_SECUNDARIO, COLOR_TERCIARIO);
-    $apiBanner = new API_Banner(BANNER_STATE, BANNER_TEXT);
+    $apiGlobales = new API_Globales(VERSION, $GLOBALS['paths']['root']);
+    $apiBanner = new API_Banner();
     $apiCarroussel = new API_Carroussel("../media/sistema/carroussel/");
     $apiUsuarios = new API_Usuarios(null, null, null);
 
@@ -47,7 +47,6 @@
     $peticion = $_POST["pttn"] ?? null;
 
     switch($peticion){
-
         case 'checkDB':
             if (($conn = peticionSQL())->connect_error) {
                 echo json_encode([

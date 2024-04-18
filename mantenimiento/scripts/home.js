@@ -30,7 +30,7 @@ document.getElementById("inputCercaLlibres").addEventListener("input", function(
                     let tituloLibro = document.createElement("li");
 
                     estadoLibro.className = "estadoLlibro";
-                    if (libro.estadoActual == 1) estadoLibro.style.color = "green", estadoLibro.innerHTML = "Disponible";
+                    if (libro.estadoActual === "Disponible") estadoLibro.style.color = "green", estadoLibro.innerHTML = "Disponible";
                     else estadoLibro.style.color = "red", estadoLibro.innerHTML = "No disponible";
 
                     tituloLibro.className = "llibre";

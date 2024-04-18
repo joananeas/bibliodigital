@@ -72,7 +72,7 @@ const getBanner = () => {
         let banner = document.getElementById("info-dinamica");
         let content = banner.querySelector(".news-content");
     
-        if (data.bannerState === true) {
+        if (data.bannerState === "1") {
             banner.innerHTML = `<div class="news-content"><span>${data.bannerText}</span></div>`;
             banner.style.display = "block";
             header.style.paddingTop = "30px";
@@ -212,7 +212,7 @@ const cargarEstilos = (estilos) => {
 switch (true) {
     case url.includes("index"):
         cargarEstilos(estilosIndex);
-        cargarScripts(scriptsIndex);
+        if (!url.includes("admin")) cargarScripts(scriptsIndex);
         console.log("indice");
         break;
     case url.includes("cuenta"):

@@ -35,7 +35,7 @@ document.getElementById('formColores').addEventListener('submit', function(e) {
 
 getBanner().then(data => {
     console.log(data);
-    if (data.bannerState === true) {
+    if (data.bannerState === "1") {
         document.getElementById("toggleSwitch").checked = true;
         console.log(true);
     } else {
@@ -50,10 +50,10 @@ getBanner().then(data => {
 
 document.getElementById('formBanner').addEventListener('submit', function(e) {
     e.preventDefault();
-
+    let c = (document.getElementById("toggleSwitch").checked == true ? "1" : "0");
     let formData = new FormData();
-    console.log("checked:", document.getElementById("toggleSwitch").checked);
-    formData.append('bannerState', document.getElementById("toggleSwitch").checked);
+    console.log("checked:", c);
+    formData.append('bannerState', c);
     formData.append('bannerText', document.getElementById("banner").value);
     formData.append('pttn', 'setBanner');
 

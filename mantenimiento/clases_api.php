@@ -11,52 +11,60 @@
 #TODO: Crear clase para las sesiones
 class API_Globales {
     private $version;
-    private $nomBiblioteca;
-    private $titolWeb;
-    private $favicon;
-    private $h1Web;
     private $rootPath;
-    private $colorPrincipal;
-    private $colorSecundario;
-    private $colorTerciario;
 
-    public function __construct($version, $nomBiblioteca, $titolWeb, $favicon, $h1Web, $rootPath, $colorPrincipal, $colorSecundario, $colorTerciario) {
+    public function __construct($version, $rootPath) {
         $this->version = $version;
-        $this->nomBiblioteca = $nomBiblioteca;
-        $this->titolWeb = $titolWeb;
-        $this->favicon = $favicon;
-        $this->h1Web = $h1Web;
         $this->rootPath = $rootPath;
-        $this->colorPrincipal = $colorPrincipal;
-        $this->colorSecundario = $colorSecundario;
-        $this->colorTerciario = $colorTerciario;
     }
     public function obtenerDatos() {
+        $sql = "SELECT `NOM_BIBLIOTECA` AS `nomBiblioteca`, `TITOL_WEB` AS `titolWeb`, `H1_WEB` AS `h1Web`, `FAVICON` AS `favicon` FROM `dib_config`";
+        $result = mysqli_query(peticionSQL(), $sql);
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+        } else {
+            echo json_encode(['response' => 'ERROR']);
+        }
+        
         $datos = array(
             "version" => $this->version,
-            "nomBiblioteca" => $this->nomBiblioteca,
-            "titolWeb" => $this->titolWeb,
-            "favicon" => $this->favicon,
-            "h1Web" => $this->h1Web,
+            "nomBiblioteca" => $row['nomBiblioteca'],
+            "titolWeb" => $row['titolWeb'],
+            "favicon" => $row['favicon'],
+            "h1Web" => $row['h1Web'],
             "rootPath" => $this->rootPath
         );
         return json_encode($datos);
     }
     public function getColores() {
-        $datos = array(
-            "colorPrincipal" => $this->colorPrincipal,
-            "colorSecundario" => $this->colorSecundario,
-            "colorTerciario" => $this->colorTerciario
-        );
-        return json_encode($datos);
+        $sql = "SELECT `COLOR_PRINCIPAL` AS 'colorPrincipal', `COLOR_SECUNDARIO` AS 'colorSecundario', `COLOR_TERCIARIO` AS 'colorTerciario' FROM `dib_config`";
+        $result = mysqli_query(peticionSQL(), $sql);
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+        } else {
+            echo json_encode(['response' => 'ERROR']);
+        }
+
+        return json_encode($row);
     }
     public function setColores($colorPrincipal, $colorSecundario, $colorTerciario) {
-        $content = file_get_contents('mant.php');
-        $content = preg_replace("/const COLOR_PRINCIPAL = '.*?';/", "const COLOR_PRINCIPAL = '$colorPrincipal';", $content);
-        $content = preg_replace("/const COLOR_SECUNDARIO = '.*?';/", "const COLOR_SECUNDARIO = '$colorSecundario';", $content);
-        $content = preg_replace("/const COLOR_TERCIARIO = '.*?';/", "const COLOR_TERCIARIO = '$colorTerciario';", $content);
+        $conexion = peticionSQL();
+        $stmt = $conexion->prepare("UPDATE `dib_config` SET `COLOR_PRINCIPAL` = ?, `COLOR_SECUNDARIO` = ?, `COLOR_TERCIARIO` = ?");
     
-        file_put_contents('mant.php', $content);
+        if ($stmt === false) {
+            die("Error preparando la consulta: " . $conexion->error);
+        }
+    
+        $stmt->bind_param("sss", $colorPrincipal, $colorSecundario, $colorTerciario);
+    
+        if (!$stmt->execute()) {
+            return json_encode([
+                "response" => "error",
+                "message" => "colors-not-changed"
+            ]);
+        }
+    
+        $stmt->close();
         return json_encode([
             "response" => "ok",
             "message" => "colors-changed"
@@ -66,32 +74,37 @@ class API_Globales {
 }
 
 class API_Banner {
-    private $bannerState;
-    private $bannerText;
-    public function __construct($bannerState, $bannerText) {
-        $this->bannerState = $bannerState;
-        $this->bannerText = $bannerText;
-    }
     public function getBanner() {
-        $datos = array(
-            "bannerState" => $this->bannerState,
-            "bannerText" => $this->bannerText
-        );
-        return json_encode($datos);
+        $sql = "SELECT `BANNER_STATE` AS 'bannerState', `BANNER_TEXT` AS 'bannerText' FROM `dib_config`";
+        $result = mysqli_query(peticionSQL(), $sql);
+        if (mysqli_num_rows($result) > 0) {
+            $row = mysqli_fetch_assoc($result);
+        } else {
+            echo json_encode(['response' => 'ERROR']);
+        }
+
+        return json_encode($row);
     }
 
     public function setBanner($bannerState, $bannerText) {
-        $content = file_get_contents('mant.php');
-        if ($bannerState == "true") $bannerState = 'true';
-        else $bannerState = 'false';
-        $content = preg_replace("/const BANNER_STATE = '.*?';/", "const BANNER_STATE = '$bannerState';", $content);
-        $content = preg_replace("/const BANNER_TEXT = '.*?';/", "const BANNER_TEXT = '$bannerText';", $content);
+        $conexion = peticionSQL();
+        $stmt = $conexion->prepare("UPDATE `dib_config` SET `BANNER_STATE` = ?, `BANNER_TEXT` = ?");
     
-        file_put_contents('mant.php', $content);
+        if ($stmt === false) {
+            die("Error preparando la consulta: " . $conexion->error);
+        }
+    
+        $stmt->bind_param("ss", $bannerState, $bannerText);
+    
+        if (!$stmt->execute()) {
+            die("Error al ejecutar la consulta: " . $stmt->error);
+        }
+    
+        $stmt->close();
         return json_encode([
             "response" => "ok",
-            "banner-state" => $bannerState,
-            "banner-text" => $bannerText,
+            // "banner-state" => $bannerState,
+            // "banner-text" => $bannerText,
             "message" => "banner-changed"
         ]);
     }
@@ -153,27 +166,35 @@ class API_Usuarios{
     }
 
     public function autenticarUsuario($email, $password){
-        //$password = md5($password);
         $conn = peticionSQL();
-        $sql = "SELECT * FROM usuaris WHERE email = '$email' AND passwd = '$password'";
-        $result = mysqli_query($conn, $sql);
+        $sql = "SELECT * FROM dib_usuaris WHERE email = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 's', $email);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
         $row = mysqli_fetch_assoc($result);
+        
         if(!$row){
             return json_encode([
                 "api" => null,
                 "response" => "error"
             ]);
         }  
-
+    
+        if (!password_verify($password, $row['passwd'])) {
+            return json_encode([
+                "api" => null,
+                "response" => "error"
+            ]);
+        }
+    
         session_start();
         $_SESSION['email'] = $row['email'];
-
-        #FIXME: Revisar si cookie es la mejor practica
-        if (isset($row['rol']) && $row['rol'] != "") $cookie = $row['rol'];
-        else $cookie = 'lector'; # Lo seteo a lector por seguridad, no puede interactuar con la página (anónimo??)
-
+    
+        $cookie = isset($row['rol']) && $row['rol'] != "" ? $row['rol'] : 'lector';
+    
         setcookie('rol', $cookie, time() + (86400 * 30), "/");
-
+    
         return json_encode([
             "api" => $row,
             "response" => "ok"
