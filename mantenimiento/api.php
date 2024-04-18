@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.3.8'; # hotfix.
+    const VERSION =  'v1.3.9'; # 🐛 Bug Fixes, admin panel structure.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs

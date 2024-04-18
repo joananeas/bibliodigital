@@ -19,6 +19,19 @@
             font-display: swap;
         }
     </style>
+    <?php 
+    session_start();
+        $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+        if((!isset($_SESSION['email']) && (strpos($url, 'login') === false) && (strpos($url, 'error') === false))) { 
+            header("Location: ./login.php"); 
+        }
+
+        if (strpos($url, 'admin') !== false) {
+            echo '<script src="../mantenimiento/scripts/colores.js"></script>';
+        } else {
+            echo '<script src="mantenimiento/scripts/colores.js"></script>';
+        }
+    ?>
 </head>
 
 <!--
@@ -28,11 +41,3 @@
     |___/___|___/____|___\___/  (c) Joan Aneas
 
 -->
-
-<?php 
-    session_start();
-    $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
-    if((!isset($_SESSION['email']) && (strpos($url, 'login') === false) && (strpos($url, 'error') === false))) { 
-        header("Location: ./login.php"); 
-    }
-?>

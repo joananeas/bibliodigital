@@ -63,3 +63,45 @@ input:checked + .slider:before {
 .slider.round:before {
     border-radius: 50%;
 }
+
+.nav-admin{
+    color: var(--color-terciario);
+}
+
+.nav-admin ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.nav-admin a {
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 2px;
+    padding-left: 10px;
+    padding-right: 10px;
+    transition: 0.1s linear;
+    float: left;
+    margin-right: 10px;
+    color: var(--color-terciario);
+}
+
+.nav-admin a:hover {
+    transition: 0.1s linear;
+    color: white !important;
+    background-color: var(--color-principal);
+}
+
+.active{
+    transition: 0.1s linear;
+    color: white;
+    background-color: var(--color-principal);
+}
+
+.active:hover{
+    transition: 0.1s linear;
+    color: white;
+    background-color: var(--color-principal);
+}
+

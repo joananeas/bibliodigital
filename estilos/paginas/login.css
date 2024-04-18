@@ -1,18 +1,24 @@
+:root {
+    --color-principal: #4A68A0; /* Valor predeterminado */
+    --color-secundario: #F5F5F5; /* Valor predeterminado */
+    --color-terciario: #333333; /* Valor predeterminado */
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #4A68A0; /* Morado */
+    background-color: var(--color-principal); /* Morado */
 }
 .login{
     text-align: center;
     padding: 20px;
     padding-left: 40px;
     padding-right: 40px;
-    color: #333333; /* Negro */
-    background-color: #f5f5f5; /* Gris */
+    color: var(--color-terciario); /* Negro */
+    background-color: var(--color-secundario); /* Gris */
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     padding-bottom: 50px;
@@ -34,7 +40,7 @@ input{
 }
 input:focus {
     outline: none; 
-    border: 2px solid #4A68A0; 
+    border: 2px solid var(--color-principal); 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .submit{
@@ -42,7 +48,7 @@ input:focus {
     text-align: center;
     float: none;
     margin-top: 20px;
-    background-color: #4A68A0;
+    background-color: var(--color-principal);
     color: white;
     border: none;
     font-size: 18px;

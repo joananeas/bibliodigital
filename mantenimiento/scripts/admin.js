@@ -47,6 +47,28 @@ getBanner().then(data => {
     console.error('Error al obtener colores:', error);
 });
 
+const panels = document.querySelectorAll(".admin-panel");
+const navLinks = document.querySelectorAll(".nav-link");
+
+const showPanel = (panelId) => {
+    panels.forEach(panel => panel.style.display = "none");
+    navLinks.forEach(link => {
+        link.classList.remove("active");
+        link.style.color = "var(--color-terciario)"; // Asegura que el color del texto sea el predeterminado.
+    });
+    const activeLink = document.querySelector(`.nav-link[data-target='${panelId}']`);
+    activeLink.classList.add("active");
+    activeLink.style.color = 'white'; // Asegura que el color del texto del enlace activo sea blanco.
+    document.getElementById(panelId).style.display = "block";
+}
+
+navLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const panelId = link.getAttribute("data-target");
+        showPanel(panelId);
+    });
+});
 
 document.getElementById('formBanner').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -75,5 +97,7 @@ document.getElementById('formBanner').addEventListener('submit', function(e) {
     });
 });
 
-document.addEventListener('DOMContentLoaded', getColores());
-document.addEventListener('DOMContentLoaded', getBanner());
+console.log('DOM cargado');
+showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.
+getColores(); // Suponiendo que estas funciones necesitan ser llamadas al cargar.
+getBanner();

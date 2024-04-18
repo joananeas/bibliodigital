@@ -27,6 +27,9 @@ function cercaLlibresLite($conn, $llibre){
         if (mysqli_num_rows($result) > 0) {
             $rows = array();
             while ($row = mysqli_fetch_assoc($result)) {
+                # Si datos están sucios
+                if (str_contains($row['estadoActual'], "Disponible")) $row['estadoActual'] = "Disponible";
+                else $row['estadoActual'] = "Prestat";
                 $rows[] = $row;
             }
             echo json_encode(['response' => 'OK', 'llibres' => $rows]);

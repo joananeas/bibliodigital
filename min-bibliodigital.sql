@@ -29,12 +29,6 @@ CREATE TABLE `dib_usuaris` (
   `rol` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish_ci;
 
-INSERT INTO `dib_usuaris` (`email`, `passwd`, `rol`) VALUES
-('joananeas', '1234', ''),
-('admin', '1234', 'admin'),
-('admin', '1234', 'admin'),
-('usuari', '1234', 'user');
-
 -- Inici Heredades d'epèrgam
 CREATE TABLE dib_cataleg (
     ID_CATÀLEG INT,
@@ -55,7 +49,7 @@ CREATE TABLE dib_cataleg (
     DESCRIPTOR VARCHAR(100),
     NIVELL VARCHAR(50),
     RESUM TEXT,
-    URL VARCHAR(255),
+    URL TEXT,
     ADREÇA VARCHAR(255),
     DIMENSIÓ VARCHAR(50),
     VOLÚM VARCHAR(50),

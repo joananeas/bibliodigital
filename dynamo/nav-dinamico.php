@@ -52,13 +52,15 @@
 </script>
 
 <script>
-    let menuImg = document.getElementById("menuTogglerImg");
-    let menuToggler = document.getElementById("menuToggler");
     let menuActivo = false;
     if (window.location.href.includes("admin")) {
+        let menuImg = document.getElementById("menuTogglerImg");
+    let menuToggler = document.getElementById("menuToggler");
         menuImg.src = "../media/icons/menuHamburguesa.png";
     }
     else {
+        let menuImg = document.getElementById("menuTogglerImg");
+        let menuToggler = document.getElementById("menuToggler");
         menuImg.src = "./media/icons/menuHamburguesa.png";
     }
     menuToggler.addEventListener("click", function() {

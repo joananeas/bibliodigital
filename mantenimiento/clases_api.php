@@ -83,6 +83,12 @@ class API_Banner {
             echo json_encode(['response' => 'ERROR']);
         }
 
+        # Prevent js error if no banner is set
+        if ($row == null) {
+            $row['bannerText'] = '0';
+            $row['bannerState'] = '';
+        }
+
         return json_encode($row);
     }
 
@@ -184,10 +190,15 @@ class API_Usuarios{
         if (!password_verify($password, $row['passwd'])) {
             return json_encode([
                 "api" => null,
-                "response" => "error"
+                "response" => "error",
+                # Debugging
+                // "password-db" => $row['passwd'],
+                // "password-usr" => $password,
+                // "message" => "contrasena-incorrecta",
+                // "message2" => password_verify($password, $row['passwd']),
             ]);
         }
-    
+        
         session_start();
         $_SESSION['email'] = $row['email'];
     

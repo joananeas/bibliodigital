@@ -1,10 +1,16 @@
+:root {
+    --color-principal: #4A68A0; /* Valor predeterminado */
+    --color-secundario: #F5F5F5; /* Valor predeterminado */
+    --color-terciario: #333333; /* Valor predeterminado */
+}
+
 body {
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #4A68A0; /* Morado */
+    background-color: var(--color-principal); /* Morado */
 }
 main{
     text-align: center;
@@ -12,13 +18,13 @@ main{
 }
 h1{
     font-size: 52px;
-    color: #333333;
+    color: var(--color-terciario);
     margin-top: 10px;
     font-family: 'Staatliches', sans-serif;
     margin-bottom: 15px;
 }
 p{
-    color: #333333;
+    color: var(--color-terciario);
 }
 footer{
     border:none;
