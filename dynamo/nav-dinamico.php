@@ -53,26 +53,22 @@
 
 <script>
     let menuActivo = false;
-    if (window.location.href.includes("admin")) {
-        let menuImg = document.getElementById("menuTogglerImg");
+    let menuImg = document.getElementById("menuTogglerImg");
     let menuToggler = document.getElementById("menuToggler");
+    if (window.location.href.includes("admin")) {
         menuImg.src = "../media/icons/menuHamburguesa.png";
     }
     else {
-        let menuImg = document.getElementById("menuTogglerImg");
-        let menuToggler = document.getElementById("menuToggler");
         menuImg.src = "./media/icons/menuHamburguesa.png";
     }
     menuToggler.addEventListener("click", function() {
         if (menuActivo) {
-            console.log("Cerrando menú...");
             menuImg.style.transform = "rotate(0deg)";
             document.querySelector("nav").style.display = "none";
             document.querySelector("main").style.display = "block";
             document.querySelector("main").style.opacity = "1";
             menuActivo = false;
         } else {
-            console.log("Abriendo menú...");
             menuImg.style.transform = "rotate(90deg)";
             document.querySelector("nav").style.display = "block";
             document.querySelector("main").style.opacity = "0.2";

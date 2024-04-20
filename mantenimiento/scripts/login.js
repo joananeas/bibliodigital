@@ -56,6 +56,19 @@ const authUsuario = (email, password) => {
 
 // genPasswd();
 
+const togglePassword = () => {
+    let password = document.getElementById("password");
+    let toggle = document.getElementById("showHide");
+    if (password.type === "password") {
+        password.type = "text";
+        toggle.src = "./media/icons/show.png";
+    }
+    else {
+        password.type = "password";
+        toggle.src = "./media/icons/hide.png";
+    }
+}
+
 document.getElementById("login").addEventListener("click", function(e){
     e.preventDefault();
     let email = document.getElementById("email").value;

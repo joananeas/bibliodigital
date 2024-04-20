@@ -14,9 +14,9 @@ body {
 }
 .login{
     text-align: center;
-    padding: 20px;
-    padding-left: 40px;
-    padding-right: 40px;
+    padding: 40px;
+    padding-left: 60px;
+    padding-right: 60px;
     color: var(--color-terciario); /* Negro */
     background-color: var(--color-secundario); /* Gris */
     border-radius: 5px;
@@ -35,7 +35,7 @@ label{
 }
 input{
     margin-bottom: 5px;
-    max-width: 140px;
+    max-width: 100%;
     float:left;
 }
 input:focus {
@@ -43,6 +43,17 @@ input:focus {
     border: 2px solid var(--color-principal); 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+/* #password {
+    width: 80%;
+} */
+
+#showHideHolder{
+    float: left;
+    margin-top: 1px;
+    margin-left: 5px;
+}
+
 .submit{
     font-family: 'Staatliches', sans-serif;
     text-align: center;

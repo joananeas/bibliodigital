@@ -104,6 +104,7 @@ const loadGlobals = () => {
 }
 
 const getRol = () => {
+    if (window.location.href.includes("login") || window.location.href.includes("install")) return;
     let formData = new FormData();
     formData.append('pttn', 'getRol');
     fetch(urlForFetch, {

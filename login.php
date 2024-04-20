@@ -15,11 +15,11 @@
                 <label>Usuari</label><br>
                 <input id="email" type="text" placeholder="nom_usuari"><br>
                 <label>Contrasenya&nbsp;</label><br>
-                <input id="password" type="password" placeholder="c0ntrasenya"><br>
+                <input id="password" type="password" placeholder="c0ntrasenya"><a id="showHideHolder" onclick="togglePassword()"><img id="showHide" src="./media/icons/hide.png" width="16" height="16"></a><br>
                 <input id="login" class="submit" type="submit" value="Login">
             </form>
         </div>
-        <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Biblio Digital</span></a>
+        <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Diblio</span></a>
     </main>
     <?php require "dynamo/footer-dinamico.php"; ?>
 </body>
