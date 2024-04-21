@@ -244,4 +244,40 @@ class API_Usuarios{
             "message" => "Usuario autenticado"
         ]);
     }
+
+    public function getAllUsers(){
+        $sql = "SELECT * FROM dib_usuaris";
+        $result = mysqli_query(peticionSQL(), $sql);
+        $users = [];
+        while($row = mysqli_fetch_assoc($result)){
+            array_push($users, $row);
+        }
+        return json_encode($users);
+    }
+
+    public function createUser($email, $passwd, $rol) {
+        $conn = peticionSQL();
+        $email = mysqli_real_escape_string($conn, $email);
+        $passwd = mysqli_real_escape_string($conn, $passwd);
+        $rol = mysqli_real_escape_string($conn, $rol);
+    
+        $sql = "INSERT INTO dib_usuaris (email, passwd, rol) VALUES (?, ?, ?)";
+        $stmt = mysqli_prepare($conn, $sql);
+        if (!$stmt) {
+            die("Error: " . mysqli_error($conn));
+        }
+        
+        $hashedPasswd = password_hash($passwd, PASSWORD_DEFAULT);
+        mysqli_stmt_bind_param($stmt, 'sss', $email, $hashedPasswd, $rol);
+    
+        $result = mysqli_stmt_execute($stmt);
+        if (!$result) {
+            die("Error: " . mysqli_error($conn));
+        }
+    
+        mysqli_stmt_close($stmt);
+        mysqli_close($conn);
+    
+        return $result;
+    }
 }

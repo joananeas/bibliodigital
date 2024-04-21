@@ -97,7 +97,113 @@ document.getElementById('formBanner').addEventListener('submit', function(e) {
     });
 });
 
-console.log('DOM cargado');
+const getAllUsers = async () => {
+    console.log('Obteniendo usuarios...');
+    let formData = new FormData();
+    formData.append('pttn', 'getAllUsers');
+
+    const response = await fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await response.json();
+    
+    let table = document.getElementById('userList');
+
+    if (Array.isArray(data)) {
+        data.forEach(user => {
+            let tr = document.createElement('tr');
+
+            // Crear y asignar los elementos para 'Nombre', que será el correo
+            let tdNombre = document.createElement('td');
+            tdNombre.textContent = user.email;
+            tdNombre.classList.add('user-row');
+            tr.appendChild(tdNombre);
+
+            // Crear y asignar los elementos para 'Correo', que será el rol
+            let tdCorreo = document.createElement('td');
+            tdCorreo.textContent = user.rol;
+            tdCorreo.classList.add('user-row');
+            tr.appendChild(tdCorreo);
+
+            // Crear y asignar los elementos vacíos para 'Estado'
+            let tdEstado = document.createElement('td');
+            tdEstado.classList.add('user-row');
+            tr.appendChild(tdEstado);
+
+            // Crear y asignar los elementos vacíos para 'Acciones'
+            let tdAcciones = document.createElement('td');
+            tr.appendChild(tdAcciones);
+
+            tr.classList.add('user-row-bottom');
+            // Añadir la fila completa a la tabla
+            table.appendChild(tr);
+        });
+    }
+}
+
+const formCreateUser = () => {
+    let menuActivo = false;
+    let form = document.getElementById('formCreateUser');
+    if (menuActivo) {
+        menuImg.style.transform = "rotate(0deg)";
+        form.style.display = "none";
+        document.querySelector("main").style.display = "block";
+        document.querySelector("main").style.opacity = "1";
+        menuActivo = false;
+    } else {
+        menuImg.style.transform = "rotate(90deg)";
+        form.style.display = "flex";
+        document.querySelector("main").style.opacity = "0.2";
+        form.style.opacity = "1";
+        menuActivo = true;
+    }
+    
+    document.getElementById('close').addEventListener('click', () => {
+        document.getElementById('formCreateUser').style.display = 'none';
+        document.querySelector("main").style.display = "block";
+        document.querySelector("main").style.opacity = "1";
+    });
+};
+
+document.getElementById("submitFormCreateUser").addEventListener('click', () => {
+    const form = document.getElementById('formUser');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault(); // Previene el envío normal del formulario
+
+        // Crear el objeto FormData y agregar los campos del formulario
+        let formData = new FormData(form);
+        formData.append('email', document.getElementById('email').value);
+        formData.append('password', document.getElementById('passwd').value);
+        formData.append('rol', document.getElementById('rol').value);
+        formData.append('pttn', 'createUser'); // Añadir el parámetro extra
+
+        try {
+            // Realizar la petición POST asincrónica
+            const response = await fetch('../mantenimiento/api.php', { // Reemplaza 'tu_endpoint_de_api' con la URL correcta
+                method: 'POST',
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Algo salió mal en la solicitud');
+            }
+
+            const result = await response.json(); // Asumiendo que la respuesta es JSON
+
+            // Procesar la respuesta aquí
+            console.log('Usuario creado:', result);
+            alert('Usuario creado con éxito!');
+
+        } catch (error) {
+            console.error('Error al crear usuario:', error);
+            alert('Error al crear el usuario');
+        }
+    });
+});
+
 showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.
 getColores(); // Suponiendo que estas funciones necesitan ser llamadas al cargar.
 getBanner();
+getAllUsers();

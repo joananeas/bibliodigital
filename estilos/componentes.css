@@ -283,30 +283,35 @@ footer {
 }
 
 .popup {
-    position: fixed; 
-    top: 0;
-    left: 0;
-    right: 0; 
-    bottom: 0; 
-    margin-top: -10px; /* El header tiene 10px de padding-top */
-    padding-bottom: 10px;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-    display: flex; /* Cambiado a flex para centrar el contenido si es necesario */
+    display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1;
-    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    margin: 0;
 }
-.popup-content{
+
+.popup-content {
     display: block;
-    background-color: var(--color-secundario);
-    border-radius: 13px;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    width: 50%;
     margin: auto;
+}
+
+#close {
+    font-size: large;
+    padding-left: 2px;
+    padding-right: 2px;
+    border-radius: 4px;
+    cursor: pointer;
+    color: var(--color-terciario);
+}
+
+#close:hover {
+    background: var(--color-principal);
+    color: white;
 }
 
 .news-bar {

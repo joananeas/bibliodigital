@@ -105,3 +105,35 @@ input:checked + .slider:before {
     background-color: var(--color-principal);
 }
 
+.tableContainer{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.tablaUsuarios{
+    text-align: center;
+    border-collapse: collapse;
+    background-color: var(--color-principal);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.tablaUsuarios th{
+    color: white;
+    padding: 10px;
+}
+
+.tablaUsuarios td{
+    padding: 2px;
+    color: var(--color-terciario);
+    background-color: var(--color-secundario);
+}
+
+.user-row{
+    border-right: 1px solid #333333;
+}
+
+.user-row-bottom{
+    border-bottom: 1px solid #333333;
+}

@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.3.9'; # 🐛 Bug Fixes, admin panel structure.
+    const VERSION =  'v1.4.0'; # ✨f/ create accounts with hashing
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
@@ -65,6 +65,17 @@
 
         case 'getRol':
             echo $apiUsuarios->getRol();
+            break;
+
+        case 'getAllUsers':
+            echo $apiUsuarios->getAllUsers();
+            break;
+        
+        case 'createUser':
+            $email = $_POST["email"];
+            $password = $_POST["password"];
+            $rol = $_POST["rol"];
+            echo $apiUsuarios->createUser($email, $password, $rol);
             break;
 
         case 'getGlobals':

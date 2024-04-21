@@ -18,6 +18,26 @@
             </ul>
         </section>
         <br>
+        <div id="admin-config-panel" class="admin-panel">
+            <section class="frame">
+                <p class="fuenteH1">Configuración</p>
+            </section>
+        </div>
+        <div id="admin-users-panel" class="admin-panel">
+            <section class="frame">
+                <p class="fuenteH1">Usuarios <button class="botonUniversal" style="margin-top:0px; float:right;" onclick="formCreateUser()">Crear Usuari</button></p>
+                <div class="tableContainer">
+                    <table id="userList" class="tablaUsuarios">
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </div>
         <div id="admin-styles-panel" class="admin-panel">
             <section class="frame">
                 <form id="formBanner">
@@ -61,26 +81,32 @@
                 <p>Usuarios totales: <span id="usuariosTotales">0</span></p>
             </section>
         </div>
-        <div id="admin-users-panel" class="admin-panel">
-            <section class="frame">
-                <p class="fuenteH1">Usuarios</p>
-                <table id="tablaUsuarios">
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>Estado</th>
-                        <th>Acciones</th>
-                    </tr>
-                </table>
-            </section>
-        </div>
-        <div id="admin-config-panel" class="admin-panel">
-            <section class="frame">
-                <p class="fuenteH1">Configuración</p>
-            </section>
-        </div>
     </main>
 
+    <!-- Los "popups" tienen que estar fuera de main -->
+    <div class="popup" style="display:none;" id="formCreateUser">
+        <section class="frame popup-content" >
+            <a id="close">&times;</a>
+            <p class="fuenteH1">Crear Usuario</p>
+            <form id="formUser">
+                <label for="nombre">Correo:</label>
+                <input type="text" id="email" name="nombre" required>
+                <br>
+                <label for="correo">Password:</label>
+                <input type="text" id="passwd" name="correo" required>
+                <br>
+                <label for="password">Rol:</label>
+                <select id="rol" name="rol">
+                    <option value="usuario">Usuario</option>
+                    <option value="moderador">Moderador</option>
+                    <option value="bibliotecario">Bibliotecario</option>
+                    <option value="admin">Admin</option>
+                </select>
+                <br>
+                <button id="submitFormCreateUser" type="submit" class="botonUniversal">Crear Usuario</button>
+            </form>
+        </section>
+    </div>
 <!-- Footer DINAMICO -->
 <?php require "../dynamo/footer-dinamico.php"; ?>
 </body>
