@@ -1,19 +1,29 @@
 .container {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
 }
 
 .aside-image, .aside-text {
-    flex: 1 0 50%; /* Esto significa que cada aside tendrá un ancho base del 50%, pero puede crecer para llenar el espacio disponible si es necesario */
+    float: left;
     box-sizing: border-box; /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
 }
 
+.aside-text{
+    margin-left: 10px;
+}
+
 .book-image {
-    max-width: 100%; /* Esto asegura que la imagen no se desborde de su contenedor */
-    height: auto; /* Esto mantiene la relación de aspecto de la imagen */
+    border: 2px solid #333333;
+    border-radius: 4px;
+    width: 400px;
+    height: 500px;
 }
 
 article {
     flex: 1 0 100%; /* Esto significa que el artículo tendrá un ancho base del 100%, pero puede crecer para llenar el espacio disponible si es necesario */
     box-sizing: border-box; /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
+}
+
+.vistaLibro{
+    margin-top: 20px;
 }

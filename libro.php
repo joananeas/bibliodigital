@@ -7,21 +7,22 @@
 <!-- Nav DINAMICO -->
 <?php require "dynamo/nav-dinamico.php"; ?>
 <main>
-    <section class="frame">
+    <section class="frame vistaLibro">
         <div class="header-libros">
-        <span>Vista del llibre: <span id="nombreLibro" class="fuenteH1"></span></span>
+            <h3 class="fuenteH1">
+                <span id="tituloLibro"></span>&nbsp;📖
+            </h3>
         </div>   
         <div class="container">
             <aside class="aside-image">
-                <img src="./media/sistema/pruebas.jpg" class="book-image">
+                <img id="libroImagen" src="./media/sistema/pruebas.jpg" class="book-image">
             </aside>
             <aside class="aside-text">
-                <p>Títol: <span id="tituloLibro" class="fuenteH1"></span></p>
+                <p><span class="fuenteH1">Autor:</span>&nbsp;<span id="autorLibro"></span></p>
+                <p><span class="fuenteH1">Categoria:</span>&nbsp;</p>
+                <p><span class="fuenteH1">💬Descripció:</span>&nbsp;<span id="resumLibro"></span></p>
+                <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;<span id="estrellas"></span></p>
             </aside>    
-            <article>
-                <h3 class="fuenteH1"></h3>
-                <span>Estrellas: </span><span id="estrellas" class="fuenteH1"></span>
-            </article>
         </div>
     </section>
 </main>

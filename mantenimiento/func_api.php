@@ -26,11 +26,14 @@ function cercaLlibresLite($conn, $llibre){
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             $rows = array();
+            $i = 0;
             while ($row = mysqli_fetch_assoc($result)) {
+                $i++;
                 # Si datos están sucios
                 if (str_contains($row['estadoActual'], "Disponible")) $row['estadoActual'] = "Disponible";
                 else $row['estadoActual'] = "Prestat";
                 $rows[] = $row;
+                if ($i > 5) break;
             }
             echo json_encode(['response' => 'OK', 'llibres' => $rows]);
         } else {
@@ -39,7 +42,11 @@ function cercaLlibresLite($conn, $llibre){
 }
 
 function cercaLlibresFull($conn, $llibre){
-    $sql = "SELECT dib_cataleg.TITOL AS nom, dib_exemplars.ESTAT as estadoActual FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
+    $sql = "SELECT dib_cataleg.TITOL AS nom,
+    dib_exemplars.ESTAT as estadoActual,
+    dib_cataleg.URL as 'url',
+    dib_cataleg.RESUM as 'resum',
+    dib_cataleg.AUTOR as 'autor' FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         $rows = array();
