@@ -6,3 +6,6 @@ composer.phar
 composer.phar.pubkey
 mantenimiento/composer-backups/*
 tmp/*
+*.xls
+*.xlsx
+*.csv

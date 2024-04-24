@@ -9,7 +9,8 @@
                 "403": "Accés denegat.",
                 "500": "Error intern de servidor.",
                 "0000": "Error desconegut.",
-                "0001": "Conexió a la base de dades fallida."
+                "0001": "Conexió a la base de dades fallida.",
+                "0008": "Versió de PHP no compatible, PHP >= 8 requerit.",
             };
 
             const getError = () => {

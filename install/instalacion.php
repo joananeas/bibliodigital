@@ -1,8 +1,8 @@
 <?php
     # © Joan Aneas
-    require '../mantenimiento/vendor/autoload.php';
-    use PhpOffice\PhpSpreadsheet\IOFactory;
-    use PhpOffice\PhpSpreadsheet\Writer\Csv;
+    # require '../mantenimiento/vendor/autoload.php';
+    # use PhpOffice\PhpSpreadsheet\IOFactory;
+    # use PhpOffice\PhpSpreadsheet\Writer\Csv;
     
     if(isset($_POST['peticion'])) $peticion = $_POST['peticion'];
     else if(isset($_GET['peticion'])) $peticion = $_GET['peticion'];  
@@ -52,7 +52,7 @@
         return json_encode(["status" => "ok", "message" => "Archivo mant.php creado con éxito."]);
     }
     
-    function convertirXlsACsv($archivoEntrada, $archivoSalida) {
+    /*function convertirXlsACsv($archivoEntrada, $archivoSalida) {
         // Cargar el archivo .xls
         $spreadsheet = IOFactory::load($archivoEntrada);
     
@@ -86,41 +86,43 @@
         return false; // Retorna false si falla
     }
     
-    function subirXlsx($files, $db_server, $db_user, $db_name, $db_pass) {    
+    */
+    function subirXlsx($files, $db_server, $db_user, $db_name, $db_pass) {
         $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
-    
-        // Verificar la conexión
+
         if ($conn->connect_error) {
             die(json_encode(["status" => "error", "message" => "Conexión fallida: " . $conn->connect_error]));
         }
     
         foreach ($files['name'] as $key => $filename) {
-            $targetDir = '../tmp'; // Asegúrate de que este directorio existe o crea uno si es necesario
-            
-            if (!file_exists($targetDir)) {
-                mkdir($targetDir, 0777, true);
-            }
-            
-            // Mover y convertir el archivo
-            $nombreArchivoSinExtension = moverYConvertirArchivo($files['tmp_name'][$key], $filename, $targetDir);
-            if (!$nombreArchivoSinExtension) {
+            $nombreArchivoSinExtension = pathinfo($filename, PATHINFO_FILENAME);
+            $targetDir = './';
+            $rutaXls = $targetDir . $nombreArchivoSinExtension . ".xls";
+            if (!move_uploaded_file($files['tmp_name'][$key], $rutaXls)) {
                 $conn->close();
-                return json_encode(["status" => "error", "message" => "Error al mover y convertir el archivo"]);
+                return json_encode(["status" => "error", "message" => "Error al subir archivos"]);
             }
+        }
+        echo json_encode(__DIR__);
+        exec(__FILE__ . "python converter.py", $output, $return_var);
+        echo json_encode($return_var);
+        
+        if ($return_var != 0) {
+            $conn->close();
+            return json_encode(["status" => "error", "message" => "Error al convertir los archivos con Python"]);
+        }
     
-            // Preparar la ruta al archivo CSV
-            $rutaCsv = $targetDir . '/' . $nombreArchivoSinExtension . ".csv";
+        foreach ($files['name'] as $key => $filename) {
+            $nombreArchivoSinExtension = pathinfo($filename, PATHINFO_FILENAME);
+            $targetDir = './';
+            $rutaCsv = $targetDir . $nombreArchivoSinExtension . ".csv";
             $tabla = "dib_" . $nombreArchivoSinExtension;
-            
-            // Preparar la consulta SQL para cargar los datos desde el archivo CSV
-            $sql = "LOAD DATA LOCAL INFILE '".$conn->real_escape_string($rutaCsv)."'
-                    INTO TABLE ". $tabla ."
+            $sql = "LOAD DATA LOCAL INFILE '" . $conn->real_escape_string($rutaCsv) . "'
+                    INTO TABLE " . $tabla . "
                     FIELDS TERMINATED BY ',' 
                     ENCLOSED BY '\"'
                     LINES TERMINATED BY '\n'
                     IGNORE 1 ROWS;";
-    
-            // Ejecutar la consulta
             if (!$conn->query($sql)) {
                 $conn->close();
                 return json_encode(["status" => "error", "message" => "Error al subir datos: " . $conn->error]);

@@ -97,9 +97,9 @@
                 <br>
                 <label for="password">Rol:</label>
                 <select id="rol" name="rol">
-                    <option value="usuario">Usuario</option>
+                    <option value="user">Usuario</option>
                     <option value="moderador">Moderador</option>
-                    <option value="bibliotecario">Bibliotecario</option>
+                    <option value="bibliotecari">Bibliotecario</option>
                     <option value="admin">Admin</option>
                 </select>
                 <br>

@@ -28,11 +28,15 @@
 </nav>
 
 <script>
+    let urlLogout = "";
+    if (window.location.href.includes("admin")) urlLogout = "../mantenimiento/api.php";
+    else urlLogout = "./mantenimiento/api.php";
+
     document.getElementById("logoutBoton").addEventListener("click", () => {
         console.log("[LOGOUT] Cerrando sesión...");
         let formData = new FormData();
         formData.append('pttn', 'logout');
-        fetch("./mantenimiento/api.php", {
+        fetch(urlLogout, {
             method: "POST",
             body: formData
         })
@@ -40,7 +44,8 @@
         .then(data => {
             if(data.response === "ok") {
                 console.log("[LOGOUT] Sesión cerrada.");
-                window.location.href = "./login.php";
+                if (window.location.href.includes("admin")) window.location.href = "../login.php";
+                else window.location.href = "./login.php";
             } else {
                 console.log("[LOGOUT] Error al cerrar sesión.");
             }

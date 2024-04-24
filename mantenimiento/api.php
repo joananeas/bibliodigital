@@ -148,6 +148,7 @@
         
         case 'logout':
             session_start();
+                $_COOKIE['rol'] = null;
             session_destroy();
             echo json_encode([
                 "api" => null,
