@@ -211,9 +211,9 @@ section {
 
 .cercaLlibresPerQr {
     float: right;
-    padding: 15px 20px;
-    width: 30px;
-    height: 30px;
+    padding: 15px;
+    width: 32px;
+    height: 32px;
     transition: 0.3s ease-in-out;
 }
 
@@ -221,4 +221,50 @@ section {
     cursor: pointer;
     scale: 1.2;
     transition: 0.3s ease-in-out;
+}
+
+.qr{
+    display: flex;
+    padding: 0;
+    margin: 0;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+@media (max-width: 767px) {
+    main {
+        padding-bottom: 30px;
+    }
+
+    .libros {
+        width: 100%;
+        margin-right: 0;
+    }
+
+    .carroussel-img {
+        height: 300px;
+        max-height: 500px;
+    }
+
+    .categorias button,
+    .topicos button {
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    #inputCercaLlibres {
+        width: 80%;
+    }
+
+    .c-boton {
+        font-size: medium;
+    }
+
+    .anterior,
+    .siguiente {
+        margin-left: 5px;
+        margin-right: 5px;
+    }
 }

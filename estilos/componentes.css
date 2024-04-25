@@ -64,6 +64,7 @@ a{
 a:hover{
     text-decoration: underline;
 }
+
 .centrado {
     display: flex;
     justify-content: space-between;
@@ -351,11 +352,46 @@ footer {
 
 
 /* Móviles here!!! */
+#footerDesktop {
+    display: flex;
+}
 
-@media screen and (max-width: 480px) {
+#footerMobile {
+    display: none;
+}
+
+@media screen and (max-width: 700px) {
+    .centrado a {
+        margin: 0 5%; 
+        display: inline-block;
+    }
+
+    .centrado {
+        display: flex;             
+        justify-content: space-around;
+        align-items: center;       
+    }
+    
+    .centrado div {
+        width: 100%;             
+    }
+
+    #footerDesktop {
+        display: none;
+    }
+
+    #footerMobile {
+        display: block;
+        padding-top: 15px;
+    }
+}
+
+
+@media screen and (max-width: 500px) {
     .menu-links{
         display: none;
     }
+
     #logoutBoton{
         display: none;
     }

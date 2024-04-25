@@ -6,14 +6,47 @@ document.getElementById("inputCercaLlibres").addEventListener("focus", function(
     document.getElementById("buscadorLlibres").style.display = "block";
 });
 
+const viewQR = () => {
+    let video = document.getElementById('videoElement');
+    let canvas = document.getElementById('canvasElement');
+
+    let menuActivo = false;
+    let form = document.getElementById('popupQR');
+    if (menuActivo) {
+        menuImg.style.transform = "rotate(0deg)";
+        form.style.display = "none";
+        video.style.display = "none";
+        canvas.style.display = "none";
+        document.querySelector("main").style.display = "block";
+        document.querySelector("main").style.opacity = "1";
+        menuActivo = false;
+    } else {
+        menuImg.style.transform = "rotate(90deg)";
+        form.style.display = "flex";
+        video.style.display = "block";
+        canvas.style.display = "none";
+        document.querySelector("main").style.opacity = "0.2";
+        form.style.opacity = "1";
+        menuActivo = true;
+    }
+    
+    document.getElementById('close').addEventListener('click', () => {
+        document.getElementById('popupQR').style.display = 'none';
+        document.querySelector("main").style.display = "block";
+        document.querySelector("main").style.opacity = "1";
+    });
+};
+
+
 document.getElementById('qrCerca').addEventListener("click", function(event) {
     event.preventDefault();
     const video = document.getElementById('videoElement');
-    video.style.display = 'block';
+    viewQR();
 
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
     .then(function(stream) {
         video.srcObject = stream;
+        popupQR.style.display = 'block';
         video.play().catch(error => console.error("Error al iniciar la reproducción del video", error));
         scanQRCode();
     }).catch(function(error) {

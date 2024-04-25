@@ -6,7 +6,18 @@
     </div>
 </section> -->
 
-<footer class="centrado">
+<footer id="footerMobile" class="centrado">
+    <div>
+        <a href="" aria-label="Inici"><img src="./media/icons/home.png" width="40" height="40"></a>
+        <a href="" aria-label="Comunitat"><img src="./media/icons/heart.png" width="40" height="40"></a>
+        <a href="" aria-label="Escanejar QR"><img src="./media/icons/qr-code-white.png" width="40" height="40"></a>
+        <a href="" aria-label="Marcadors"><img src="./media/icons/markers.png" width="40" height="40"></a>
+        <a href="" aria-label="Perfil Usuari"><img src="./media/icons/user.png" width="40" height="40"></a>
+    </div>
+</footer>
+
+
+<footer id="footerDesktop" class="centrado">
     <span class="izquierda" id="version"></span><!--OK--><!--dinamico-->
     <div class="central">
         <span id="escuela-footer"></span>

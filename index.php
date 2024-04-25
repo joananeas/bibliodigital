@@ -9,12 +9,7 @@
     <main>
         <section id="buscador" class="frame" style="padding: 0;">
             <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">    
-            <a id="qrCerca"><img src="./media/icons/qr-code.png" alt="Cerca Per QR" class="cercaLlibresPerQr" width="30" height="30"></a>
-            
-            <!-- Para la api de la cámara -->
-            <video id="videoElement" playsInline autoplay style="display:none;"></video>
-            <canvas id="canvasElement" style="display:none;"></canvas>
-            
+            <a id="qrCerca"><img src="./media/icons/qr-code.png" alt="Cerca Per QR" class="cercaLlibresPerQr" width="30" height="30"></a>            
             <div class="buscadorLlibres" id="buscadorLlibres"></div>
         </section>
         <section class="carroussel">
@@ -61,6 +56,22 @@
         </section>
         <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
     </main>
+    <!-- Para la api de la cámara -->
+    <div class="popup" style="display:none;" id="popupQR">
+        <div class="popup-content">
+            <section class="frame" >
+                <a id="close">&times;</a>
+                <p class="fuenteH1" style="text-align:center;">Escaneja un QR vàlid</p>
+                <div class="qr">
+                    <video id="videoElement" playsInline autoplay style="display:none;"></video>
+                    <canvas id="canvasElement" style="display:none;"></canvas>
+                </div>
+            </section>
+            <section id="toast-frame" class="frame toast" style="display:none;">
+                <p id="toast">Copiat al portapapers</p>
+            </section>
+        </div>
+    </div>
 
 <!-- Footer DINAMICO -->
 <?php require "dynamo/footer-dinamico.php"; ?>

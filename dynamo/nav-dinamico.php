@@ -9,8 +9,6 @@
 <header id="h">
     <a id="menuToggler" href="#" class="menu-hamburguesa"><img id="menuTogglerImg" width="35px" height="35px" alt="icono menú hamburguesa (desplegable)"></a>
     <a href="./index.php" class="titulo"><h1 id="titulo"></h1></a>
-    <a class="menu-links" href="libro.php">Cercar llibres</a>
-    <a class="menu-links" href="#">Pjt Carlos</a>
     <div class="logout">
         <span id="info-usuari"></span>
         <button id="logoutBoton" class="botonUniversal_alt" style="margin-top:0;">Logout</button>

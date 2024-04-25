@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.4.0'; # ✨f/ create accounts with hashing
+    const VERSION =  'v1.4.2'; # ✨Responsive design
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
