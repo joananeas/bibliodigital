@@ -9,8 +9,12 @@
     <main>
         <section id="buscador" class="frame" style="padding: 0;">
             <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">    
-
-            <!-- <button id="btnCercaLlibres">x</button> -->
+            <a id="qrCerca"><img src="./media/icons/qr-code.png" alt="Cerca Per QR" class="cercaLlibresPerQr" width="30" height="30"></a>
+            
+            <!-- Para la api de la cámara -->
+            <video id="videoElement" playsInline autoplay style="display:none;"></video>
+            <canvas id="canvasElement" style="display:none;"></canvas>
+            
             <div class="buscadorLlibres" id="buscadorLlibres"></div>
         </section>
         <section class="carroussel">
@@ -55,6 +59,7 @@
                 <li>Opció 1</li>
             </ul>
         </section>
+        <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
     </main>
 
 <!-- Footer DINAMICO -->

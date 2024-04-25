@@ -6,6 +6,47 @@ document.getElementById("inputCercaLlibres").addEventListener("focus", function(
     document.getElementById("buscadorLlibres").style.display = "block";
 });
 
+document.getElementById('qrCerca').addEventListener("click", function(event) {
+    event.preventDefault();
+    const video = document.getElementById('videoElement');
+    video.style.display = 'block';
+
+    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+    .then(function(stream) {
+        video.srcObject = stream;
+        video.play().catch(error => console.error("Error al iniciar la reproducción del video", error));
+        scanQRCode();
+    }).catch(function(error) {
+        console.error("Cannot access camera", error);
+    });
+});
+
+const scanQRCode = () => {
+    const canvasElement = document.getElementById('canvasElement');
+    const canvas = canvasElement.getContext('2d');
+    const video = document.getElementById('videoElement');
+
+    function tick() {
+        if (video.readyState === video.HAVE_ENOUGH_DATA) {
+            canvasElement.height = video.videoHeight;
+            canvasElement.width = video.videoWidth;
+            canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
+            var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
+            var code = jsQR(imageData.data, imageData.width, imageData.height, {
+                inversionAttempts: "dontInvert",
+            });
+            if (code) {
+                console.log("Found QR code", code.data);
+                video.srcObject.getTracks().forEach(track => track.stop());
+                video.style.display = 'none';
+                alert("Código QR detectado: " + code.data);
+                return;
+            }
+        }
+        requestAnimationFrame(tick);
+    }
+    tick();
+}
 
 document.getElementById("inputCercaLlibres").addEventListener("input", function() {
     let formData = new FormData();

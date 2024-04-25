@@ -62,6 +62,14 @@
                 ]);
             }
             break;
+        
+        case 'server-ip':
+            echo json_encode([
+                "api" => null,
+                "response" => "ok",
+                "ip" => $_SERVER['REQUEST_URI']
+            ]);
+            break;
 
         case 'getRol':
             echo $apiUsuarios->getRol();
