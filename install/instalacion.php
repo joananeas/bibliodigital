@@ -52,41 +52,6 @@
         return json_encode(["status" => "ok", "message" => "Archivo mant.php creado con éxito."]);
     }
     
-    /*function convertirXlsACsv($archivoEntrada, $archivoSalida) {
-        // Cargar el archivo .xls
-        $spreadsheet = IOFactory::load($archivoEntrada);
-    
-        // Crear un escritor de tipo CSV
-        $writer = new Csv($spreadsheet);
-    
-        // Configurar delimitador a coma
-        $writer->setDelimiter(',');  // Establecer el delimitador a coma
-        $writer->setEnclosure('"');  // Establecer el tipo de delimitador de texto
-        $writer->setLineEnding("\r\n");
-        $writer->setSheetIndex(0);   // Escribir la primera hoja del archivo .xls
-    
-        // Guardar archivo .csv
-        $writer->save($archivoSalida);
-        return file_exists($archivoSalida) ? $archivoSalida : false;
-    }
-    
-    function moverYConvertirArchivo($archivoEntrada, $nombreArchivo, $targetDir) {
-        $pathInfo = pathinfo($nombreArchivo);
-        $baseName = $pathInfo['filename']; // Obtener el nombre sin extensión
-        $destPath = $targetDir . '/' . $baseName . '.xls'; // Agregar la extensión .xls al archivo de destino
-    
-        // Intenta mover el archivo al directorio temporal
-        if (move_uploaded_file($archivoEntrada, $destPath)) {
-            // Define el path de salida para el archivo CSV
-            $outputPath = $targetDir . '/' . $baseName . '.csv'; // Agregar la extensión .csv al archivo de salida
-            if (convertirXlsACsv($destPath, $outputPath)) {
-                return $baseName; // Retorna el nombre base del archivo convertido
-            }
-        }
-        return false; // Retorna false si falla
-    }
-    
-    */
     function subirXlsx($files, $db_server, $db_user, $db_name, $db_pass) {
         $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
 
@@ -142,7 +107,7 @@
         }
     
         // Preparar la sentencia SQL
-        $stmt = $conn->prepare("INSERT INTO dib_config (INSTALLED, NOM_BIBLIOTECA, TITOL_WEB, H1_WEB, FAVICON, COLOR_PRINCIPAL, COLOR_SECUNDARIO, COLOR_TERCIARIO, BANNER_STATE, BANNER_TEXT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt = $conn->prepare("INSERT INTO dib_config (NOM_BIBLIOTECA, TITOL_WEB, H1_WEB, FAVICON, COLOR_PRINCIPAL, COLOR_SECUNDARIO, COLOR_TERCIARIO, BANNER_STATE, BANNER_TEXT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
     
         // Verificar si la sentencia se preparó correctamente
         if (!$stmt) {
@@ -155,7 +120,7 @@
         $b = 0;
         $bT = "";
         // Vincular los parámetros a la sentencia SQL
-        $stmt->bind_param("isssssssis", $i, $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario, $b, $bT);
+        $stmt->bind_param("sssssssis", $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario, $b, $bT);
     
         // Ejecutar la sentencia
         if ($stmt->execute()) {

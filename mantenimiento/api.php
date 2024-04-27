@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.4.2'; # ✨Responsive design
+    const VERSION =  'v1.5.0'; # 🧹 DB redesign: reserves, usuaris, prestecs, expulsions, notificacions
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
