@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.0'; # 🧹 DB redesign: reserves, usuaris, prestecs, expulsions, notificacions
+    const VERSION =  'v1.5.1'; # ✨ Reserves (falta retocar) y notificaciones.
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
@@ -167,6 +167,31 @@
         
         case 'getFotos':
             $resp = $apiCarroussel->obtenerFotos();
+            echo $resp;
+            break;
+
+        case 'getReserves':
+            $conn = peticionSQL();
+            $id = $_POST["id"];
+            $resp = getReserves($conn, $id);
+            echo $resp;
+            break;
+
+        case 'reservar':
+            $conn = peticionSQL();
+            $id = $_POST['id'];
+            $fechaInicio = $_POST['fecha'];
+            $usuari = $apiUsuarios->getID();
+
+            $resp = reservar($conn, $id, $usuari, $fechaInicio);
+            echo $resp;
+            break;
+
+        case 'getNotifications':
+            $conn = peticionSQL();
+            $usuari = $apiUsuarios->getID();
+                
+            $resp = $apiUsuarios->getNotifications($usuari);
             echo $resp;
             break;
 

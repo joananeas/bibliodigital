@@ -201,6 +201,7 @@ class API_Usuarios{
         
         session_start();
         $_SESSION['email'] = $row['email'];
+        $_SESSION['u_id'] = $row['usuari'];
     
         $cookie = isset($row['rol']) && $row['rol'] != "" ? $row['rol'] : 'lector';
     
@@ -229,6 +230,25 @@ class API_Usuarios{
         ]);
     }
 
+    public function getID(){
+        session_start();
+        if (!isset($_SESSION['email'])) {
+            return json_encode([
+                "api" => null,
+                "response" => "error",
+                "message" => "Usuario no autenticado"
+            ]);
+        }
+
+        $conn = peticionSQL();
+        $sql = "SELECT usuari FROM dib_usuaris WHERE email = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, 's', $_SESSION['email']);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        return $row['usuari'];
+    }
     public function headerAuthUsuario(){
         session_start();
         if (!isset($_SESSION['email'])) {
@@ -280,4 +300,22 @@ class API_Usuarios{
     
         return $result;
     }
+
+    public function getNotifications($userId){
+        $conn = peticionSQL();
+        $notificaciones = [];
+        if ($stmt = mysqli_prepare($conn, "SELECT * FROM dib_notificacions WHERE usuari_id = ?")) {
+            mysqli_stmt_bind_param($stmt, 'i', $userId);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+            while ($row = mysqli_fetch_assoc($result)) {
+                $notificaciones[] = $row;
+            }
+            mysqli_free_result($result);
+            mysqli_stmt_close($stmt);
+        }
+        mysqli_close($conn);
+        return json_encode($notificaciones);
+    }
 }
+

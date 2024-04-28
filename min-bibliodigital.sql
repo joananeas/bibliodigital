@@ -2,7 +2,11 @@ SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET GLOBAL time_zone = '+01:00';
 
+SET foreign_key_checks = 0;
+
 DROP TABLE IF EXISTS `dib_reserves`, `dib_prestecs`, `dib_expulsions`, `dib_exemplars`, `dib_cataleg`, `dib_config`, `dib_usuaris`, `dib_notificacions`;
+
+SET foreign_key_checks = 1;
 
 CREATE TABLE IF NOT EXISTS dib_usuaris (
   usuari INT AUTO_INCREMENT PRIMARY KEY,
@@ -17,7 +21,7 @@ CREATE TABLE IF NOT EXISTS dib_usuaris (
 );
 
 CREATE TABLE dib_cataleg (
-  ID_CATÀLEG INT AUTO_INCREMENT PRIMARY KEY,
+  ID_CATÀLEG INT,
   ID_BIBLIOTECA INT,
   NUMERO INT,
   ISBN VARCHAR(20),
@@ -49,7 +53,7 @@ CREATE TABLE dib_cataleg (
 );
 
 CREATE TABLE dib_exemplars (
-  IDENTIFICADOR INT AUTO_INCREMENT PRIMARY KEY,
+  IDENTIFICADOR INT,
   NUMERO_EXEMPLAR INT,
   SIGNATURA_EXEMPLAR VARCHAR(255),
   SITUACIO VARCHAR(50),
@@ -58,7 +62,7 @@ CREATE TABLE dib_exemplars (
 
 CREATE TABLE IF NOT EXISTS dib_reserves (
   reserva INT AUTO_INCREMENT PRIMARY KEY,
-  isbn VARCHAR(20),
+  exemplar_id INT NOT NULL,
   usuari_id INT NOT NULL,
   data_inici DATE,
   data_fi DATE,
@@ -118,5 +122,19 @@ CREATE TABLE IF NOT EXISTS dib_notificacions (
 CREATE INDEX idx_notificacions_usuari ON dib_notificacions(usuari_id);
 CREATE INDEX idx_notificacions_estat ON dib_notificacions(estat);
 CREATE INDEX idx_notificacions_data ON dib_notificacions(data_creada);
+
+
+-- TRIGGERS
+DELIMITER $$
+
+CREATE TRIGGER `trg_after_insert_reserva` 
+AFTER INSERT ON `dib_reserves` 
+FOR EACH ROW BEGIN
+  INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus) 
+  VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('Tu reserva con ID ', NEW.reserva, ' ha sido registrada con éxito.'), 'Reserva');
+END$$
+
+DELIMITER ;
+
 
 COMMIT;

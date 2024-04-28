@@ -23,6 +23,7 @@
                 <p><span class="fuenteH1">🧩Categoria:</span>&nbsp;</p>
                 <p><span class="fuenteH1">💬Descripció:</span>&nbsp;<span id="resumLibro"></span></p>
                 <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;<span id="estrellas"></span></p>
+                <button id="reservar" class="botonUniversal">Reservar</button>
             </aside>    
         </div>
         
@@ -33,7 +34,7 @@
     <div class="popup" style="display:none;" id="popupQR">
         <div class="popup-content">
             <section class="frame" >
-                <a id="close">&times;</a>
+                <a id="closeQR" class="close">&times;</a>
                 <p class="fuenteH1" style="text-align:center;">Escaneja el QR del Llibre</p>
                 <div id="qrcode" class="qr"></div>
                 <p class="fuenteH1" style="text-align:center;">Compartir</p>
@@ -49,6 +50,41 @@
             </section>
         </div>
     </div>
+
+    <div class="popup" style="display:none;" id="popupReserva">
+        <div class="popup-content">
+            <section class="frame" >
+                <a id="closeReserva" class="close">&times;</a>
+                <p class="fuenteH1" style="text-align:center;">Reserva [titulo]</p>
+                <div id="calendar-container">
+                    <div id="calendar-header">
+                        <button id="prev-month" class="botonUniversal">&laquo;</button>
+                        <h2 id="month-year"></h2>
+                        <button id="next-month" class="botonUniversal">&raquo;</button>
+                    </div>
+                    <table id="calendar" class="calendar">
+                        <thead>
+                            <tr>
+                                <th>D</th>
+                                <th>L</th>
+                                <th>M</th>
+                                <th>X</th>
+                                <th>J</th>
+                                <th>V</th>
+                                <th>S</th>
+                            </tr>
+                        </thead>
+                        <tbody id="calendar-body">
+                            <!-- Las celdas del calendario se llenarán con JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <p id="reserva-holder"></p>
+                <button id="reservar-libro" class="botonUniversal">Reservar</button>
+            </section>
+        </div>
+    </div>
+
 <!-- Footer DINAMICO -->
 <?php require "dynamo/footer-dinamico.php"; ?>
 </body>

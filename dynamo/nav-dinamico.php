@@ -10,11 +10,16 @@
     <a id="menuToggler" href="#" class="menu-hamburguesa"><img id="menuTogglerImg" width="35px" height="35px" alt="icono menú hamburguesa (desplegable)"></a>
     <a href="./index.php" class="titulo"><h1 id="titulo"></h1></a>
     <div class="logout">
+        <div class="dropdown">
+            <button style="margin-top:0;" class="botonUniversal_alt">🔔&nbsp;(<span id="notification-number"></span>)</button>
+            <div class="dropdown-content" id="notification-submenu">
+                <!-- Dinamico!!! -->
+            </div>
+        </div>
         <span id="info-usuari"></span>
         <button id="logoutBoton" class="botonUniversal_alt" style="margin-top:0;">Logout</button>
     </div>
 </header>
-
 <nav class="frame" style="margin-left:0; margin-right:0; margin-top:20px; padding:0;">
     <li><a href="index.php">🏠 Inici</a></li>
     <li><a href="llibres.php">🔍 Cerca de llibres</a></li>

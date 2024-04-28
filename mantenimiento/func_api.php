@@ -22,7 +22,7 @@ function peticionSQL(){
 }
 
 function cercaLlibresLite($conn, $llibre){
-    $sql = "SELECT dib_cataleg.TITOL AS nom, dib_exemplars.ESTAT as estadoActual FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
+    $sql = "SELECT dib_cataleg.TITOL AS nom, dib_exemplars.ESTAT as estadoActual, dib_cataleg.NUMERO as id FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             $rows = array();
@@ -46,7 +46,7 @@ function cercaLlibresFull($conn, $llibre){
     dib_exemplars.ESTAT as estadoActual,
     dib_cataleg.URL as 'url',
     dib_cataleg.RESUM as 'resum',
-    dib_cataleg.AUTOR as 'autor' FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
+    dib_cataleg.AUTOR as 'autor' FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `NUMERO` = '$llibre'";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         $rows = array();
@@ -75,5 +75,37 @@ function reservarLibro($conn, $titulo, $fechaInicio, $fechaFin){
         }
     } else {
         echo json_encode(['response' => 'ERROR', 'message' => 'El libro no existe']);
+    }
+}
+
+function getReserves($conn, $id){
+    $sql = "SELECT * FROM dib_reserves WHERE exemplar_id = '$id'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        $rows = array();
+        while ($row = mysqli_fetch_assoc($result)) {
+            $rows[] = $row;
+        }
+        return json_encode(['response' => 'OK', 'reserves' => $rows]);
+    } else {
+        return json_encode(['response' => 'no-data']);
+    }
+}
+
+function reservar($conn, $exemplar_id, $usuari_id, $data_inici, $estat = 'pendent', $prolongada = false, $motiu_prolongacio = '') {
+    $data_fi = date('Y-m-d', strtotime($data_inici . ' + 7 days'));
+
+    $sql = "INSERT INTO `dib_reserves` (`reserva`, `exemplar_id`, `usuari_id`, `data_inici`, `data_fi`, `estat`, `prolongada`, `motiu_prolongacio`) 
+            VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+
+    $prolongada = $prolongada ? 1 : 0;
+
+    mysqli_stmt_bind_param($stmt, "iisssis", $exemplar_id, $usuari_id, $data_inici, $data_fi, $estat, $prolongada, $motiu_prolongacio);
+
+    if (mysqli_stmt_execute($stmt)) {
+        return json_encode(['response' => 'OK']);
+    } else {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar la reserva en la base de datos: ' . mysqli_error($conn)]);
     }
 }

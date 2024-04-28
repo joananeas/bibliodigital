@@ -8,6 +8,37 @@ else {
     urlForFetch = "./mantenimiento/api.php";
 }
 
+async function getNotificaciones() {
+    let formData = new FormData();
+    let number = document.getElementById("notification-number");
+    let submenu = document.getElementById("notification-submenu");
+
+    // Limpiar las notificaciones existentes antes de añadir las nuevas
+    submenu.innerHTML = '';
+
+    formData.append('pttn', 'getNotifications');
+    try {
+        const response = await fetch(urlForFetch, {
+            method: "POST",
+            body: formData
+        });
+        if (!response.ok) {
+            throw new Error('Respuesta no válida');
+        }
+        const data = await response.json();
+        number.textContent = data.length;
+        for (let i = 0; i < data.length; i++) {
+            let link = document.createElement("a");
+            link.textContent = data[i].titol;
+            submenu.appendChild(link);
+        }
+
+    } catch (error) {
+        console.log("[ERROR (API_Request)] ", error);
+    }
+}
+
+getNotificaciones();
 const comprobarConexionBBDD = async () => {  
     if (window.location.href.includes("install") || window.location.href.includes("error")) return;
     console.log("[CONEXION_BBDD] Comprobando conexión con la base de datos...");
@@ -251,3 +282,4 @@ document.addEventListener("DOMContentLoaded", () => { getColores(); });
 document.addEventListener("DOMContentLoaded", () => { getBanner(); });
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
 document.addEventListener("DOMContentLoaded", () => { getRol(); });
+setInterval(getNotificaciones, 10000); // Cada 10 segundos se comprueban las notis

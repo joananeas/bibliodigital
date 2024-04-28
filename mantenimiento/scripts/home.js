@@ -113,7 +113,7 @@ document.getElementById("inputCercaLlibres").addEventListener("input", function(
 
                     // Agregar botón al final del elemento tituloLibro
                     let a = document.createElement("a");
-                    a.href = `./libro.php?libro=${libro.nom}`;
+                    a.href = `./libro.php?libro=${libro.id}`;
                     a.innerHTML = "Clic aquí per a més informació";
                     a.style.marginLeft = "25px";
                     a.style.color = "grey";
