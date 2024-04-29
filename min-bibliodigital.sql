@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS dib_usuaris (
   passwd VARCHAR(255) NOT NULL,
   rol ENUM('guest', 'user', 'bibliotecari', 'admin') NOT NULL,
   estat ENUM('actiu', 'inactiu', 'expulsat', 'expulsat-temp') NOT NULL,
-  data_registre DATE NOT NULL,
+  data_registre DATE,
   experiencia INT DEFAULT 0,
   nivell INT DEFAULT 1,
   INDEX (email)

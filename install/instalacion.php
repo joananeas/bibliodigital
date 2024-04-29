@@ -142,7 +142,7 @@
         $hashedPass = password_hash($adminPass, PASSWORD_DEFAULT);
 
         // Preparar la sentencia SQL para evitar inyecciones SQL
-        $stmt = $conn->prepare("INSERT INTO `dib_usuaris` (`email`, `passwd`, `rol`) VALUES (?, ?, 'admin')");
+        $stmt = $conn->prepare("INSERT INTO `dib_usuaris` (`usuari`, `email`, `passwd`, `rol`, `estat`, `data_registre`, `experiencia`, `nivell`) VALUES (NULL, ?, ?, 'admin', 'actiu', CURRENT_TIMESTAMP, '0', '0')");
     
         // Comprobar si la sentencia se preparó correctamente
         if (!$stmt) {
