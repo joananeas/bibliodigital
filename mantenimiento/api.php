@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.1'; # ✨ Reserves (falta retocar) y notificaciones.
+    const VERSION =  'v1.5.1'; # 🐛 install-script hotfix
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs

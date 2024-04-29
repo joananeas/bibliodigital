@@ -125,16 +125,12 @@ CREATE INDEX idx_notificacions_data ON dib_notificacions(data_creada);
 
 
 -- TRIGGERS
-DELIMITER $$
-
 CREATE TRIGGER `trg_after_insert_reserva` 
 AFTER INSERT ON `dib_reserves` 
 FOR EACH ROW BEGIN
   INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus) 
   VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('Tu reserva con ID ', NEW.reserva, ' ha sido registrada con éxito.'), 'Reserva');
-END$$
-
-DELIMITER ;
+END;
 
 
 COMMIT;
