@@ -9,8 +9,8 @@
     ##################
     #--- Includes ---#
     ###########################################################################
-    /**/require_once "clases_api.php";                                        #
-    /**/require_once "func_api.php";                                          #
+    /**/require_once(__DIR__ ."/clases_api.php");                              #
+    /**/require_once(__DIR__ ."/func_api.php");                                #
     ###########################################################################
 
     # Versión del core.
