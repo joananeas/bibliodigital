@@ -124,12 +124,8 @@
     
         // Ejecutar la sentencia
         if ($stmt->execute()) {
-            $stmt->close();
-            $conn->close();
             return json_encode(["status" => "ok", "message" => "config-ok"]);
         } else {
-            $stmt->close();
-            $conn->close();
             return json_encode(["status" => "error", "message" => "error-config"]);
         }
     }
@@ -156,12 +152,8 @@
         $stmt->bind_param("ss", $admin, $hashedPass);
     
         if ($stmt->execute()) {
-            $stmt->close();
-            $conn->close();
             return json_encode(["status" => "ok", "message" => "admin-creado"]);
         } else {
-            $stmt->close();
-            $conn->close();
             return json_encode(["status" => "error", "message" => "admin-no-creado: " . $stmt->error]);
         }
     }
