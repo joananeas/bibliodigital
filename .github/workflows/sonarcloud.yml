@@ -1,41 +1,13 @@
-name: Build
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened]
-jobs:
-  sonarcloud:
-    name: SonarCloud
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      
-      # Instalar PHP y cualquier extensión necesaria
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '7.4' # Reemplaza con la versión que necesites
-          extensions: mbstring, xml # Asegúrate de añadir las extensiones que tu proyecto necesite
-          coverage: pcov # Si estás generando cobertura, puede ser xdebug o pcov
-        env:
-          fail-fast: true
+sonar.projectKey=joananeas_diblio
+sonar.organization=joananeas
 
-      # Instalar dependencias de Composer, si las hay
-      - name: Install Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
-      
-      # Ejecutar pruebas de PHP y generar reporte de cobertura
-      - name: Run PHP tests
-        run: |
-          ./vendor/bin/phpunit --coverage-clover clover.xml
+# This is the name and version displayed in the SonarCloud UI.
+#sonar.projectName=diblio
+#sonar.projectVersion=1.0
 
-      # Análisis de SonarCloud
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+# Path is relative to the sonar-project.properties file. Replace "\" by "/" on Windows.
+#sonar.sources=.
+
+# Encoding of the source code. Default is default system encoding
+#sonar.sourceEncoding=UTF-8
