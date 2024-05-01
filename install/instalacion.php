@@ -157,9 +157,17 @@
             return json_encode(["status" => "error", "message" => "admin-no-creado: " . $stmt->error]);
         }
     }
+    
     function crearTablasDB($db_server, $db_user, $db_name, $db_pass){
         $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
         $sql = file_get_contents("../min-bibliodigital.sql");
+        $conn->set_charset("utf8mb4"); # por el archivo
+
+        if ($conn->connect_error) {
+            return json_encode(["status" => "error", "message" => "Error de conexión: " . $conn->connect_error]);
+        }
+
+        
         if ($conn->multi_query($sql)) {
             // Ciclo a través de cada resultado para asegurarse de que se ejecuten todas las consultas
             while ($conn->more_results() && $conn->next_result()) {
@@ -176,7 +184,7 @@
                 return json_encode(["status" => "ok", "message" => "tablas-creadas"]);
             }
         } else {
-            return json_encode(["status" => "ok", "message" => "tablas-no-creadas"]);
+            return json_encode(["status" => "ok", "message" => "tablas-no-creadas". $conn->error]);
         }
     }
 

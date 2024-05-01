@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      - db
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=secret
+      - MYSQL_DB=diblio
+
+  db:
+    image: mariadb:10.4
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=diblio
+      - MARIADB_DB=diblio
+      - MYSQL_ROOT_PASSWORD=secret
+      - MARIADB_ROOT_PASSWORD=secret
+    ports:
+      - "3306:3306"
+
+volumes:
+  db_data:

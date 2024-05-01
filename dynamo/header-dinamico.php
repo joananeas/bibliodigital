@@ -68,7 +68,7 @@
             
             # echo $_COOKIE['rol'];
             # echo ROL_LVL[$_COOKIE['rol']];
-            error_reporting(0);
+            #error_reporting(0);
 
             foreach (PAGES_ROL_LVL as $page => $level) {
                 if (strpos($url, $page) !== false && ROL_LVL[$_COOKIE['rol']] < $level){

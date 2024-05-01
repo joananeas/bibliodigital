@@ -17,25 +17,32 @@ class API_Globales {
         $this->version = $version;
         $this->rootPath = $rootPath;
     }
+    
     public function obtenerDatos() {
         $sql = "SELECT `NOM_BIBLIOTECA` AS `nomBiblioteca`, `TITOL_WEB` AS `titolWeb`, `H1_WEB` AS `h1Web`, `FAVICON` AS `favicon` FROM `dib_config`";
-        $result = mysqli_query(peticionSQL(), $sql);
+        $mysqli = peticionSQL();
+        $result = mysqli_query($mysqli, $sql);
+        if ($result === FALSE) {
+            echo json_encode(['response' => 'ERROR', 'msg' => mysqli_error($mysqli)]);
+            return;
+        }
+    
         if (mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
+            $datos = array(
+                "version" => $this->version,
+                "nomBiblioteca" => $row['nomBiblioteca'],
+                "titolWeb" => $row['titolWeb'],
+                "favicon" => $row['favicon'],
+                "h1Web" => $row['h1Web'],
+                "rootPath" => $this->rootPath
+            );
+            return json_encode($datos);
         } else {
-            echo json_encode(['response' => 'ERROR']);
+            echo json_encode(['response' => 'NO DATA']);
         }
-        
-        $datos = array(
-            "version" => $this->version,
-            "nomBiblioteca" => $row['nomBiblioteca'],
-            "titolWeb" => $row['titolWeb'],
-            "favicon" => $row['favicon'],
-            "h1Web" => $row['h1Web'],
-            "rootPath" => $this->rootPath
-        );
-        return json_encode($datos);
     }
+
     public function getColores() {
         $sql = "SELECT `COLOR_PRINCIPAL` AS 'colorPrincipal', `COLOR_SECUNDARIO` AS 'colorSecundario', `COLOR_TERCIARIO` AS 'colorTerciario' FROM `dib_config`";
         $result = mysqli_query(peticionSQL(), $sql);
