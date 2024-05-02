@@ -23,23 +23,26 @@ let f = document.getElementById("formInstalacionNormal");
 let s = document.getElementById("statusInstalacion");
 let t = document.getElementById("formInstalacionLoading-text");
 
+
 const textoDeCarga = (texto, time) => {
     setTimeout(() => {}, time);
     t.textContent = texto;
 }
 
-const subirXlsx = async () => {
-    let formData = new FormData();
-    formData.append("host", document.getElementById("server").value);
-    formData.append("user", document.getElementById("usuari").value);
-    formData.append("passwd", document.getElementById("passwd").value);
-    formData.append("db", document.getElementById("nom").value);
-    formData.append("peticion", "subir-xlsx");
-    let files = document.getElementById('upload').files;
+const animacionFinal = () => {
+    document.getElementById("formInstalacionLoading").style.display = "block";
+    document.getElementById("formInstalacionUpload").style.display = "none";
 
-    for (let i = 0; i < files.length; i++) {
-        formData.append('uploads[]', files[i]);
-    }
+    textoDeCarga("La truita de patates amb ceba o sense? - Tornant a l'inici.", 500);
+    setTimeout(() => {
+        window.location.href = "../index.php";
+    }, 2000);
+}
+
+const csvToDB = async () => {
+    let formData = new FormData();
+    formData.append("peticion", "csv-to-db");
+    console.log("Pujant arxius...");
 
     try {
         const response = await fetch('instalacion.php', {
@@ -47,43 +50,77 @@ const subirXlsx = async () => {
             body: formData
         });
         const data = await response.json();
-        if (data.status !== "ok") return;
-        e = document.getElementById("errorUpload").value;
-
-        switch(data.message){
-            case "error-subir-xlsx":
-                textoDeCarga("Error al subir l'arxiu.", 500);
-                break;
-            case "subir-xlsx-ok":
-                textoDeCarga("Arxiu de dades pujat correctament.", 500);
-                document.getElementById("formInstalacionLoading").style.display = "block";
-                document.getElementById("formInstalacionUpload").style.display = "none";
-                textoDeCarga("La truita de patates amb ceba o sense? - Tornant a l'inici.", 500);
-                    setTimeout(() => {
-                        window.location.href = "../index.php";
-                    }, 2000);
-                break;
-            case "archivo-invalido":
-                e = "Arxiu invàlid. Només s'accepten arxius .xlsx";
-                break;
-            case "archivo-grande":
-                e = "Arxiu massa gran.";
-                break;
+        if (data.status !== "ok") {
+            console.log("Error al importar datos.");
+            return;
         }
-        
+
+        if (data.message == "csv-to-db-ok") {
+            textoDeCarga("Dades importades correctament.", 500);
+            animacionFinal();
+        }
     } catch (error) {
         console.error('Error:', error);
     }
 };
 
-const config = async () => {
+const xlsToCsv = async () => {
     let formData = new FormData();
-    // Añadir datos del servidor y base de datos
-    formData.append("host", document.getElementById("server").value);
-    formData.append("user", document.getElementById("usuari").value);
-    formData.append("passwd", document.getElementById("passwd").value);
-    formData.append("db", document.getElementById("nom").value);
-    
+    formData.append("peticion", "xls-to-csv");
+    console.log("Convirtiendo archivo...");
+    try {
+        const response = await fetch('instalacion.php', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (data.status !== "ok") return;
+        if (data.message == "xls-to-csv-ok") {
+            console.log("Arxiu convertit correctament.");
+            textoDeCarga("Arxiu convertit correctament.", 500);
+            csvToDB();
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
+
+const subirXls = () => {
+    let formData = new FormData();
+    formData.append("peticion", "subir-xls");
+    console.log("Subiendo archivo...");
+    let files = document.getElementById('upload').files;
+
+    for (let i = 0; i < files.length; i++) {
+        formData.append('uploads[]', files[i]);
+    }
+
+    fetch('instalacion.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status !== "ok") {
+            console.log("Error al pujar l'arxiu.");
+            return;
+        }
+
+        e = document.getElementById("errorUpload").value;
+        console.log(data.message);
+
+        if (data.message == "subir-xls-ok") {
+            textoDeCarga("Arxiu pujat correctament.", 500);
+            console.log("Arxiu pujat correctament.");
+            xlsToCsv();
+        }
+    }).catch(error => {
+        console.error('Error:', error);
+    });
+};
+
+const config = async () => {
+    let formData = new FormData();    
     // Añadir datos de configuración del sitio web
     formData.append("nomBiblioteca", document.getElementById("nomBiblioteca").value);
     formData.append("titolWeb", document.getElementById("titolWeb").value);
@@ -114,18 +151,12 @@ const config = async () => {
                 document.getElementById("formInstalacionUpload").style.display = "block";
                 
                 document.getElementById("submitUpload").addEventListener("click", function() {
-                    subirXlsx();
+                    subirXls();
                 });
 
                 document.getElementById("skipUpload").addEventListener("click", function(e) {
                     e.preventDefault();
-                    document.getElementById("formInstalacionLoading").style.display = "block";
-                    document.getElementById("formInstalacionUpload").style.display = "none";
-
-                    textoDeCarga("La truita de patates amb ceba o sense? - Tornant a l'inici.", 500);
-                    setTimeout(() => {
-                        window.location.href = "../index.php";
-                    }, 2000);
+                    animacionFinal();
                 });
                 break;
             case "error-config":
@@ -140,11 +171,6 @@ const config = async () => {
 
 const creacionAdmin = async () => {
     let formData = new FormData();
-    formData.append("host", document.getElementById("server").value);
-    formData.append("user", document.getElementById("usuari").value);
-    formData.append("passwd", document.getElementById("passwd").value);
-    formData.append("db", document.getElementById("nom").value);
-
     formData.append("admin", document.getElementById("admin").value);
     formData.append("adminPass", document.getElementById("adminPass").value);
     formData.append("peticion", "creacion-admin");
@@ -187,10 +213,6 @@ const creacionAdmin = async () => {
 
 const instalacionTablas = async () => {
     let formData = new FormData();
-    formData.append("host", document.getElementById("server").value);
-    formData.append("user", document.getElementById("usuari").value);
-    formData.append("passwd", document.getElementById("passwd").value);
-    formData.append("db", document.getElementById("nom").value);
     formData.append("peticion", "instalacion-tablas");
 
     textoDeCarga("Cercant als índex...", 500);

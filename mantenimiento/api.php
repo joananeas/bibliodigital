@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.2'; # 🐳 Docker transition (v1.5.2)
+    const VERSION =  'v1.5.3'; # 🌟 Install fully working (v1.5.3)
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs

@@ -99,7 +99,7 @@
                 <p><strong><span id="errorUpload"></span></strong></p>
                 <input type="file" id="upload" name="uploads[]" multiple><br>
                 <input class="submit" id="skipUpload" type="button" value="Ometre⏭">
-                <input class="submit" id="submitUpload" type="button" onclick="subirXlsx();" value="Enviar🛠️">
+                <input class="submit" id="submitUpload" type="button" value="Enviar🛠️">
             </form>
         </div>
 
