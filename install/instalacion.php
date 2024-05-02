@@ -55,47 +55,63 @@
     function subirXls($files, $db_server, $db_user, $db_name, $db_pass) {
         $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
         if ($conn->connect_error) {
-            die(json_encode(["status" => "error", "message" => "Conexión fallida: " . $conn->connect_error]));
+            return json_encode(["status" => "error", "message" => "Conexión fallida: " . $conn->connect_error]);
         }
     
         if (empty($files['name'])) {
-            $conn->close();
             return json_encode(["status" => "error", "message" => "No hay archivos para subir."]);
+        }
+    
+        $targetDir = '/var/www/html/temporal/';
+        if (!is_dir($targetDir) && !mkdir($targetDir, 0777, true)) {
+            return json_encode(["status" => "error", "message" => "Failed to create directory"]);
         }
     
         foreach ($files['name'] as $key => $filename) {
             $tmp_name = $files['tmp_name'][$key];
             if (!is_uploaded_file($tmp_name)) {
-                $conn->close();
                 return json_encode(["status" => "error", "message" => "Archivo no válido: $filename"]);
             }
     
             $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
             if ($extension !== 'xls') {
-                $conn->close();
                 return json_encode(["status" => "error", "message" => "Formato de archivo no permitido: $filename"]);
             }
     
             $nombreArchivoSinExtension = pathinfo($filename, PATHINFO_FILENAME);
-            $targetDir = '/var/www/html/temporal/';
-
             $rutaXls = $targetDir . $nombreArchivoSinExtension . ".xls";
             if (!move_uploaded_file($tmp_name, $rutaXls)) {
-                $conn->close();
                 return json_encode(["status" => "error", "message" => "Error al subir el archivo: $rutaXls"]);
             }
         }
     
-        // Todos los archivos se han subido, ejecutar el script de Python
-        $command = 'python3 /var/www/html/converter.py';
+        // Execute the Python script
+        $command = 'python3 /var/www/html/install/converter.py 2>&1'; // Corrected the path
         $output = shell_exec($command);
-        echo $output;
-        // error_log("Output del script Python: " . $output);
     
-        $conn->close();
-        return json_encode(["status" => "ok", "message" => $output ?? "No se ha recibido respuesta."]);
+        if (trim($output) !== "ok") {
+            return json_encode(["status" => "error", "message" => "Python script failed: $output"]);
+        }
+    
+        // Assuming the Python script converts and deletes the original files
+        foreach ($files['name'] as $key => $filename) {
+            $nombreArchivoSinExtension = pathinfo($filename, PATHINFO_FILENAME);
+            $rutaCsv = $targetDir . $nombreArchivoSinExtension . ".csv";
+            if (!file_exists($rutaCsv)) {
+                return json_encode(["status" => "error", "message" => "CSV file not found: $rutaCsv"]);
+            }
+            
+            $tabla = "dib_" . $nombreArchivoSinExtension;
+            // Perform the SQL operation
+            $conn->options(MYSQLI_OPT_LOCAL_INFILE, true); // Enable LOCAL INFILE
+            $sql = 'LOAD DATA LOCAL INFILE \'' . $rutaCsv . '\' INTO TABLE ' . $tabla . ' FIELDS TERMINATED BY \',\' ENCLOSED BY \'"\' LINES TERMINATED BY \'\\n\' IGNORE 1 LINES';
+            if (!$conn->query($sql)) {
+                return json_encode(["status" => "error", "message" => "Database error: " . $conn->error. " - ". $sql]);
+            }
+        }
+    
+        return json_encode(["status" => "ok", "message" => "Upload successful"]);
     }
-    
 
     function config($db_server, $db_user, $db_name, $db_pass, $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario) {
         // Crear una conexión a la base de datos

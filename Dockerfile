@@ -5,14 +5,17 @@ FROM php:8.0-apache
 RUN apt-get update && apt-get upgrade -y \
     && apt-get autoremove -y && apt-get clean
 
-# Instalar dependencias necesarias para las extensiones de PHP
+# Instalar dependencias necesarias para las extensiones de PHP y Python
 RUN apt-get update && apt-get install -y \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
     libpng-dev \
     libwebp-dev \
     libxpm-dev \
+    python3.9 python3.9-venv python3.9-dev python3-pip \
     && rm -rf /var/lib/apt/lists/*
+
+RUN pip3 install pandas numpy matplotlib xlrd
 
 # Configurar y instalar la extensión GD con soporte para varios formatos
 RUN docker-php-ext-configure gd \
@@ -30,9 +33,6 @@ RUN a2enmod rewrite
 
 # Copiar el contenido del directorio del host al contenedor
 COPY . /var/www/html/
-
-# Crear directorio temporal
-RUN mkdir -p /var/www/html/temporal
 
 # Configurar los permisos adecuados para el directorio raíz del servidor web
 RUN chown -R www-data:www-data /var/www/html
