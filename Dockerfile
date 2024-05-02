@@ -31,11 +31,18 @@ RUN a2enmod rewrite
 # Copiar el contenido del directorio del host al contenedor
 COPY . /var/www/html/
 
+# Crear directorio temporal
+RUN mkdir -p /var/www/html/temporal
+
 # Configurar los permisos adecuados para el directorio raíz del servidor web
 RUN chown -R www-data:www-data /var/www/html
 
-# Establecer el búfer de salida
-RUN echo 'output_buffering = On' >> /usr/local/etc/php/conf.d/docker-php-output-buffering.ini
+# Establecer el búfer de salida y aumentar el tamaño máximo de carga y post
+RUN echo 'output_buffering = On' >> /usr/local/etc/php/php.ini \
+    && echo 'upload_max_filesize = 12M' >> /usr/local/etc/php/php.ini \
+    && echo 'post_max_size = 13M' >> /usr/local/etc/php/php.ini \
+    && echo 'max_execution_time = 300' >> /usr/local/etc/php/php.ini \
+    && echo 'max_input_time = 300' >> /usr/local/etc/php/php.ini
 
 # Exponer el puerto 80 para el servidor web
 EXPOSE 80

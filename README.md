@@ -21,5 +21,17 @@ Aquesta imatge conté: **apache2.4**, **php8.0** i **mariadb10.4**.
 
 Si és el primer cop, sereu redireccionats a ```<ruta_arrel>/install```. Aquí haureu de connectar-vos a la base de dades, crear un compte d'administrador i configurar el lloc web.
 
+### Instal·lació en un servidor / localhost
+Durant la instal·lació, haureu de connectar-vos a la BBDD.
+
+**A localhost**:  
+hostname: db
+
+**A un servidor**:  
+hostname: localhost:3306
+
+A un servidor si no es posa localhost, busca "db" a la xarxa pública, per tant, mai es connectarà, per això cal definir el port de mariadb.
+
+
 ## Consideracions
 Aquest projecte **no ofereix cap garantia** i **no està permesa la redistribució per a ús comercial**. Més informació a la llicència del projecte.

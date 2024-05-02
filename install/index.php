@@ -91,7 +91,7 @@
         <div style="display: none;" id="formInstalacionUpload" class="login">
             <h1>Instal·lació</h1>
             <h4>(Upload)</h4>
-            <form method="POST" id="uploadForm" action="">
+            <form method="POST" id="uploadForm" enctype="multipart/form-data">
                 <p>Aquí pots pujar el catàleg.xlsx i el exemplars.xls d'Epèrgam</p>
                 <p>Ho podràs fer més tard a <code>/admin</code> si no disposes dels arxius.</p>
                 <p><strong>NO MODIFIQUIS EL NOM DELS ARXIUS</strong></p>
@@ -99,7 +99,7 @@
                 <p><strong><span id="errorUpload"></span></strong></p>
                 <input type="file" id="upload" name="uploads[]" multiple><br>
                 <input class="submit" id="skipUpload" type="button" value="Ometre⏭">
-                <input class="submit" id="submitUpload" type="button" value="!NO FUNCIONA!🛠️">
+                <input class="submit" id="submitUpload" type="button" onclick="subirXlsx();" value="Enviar🛠️">
             </form>
         </div>
 

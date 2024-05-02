@@ -1,11 +1,10 @@
+# Cada proyecto tiene que venir sin db.php, se crea automáticamente
 mantenimiento/db.php
-mantenimiento/vendor/*
-# mantenimiento/composer.lock
-mantenimiento/.composer/*
-composer.phar
-composer.phar.pubkey
-mantenimiento/composer-backups/*
-tmp/*
+
+# Se crea con el dockerfile
+temporal/* 
+
+# Estos archivos son únicos por proyecto
 *.xls
 *.xlsx
 *.csv

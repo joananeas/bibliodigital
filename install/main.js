@@ -114,8 +114,7 @@ const config = async () => {
                 document.getElementById("formInstalacionFinal").style.display = "none";
                 document.getElementById("formInstalacionUpload").style.display = "block";
                 
-                document.getElementById("submitUpload").addEventListener("click", function(e) {
-                    e.preventDefault();
+                document.getElementById("submitUpload").addEventListener("click", function() {
                     subirXlsx();
                 });
 

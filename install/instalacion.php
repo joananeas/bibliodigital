@@ -52,51 +52,50 @@
         return json_encode(["status" => "ok", "message" => "Archivo mant.php creado con éxito."]);
     }
     
-    function subirXlsx($files, $db_server, $db_user, $db_name, $db_pass) {
+    function subirXls($files, $db_server, $db_user, $db_name, $db_pass) {
         $conn = new mysqli($db_server, $db_user, $db_pass, $db_name);
-
         if ($conn->connect_error) {
             die(json_encode(["status" => "error", "message" => "Conexión fallida: " . $conn->connect_error]));
         }
     
-        foreach ($files['name'] as $key => $filename) {
-            $nombreArchivoSinExtension = pathinfo($filename, PATHINFO_FILENAME);
-            $targetDir = './';
-            $rutaXls = $targetDir . $nombreArchivoSinExtension . ".xls";
-            if (!move_uploaded_file($files['tmp_name'][$key], $rutaXls)) {
-                $conn->close();
-                return json_encode(["status" => "error", "message" => "Error al subir archivos"]);
-            }
-        }
-        echo json_encode(__DIR__);
-        exec(__FILE__ . "python converter.py", $output, $return_var);
-        echo json_encode($return_var);
-        
-        if ($return_var != 0) {
+        if (empty($files['name'])) {
             $conn->close();
-            return json_encode(["status" => "error", "message" => "Error al convertir los archivos con Python"]);
+            return json_encode(["status" => "error", "message" => "No hay archivos para subir."]);
         }
     
         foreach ($files['name'] as $key => $filename) {
-            $nombreArchivoSinExtension = pathinfo($filename, PATHINFO_FILENAME);
-            $targetDir = './';
-            $rutaCsv = $targetDir . $nombreArchivoSinExtension . ".csv";
-            $tabla = "dib_" . $nombreArchivoSinExtension;
-            $sql = "LOAD DATA LOCAL INFILE '" . $conn->real_escape_string($rutaCsv) . "'
-                    INTO TABLE " . $tabla . "
-                    FIELDS TERMINATED BY ',' 
-                    ENCLOSED BY '\"'
-                    LINES TERMINATED BY '\n'
-                    IGNORE 1 ROWS;";
-            if (!$conn->query($sql)) {
+            $tmp_name = $files['tmp_name'][$key];
+            if (!is_uploaded_file($tmp_name)) {
                 $conn->close();
-                return json_encode(["status" => "error", "message" => "Error al subir datos: " . $conn->error]);
+                return json_encode(["status" => "error", "message" => "Archivo no válido: $filename"]);
+            }
+    
+            $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+            if ($extension !== 'xls') {
+                $conn->close();
+                return json_encode(["status" => "error", "message" => "Formato de archivo no permitido: $filename"]);
+            }
+    
+            $nombreArchivoSinExtension = pathinfo($filename, PATHINFO_FILENAME);
+            $targetDir = '/var/www/html/temporal/';
+
+            $rutaXls = $targetDir . $nombreArchivoSinExtension . ".xls";
+            if (!move_uploaded_file($tmp_name, $rutaXls)) {
+                $conn->close();
+                return json_encode(["status" => "error", "message" => "Error al subir el archivo: $rutaXls"]);
             }
         }
+    
+        // Todos los archivos se han subido, ejecutar el script de Python
+        $command = 'python3 /var/www/html/converter.py';
+        $output = shell_exec($command);
+        echo $output;
+        // error_log("Output del script Python: " . $output);
     
         $conn->close();
-        return json_encode(["status" => "ok", "message" => "Archivos subidos con éxito"]);
+        return json_encode(["status" => "ok", "message" => $output ?? "No se ha recibido respuesta."]);
     }
+    
 
     function config($db_server, $db_user, $db_name, $db_pass, $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario) {
         // Crear una conexión a la base de datos
@@ -345,7 +344,7 @@
             $db_name = $_POST['db'] ?? null;
             $db_pass = $_POST['passwd'] ?? "";
 
-            echo subirXlsx($_FILES['uploads'], $db_server, $db_user, $db_name, $db_pass);
+            echo subirXls($_FILES['uploads'], $db_server, $db_user, $db_name, $db_pass);
             break;
         default:
             echo json_encode(["status" => "error", "message" => "Peticion no reconocida: $peticion"]);
