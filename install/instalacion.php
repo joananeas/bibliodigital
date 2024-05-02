@@ -104,13 +104,55 @@
             $tabla = "dib_" . $nombreArchivoSinExtension;
             // Perform the SQL operation
             $conn->options(MYSQLI_OPT_LOCAL_INFILE, true); // Enable LOCAL INFILE
-            $sql = 'LOAD DATA LOCAL INFILE \'' . $rutaCsv . '\' INTO TABLE ' . $tabla . ' FIELDS TERMINATED BY \',\' ENCLOSED BY \'"\' LINES TERMINATED BY \'\\n\' IGNORE 1 LINES';
+            $sql = "LOAD DATA LOCAL INFILE '" . $rutaCsv . "' INTO TABLE dib_cataleg
+                    FIELDS TERMINATED BY ','
+                    ENCLOSED BY '\"'
+                    LINES TERMINATED BY '\\n'
+                    IGNORE 1 LINES";
+            
+            /*if ($nombreArchivoSinExtension == "cataleg"){
+                $sql = "LOAD DATA LOCAL INFILE '" . $rutaCsv . "' INTO TABLE dib_cataleg
+                FIELDS TERMINATED BY ','
+                OPTIONALLY ENCLOSED BY '\"'
+                LINES TERMINATED BY '\\n'
+                IGNORE 1 LINES
+                (ID_CATÀLEG, ID_BIBLIOTECA, NUMERO, ISBN, CDU, FORMAT, TITOL, AUTOR, EDITORIAL, LLOC, COL·LECCIÓ, PAÍS, DATA, LLENGUA, MATERIA, DESCRIPTOR, NIVELL, RESUM, URL, ADREÇA, DIMENSIÓ, VOLÚM, PÀGINES, PROC, CARC, CAMP_LLIURE, NPRES, REC, ESTAT)
+                ON DUPLICATE KEY UPDATE
+                ID_BIBLIOTECA = VALUES(ID_BIBLIOTECA),
+                ISBN = VALUES(ISBN),
+                CDU = VALUES(CDU),
+                FORMAT = VALUES(FORMAT),
+                TITOL = VALUES(TITOL),
+                AUTOR = VALUES(AUTOR),
+                EDITORIAL = VALUES(EDITORIAL),
+                LLOC = VALUES(LLOC),
+                COL·LECCIÓ = VALUES(COL·LECCIÓ),
+                PAÍS = VALUES(PAÍS),
+                DATA = VALUES(DATA),
+                LLENGUA = VALUES(LLENGUA),
+                MATERIA = VALUES(MATERIA),
+                DESCRIPTOR = VALUES(DESCRIPTOR),
+                NIVELL = VALUES(NIVELL),
+                RESUM = VALUES(RESUM),
+                URL = VALUES(URL),
+                ADREÇA = VALUES(ADREÇA),
+                DIMENSIÓ = VALUES(DIMENSIÓ),
+                VOLÚM = VALUES(VOLÚM),
+                PÀGINES = VALUES(PÀGINES),
+                PROC = VALUES(PROC),
+                CARC = VALUES(CARC),
+                CAMP_LLIURE = VALUES(CAMP_LLIURE),
+                NPRES = VALUES(NPRES),
+                REC = VALUES(REC),
+                ESTAT = VALUES(ESTAT);";
+            }*/
+
             if (!$conn->query($sql)) {
                 return json_encode(["status" => "error", "message" => "Database error: " . $conn->error. " - ". $sql]);
             }
         }
     
-        return json_encode(["status" => "ok", "message" => "Upload successful"]);
+        return json_encode(["status" => "ok", "message" => "subir-xlsx-ok"]);
     }
 
     function config($db_server, $db_user, $db_name, $db_pass, $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario) {

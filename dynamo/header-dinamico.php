@@ -69,7 +69,8 @@
             # echo $_COOKIE['rol'];
             # echo ROL_LVL[$_COOKIE['rol']];
             #error_reporting(0);
-
+            $_COOKIE['rol'] = $_COOKIE['rol'] ?? null;
+            
             foreach (PAGES_ROL_LVL as $page => $level) {
                 if (strpos($url, $page) !== false && ROL_LVL[$_COOKIE['rol']] < $level){
                     if (strpos($url, 'admin') !== false) header("Location: ../error.php?error=403"); 

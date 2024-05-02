@@ -56,12 +56,12 @@ const subirXlsx = async () => {
                 break;
             case "subir-xlsx-ok":
                 textoDeCarga("Arxiu de dades pujat correctament.", 500);
-                // document.getElementById("formInstalacionLoading").style.display = "block";
-                // document.getElementById("formInstalacionUpload").style.display = "none";
-                // textoDeCarga("La truita de patates amb ceba o sense? - Tornant a l'inici.", 500);
-                //     setTimeout(() => {
-                //         window.location.href = "../index.php";
-                //     }, 2000);
+                document.getElementById("formInstalacionLoading").style.display = "block";
+                document.getElementById("formInstalacionUpload").style.display = "none";
+                textoDeCarga("La truita de patates amb ceba o sense? - Tornant a l'inici.", 500);
+                    setTimeout(() => {
+                        window.location.href = "../index.php";
+                    }, 2000);
                 break;
             case "archivo-invalido":
                 e = "Arxiu invàlid. Només s'accepten arxius .xlsx";
@@ -71,7 +71,6 @@ const subirXlsx = async () => {
                 break;
         }
         
-        // Manejar la respuesta del servidor aquí
     } catch (error) {
         console.error('Error:', error);
     }
