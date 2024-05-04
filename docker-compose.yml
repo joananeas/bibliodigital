@@ -2,7 +2,7 @@ services:
   web:
     build: .
     ports:
-      - "80:80"
+      - "8080:80"
     volumes:
       - .:/var/www/html
     depends_on:
@@ -26,7 +26,7 @@ services:
       - PMA_PORT=3306
       - MYSQL_ROOT_PASSWORD=secret
     ports:
-      - "8080:80"
+      - "8088:80"
     depends_on:
       - db
 
