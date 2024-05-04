@@ -225,10 +225,10 @@ const instalacionTablas = async () => {
 
         const data = await response.json();
         
-        if (data.status !== "ok") return; 
         switch(data.message){
             case "tablas-no-creadas":
-                textoDeCarga("Error al crear les taules.", 500);
+                console.log("Error al crear las tablas.");
+                textoDeCarga("Error: " + data.content, 0);
                 break;
             case "tablas-creadas":
                 document.getElementById("formInstalacionLoading").style.display = "none";

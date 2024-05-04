@@ -256,6 +256,7 @@ class API_Usuarios{
         $row = mysqli_fetch_assoc($result);
         return $row['usuari'];
     }
+    
     public function headerAuthUsuario(){
         session_start();
         if (!isset($_SESSION['email'])) {
@@ -308,21 +309,45 @@ class API_Usuarios{
         return $result;
     }
 
-    public function getNotifications($userId){
+    public function getNotifications() {
+        $conn = peticionSQL();  // Obtener la conexión de la base de datos.
+        mysqli_begin_transaction($conn);  // Iniciar una transacción.
+    
+        try {
+            $sql = "SELECT * FROM dib_notificacions";  // Consulta SQL para seleccionar los datos.
+            $result = mysqli_query($conn, $sql);
+            $users = [];
+            
+            while($row = mysqli_fetch_assoc($result)){
+                array_push($users, $row);
+            }
+            
+            mysqli_commit($conn);  // Realizar COMMIT si todo ha ido bien.
+            return json_encode($users);
+        } catch (Exception $e) {
+            mysqli_rollback($conn);  // Realizar ROLLBACK en caso de error.
+            return json_encode([]);  // O manejar el error de alguna otra manera.
+        } finally {
+            mysqli_close($conn);  // Asegurarse de cerrar la conexión independientemente del resultado.
+        }
+    }
+    
+
+    public function getReservas($userId){
         $conn = peticionSQL();
-        $notificaciones = [];
-        if ($stmt = mysqli_prepare($conn, "SELECT * FROM dib_notificacions WHERE usuari_id = ?")) {
+        $reservas = [];
+        if ($stmt = mysqli_prepare($conn, "SELECT * FROM dib_reserves WHERE usuari_id = ?")) {
             mysqli_stmt_bind_param($stmt, 'i', $userId);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);
             while ($row = mysqli_fetch_assoc($result)) {
-                $notificaciones[] = $row;
+                $reservas[] = $row;
             }
             mysqli_free_result($result);
             mysqli_stmt_close($stmt);
         }
         mysqli_close($conn);
-        return json_encode($notificaciones);
+        return json_encode($reservas);
     }
 }
 

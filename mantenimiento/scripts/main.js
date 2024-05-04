@@ -8,37 +8,55 @@ else {
     urlForFetch = "./mantenimiento/api.php";
 }
 
-async function getNotificaciones() {
+const getID = () => {
+    fetch(urlForFetch, {
+        method: "POST",
+        body: new FormData().append('pttn', 'getID')
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+        return data;
+    })
+    .catch(error => {
+        console.error('Error al hacer la petición:', error);
+    });
+}
+
+function getNotificaciones() {
     let formData = new FormData();
     let number = document.getElementById("notification-number");
     let submenu = document.getElementById("notification-submenu");
+    if (submenu === null || number === null) return;
 
-    // Limpiar las notificaciones existentes antes de añadir las nuevas
     submenu.innerHTML = '';
 
     formData.append('pttn', 'getNotifications');
-    try {
-        const response = await fetch(urlForFetch, {
-            method: "POST",
-            body: formData
-        });
+    fetch(urlForFetch, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => {
         if (!response.ok) {
             throw new Error('Respuesta no válida');
         }
-        const data = await response.json();
+        return response.json();
+    })
+    .then(data => {
         number.textContent = data.length;
-        for (let i = 0; i < data.length; i++) {
+        data.forEach(notification => {
             let link = document.createElement("a");
-            link.textContent = data[i].titol;
+            link.textContent = notification.titol;
             submenu.appendChild(link);
-        }
-
-    } catch (error) {
+        });
+    })
+    .catch(error => {
         console.log("[ERROR (API_Request)] ", error);
-    }
+    });
 }
 
 getNotificaciones();
+
 const comprobarConexionBBDD = async () => {  
     if (window.location.href.includes("install") || window.location.href.includes("error")) return;
     console.log("[CONEXION_BBDD] Comprobando conexión con la base de datos...");

@@ -26,53 +26,50 @@
     function crearFicheroDB($db_server, $db_user, $db_name, $db_pass, $randKey, $iv){
         sleep(1);
         $archivo_db = fopen("../mantenimiento/db.php", "w");
-        fwrite($archivo_db, "<?php\n");
-        fwrite($archivo_db, "# © Joan Aneas\n"); # (Comentario) Copyright
-        fwrite($archivo_db, "# Este archivo fue generado automáticamente por el instalador de Bibliodigital.\n"); # (Comentario) Aviso.
-        fwrite($archivo_db, "# NO MODIFICAR SI SE DESCONOCE EL FUNCIONAMIENTO.\n"); # (Comentario) Aviso.
-        fwrite($archivo_db, "\n# IV, Key, cifrado openssl. \n"); 
-        fwrite($archivo_db, "define('DB_SERVER_IV', '".base64_encode($iv)."');\n"); # (Constante) IV, cifrado openssl.
-        fwrite($archivo_db, "define('DB_SERVER_KEY', '".base64_encode($randKey)."');\n"); # (Constante) KEY, cifrado openssl.
-        fwrite($archivo_db, "# Constantes de la BBDD, si se modifican manualmente, luego no se podrán leer.\n");
-        fwrite($archivo_db, "# Luego se usa el decrypt, por lo que poner texto plano es mala idea 😅\n");
-        fwrite($archivo_db, "define('DB_HOST', '".$db_server."');\n"); # (Constante) HOST, cifrado openssl.
-        fwrite($archivo_db, "define('DB_USER', '".$db_user."');\n"); # (Constante) USER, cifrado openssl.
-        fwrite($archivo_db, "define('DB_PASSWORD', '".$db_pass."');\n"); # (Constante) PASSWORD, cifrado openssl.
-        fwrite($archivo_db, "define('DB_NAME', '".$db_name."');\n"); # (Constante) NAME, cifrado openssl.
-        fwrite($archivo_db, "\n# Sígueme en github ^^ (joananeas).\n");
-        fwrite($archivo_db, "# Si tienes alguna duda, puedes abrir un issue en el repositorio.\n");
-        fwrite($archivo_db, "\n\n/*\n");
-        fwrite($archivo_db, "*[-----------------------------------------------------------------------------------------------------------]\n");
-        fwrite($archivo_db, "*| IMPORTANTE: Si el archivo no se crea automáticamente, no se podrá acceder a la web. ----------------------|\n");
-        fwrite($archivo_db, "*| Si te encuentras en Linux: chown www-data:www-data <raiz_proyecto>/mantenimiento/* -----------------------|\n");
-        fwrite($archivo_db, "*| %%%%%%%%%%%%%%%%%%%%%%%%%% chmod 755 <raiz_proyecto>/mantenimiento/* -------------------------------------|\n");
-        fwrite($archivo_db, "*| Si te encuentras en Windows: Nidea jajajaj. Es broma, con xampp no deberías tener problemas, -------------|\n");
-        fwrite($archivo_db, "*| te recomiendo WLS o una máquina virtual con ubuntu server. -----------------------------------------------|\n");
-        fwrite($archivo_db, "*| pero si usas WAMP, deberás dar permisos a la carpeta mantenimiento. --------------------------------------|\n");
-        fwrite($archivo_db, "*L-----------------------------------------------------------------------------------------------------------]\n");
-        fwrite($archivo_db, "*/\n");
-        # Es una buena práctica no cerrar con '? >'
-        # los archivos php que no contienen código html 
-        # fuente: https://www.php.net/basic-syntax.instruction-separation
-        
-        # DEBUG (borrar en producción)
-        /*$key = 'bibliodigital';
-        $host = openssl_decrypt($db_server, 'aes-256-cbc', $key, 0, $iv);
-        $user = openssl_decrypt($db_user, 'aes-256-cbc', $key, 0, $iv);
-        $password = openssl_decrypt($db_pass, 'aes-256-cbc', $key, 0, $iv);
-        $db = openssl_decrypt($db_name, 'aes-256-cbc', $key, 0, $iv);
-
-        fwrite($archivo_db, "# host: ".$host."\n");
-        fwrite($archivo_db, "# user: ".$user."\n");
-        fwrite($archivo_db, "# password: ".$password."\n");
-        fwrite($archivo_db, "# db: ".$db."\n"); */
-        
-        fclose($archivo_db);            
-
+        if (!$archivo_db) {
+            // Si fopen devuelve false, no se pudo abrir el archivo
+            return json_encode(["status" => "error", "message" => "No se pudo abrir el archivo para escritura. Verifique los permisos o la ruta del archivo."]);
+        }
+    
+        // Si el archivo se abrió correctamente, procedemos a escribir en él
+        $writes = [
+            "<?php\n",
+            "# © Joan Aneas\n",
+            "# Este archivo fue generado automáticamente por el instalador de Bibliodigital.\n",
+            "# NO MODIFICAR SI SE DESCONOCE EL FUNCIONAMIENTO.\n",
+            "\n# IV, Key, cifrado openssl. \n",
+            "define('DB_SERVER_IV', '".base64_encode($iv)."');\n",
+            "define('DB_SERVER_KEY', '".base64_encode($randKey)."');\n",
+            "# Constantes de la BBDD, si se modifican manualmente, luego no se podrán leer.\n",
+            "# Luego se usa el decrypt, por lo que poner texto plano es mala idea 😅\n",
+            "define('DB_HOST', '".$db_server."');\n",
+            "define('DB_USER', '".$db_user."');\n",
+            "define('DB_PASSWORD', '".$db_pass."');\n",
+            "define('DB_NAME', '".$db_name."');\n",
+            "\n# Sígueme en github ^^ (joananeas).\n",
+            "# Si tienes alguna duda, puedes abrir un issue en el repositorio.\n",
+            "\n\n/*\n",
+            "*[-----------------------------------------------------------------------------------------------------------]\n",
+            "*| IMPORTANTE: Si el archivo no se crea automáticamente, no se podrá acceder a la web. ----------------------|\n",
+            "*| Si te encuentras en Linux: chown www-data:www-data <raiz_proyecto>/mantenimiento/* -----------------------|\n",
+            "*| %%%%%%%%%%%%%%%%%%%%%%%%%% chmod 755 <raiz_proyecto>/mantenimiento/* -------------------------------------|\n",
+            "*| Si te encuentras en Windows: Nidea jajajaj. Es broma, con xampp no deberías tener problemas, -------------|\n",
+            "*| te recomiendo WLS o una máquina virtual con ubuntu server. -----------------------------------------------|\n",
+            "*| pero si usas WAMP, deberás dar permisos a la carpeta mantenimiento. --------------------------------------|\n",
+            "*L-----------------------------------------------------------------------------------------------------------]\n",
+            "*/\n"
+        ];
+    
+        foreach ($writes as $line) {
+            fwrite($archivo_db, $line);
+        }
+    
+        fclose($archivo_db);
+    
         if (!file_exists("../mantenimiento/db.php")) {
             return json_encode(["status" => "error", "message" => "archivo-no-creado"]);
         }
-
+    
         return json_encode(["status" => "ok", "message" => "archivo-creado"]);
     }
 
@@ -97,12 +94,12 @@
             }
         
             if ($conn->errno) {
-                return json_encode(["status" => "error", "message" => "tablas-no-creadas". $conn->error]);
+                return json_encode(["status" => "error", "message" => "tablas-no-creadas", "content" => $conn->error]);
             } else {
                 return json_encode(["status" => "ok", "message" => "tablas-creadas"]);
             }
         } else {
-            return json_encode(["status" => "ok", "message" => "tablas-no-creadas". $conn->error]);
+            return json_encode(["status" => "error", "message" => "tablas-no-creadas", "content" => $conn->error]);
         }
     }
 

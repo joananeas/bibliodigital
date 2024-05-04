@@ -1,3 +1,10 @@
+:root {
+    --color-principal: #4A68A0; /* Valor predeterminado */
+    --color-secundario: #F5F5F5; /* Valor predeterminado */
+    --color-terciario: #333333; /* Valor predeterminado */
+}
+
+
 .container {
     display: flex;
     flex-wrap: wrap;
@@ -16,4 +23,42 @@
 article {
     flex: 1 0 100%; /* Esto significa que el artículo tendrá un ancho base del 100%, pero puede crecer para llenar el espacio disponible si es necesario */
     box-sizing: border-box; /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
+}
+
+.reservas {
+    margin-top: 20px;
+}
+
+
+.tableContainer{
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.tablaUsuarios{
+    text-align: center;
+    border-collapse: collapse;
+    background-color: var(--color-principal);
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+}
+
+.tablaUsuarios th{
+    color: white;
+    padding: 10px;
+}
+
+.tablaUsuarios td{
+    padding: 2px;
+    color: var(--color-terciario);
+    background-color: var(--color-secundario);
+}
+
+.user-row{
+    border-right: 1px solid #333333;
+}
+
+.user-row-bottom{
+    border-bottom: 1px solid #333333;
 }

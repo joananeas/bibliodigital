@@ -72,7 +72,7 @@ const scanQRCode = () => {
                 console.log("Found QR code", code.data);
                 video.srcObject.getTracks().forEach(track => track.stop());
                 video.style.display = 'none';
-                alert("Código QR detectado: " + code.data);
+                window.location.href = code.data;
                 return;
             }
         }

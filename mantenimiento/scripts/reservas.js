@@ -1,32 +1,48 @@
-const getLibro = () => {
-    let urlString = window.location.href;
-    let paramString = urlString.split('?')[1];
-    let queryString = new URLSearchParams(paramString);
-    let libro = queryString.get('libro');
-    console.log("Libro is:" + libro);
-    return libro;
-};
 
-document.getElementById('reservar').addEventListener('click', function() {
-    let titulo = getLibro();
-    let fechaInicio = document.getElementById('fechaReserva').value;
-    let fechaFin = document.getElementById('fechaReserva').value;
 
+const getAllUsers = async () => {
+    console.log('Obteniendo usuarios...');
     let formData = new FormData();
-    formData.append('pttn', 'reservarLibro');
-    formData.append('titulo', titulo);
-    formData.append('fechaInicio', fechaInicio);
-    formData.append('fechaFin', fechaFin);
+    formData.append('pttn', 'getReservesFromUser');
 
-    fetch("./mantenimiento/api.php", {
-        method: "POST",
+    const response = await fetch('../mantenimiento/api.php', {
+        method: 'POST',
         body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch((error) => {
-        console.error('Error:', error);
     });
-});
+    const data = await response.json();
+    
+    let table = document.getElementById('userList');
+    console.log(data);
+    // if (Array.isArray(data)) {
+    //     data.forEach(user => {
+    //         let tr = document.createElement('tr');
+
+    //         // Crear y asignar los elementos para 'Nombre', que será el correo
+    //         let tdNombre = document.createElement('td');
+    //         tdNombre.textContent = user.email;
+    //         tdNombre.classList.add('user-row');
+    //         tr.appendChild(tdNombre);
+
+    //         // Crear y asignar los elementos para 'Correo', que será el rol
+    //         let tdCorreo = document.createElement('td');
+    //         tdCorreo.textContent = user.rol;
+    //         tdCorreo.classList.add('user-row');
+    //         tr.appendChild(tdCorreo);
+
+    //         // Crear y asignar los elementos vacíos para 'Estado'
+    //         let tdEstado = document.createElement('td');
+    //         tdEstado.classList.add('user-row');
+    //         tr.appendChild(tdEstado);
+
+    //         // Crear y asignar los elementos vacíos para 'Acciones'
+    //         let tdAcciones = document.createElement('td');
+    //         tr.appendChild(tdAcciones);
+
+    //         tr.classList.add('user-row-bottom');
+    //         // Añadir la fila completa a la tabla
+    //         table.appendChild(tr);
+    //     });
+    // }
+}
+
+getAllUsers();

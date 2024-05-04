@@ -8,3 +8,7 @@ temporal/*
 *.xls
 *.xlsx
 *.csv
+
+# IDE config
+.vscode/
+.idea/

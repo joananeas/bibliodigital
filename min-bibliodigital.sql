@@ -1,13 +1,17 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-START TRANSACTION;
 SET GLOBAL time_zone = '+01:00';
+SET GLOBAL event_scheduler = ON;
+SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
+SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
+START TRANSACTION;
 SET foreign_key_checks = 0;
-
-DROP TABLE IF EXISTS `dib_reserves`, `dib_prestecs`, `dib_expulsions`, `dib_exemplars`, `dib_cataleg`, `dib_config`, `dib_usuaris`, `dib_notificacions`;
-
+DROP TABLE IF EXISTS `dib_prestecs`, `dib_reserves`, `dib_expulsions`, `dib_exemplars`, `dib_cataleg`, `dib_config`, `dib_usuaris`, `dib_notificacions`;
 SET foreign_key_checks = 1;
+COMMIT;
 
+-- Creación de tablas
+START TRANSACTION;
 CREATE TABLE IF NOT EXISTS dib_usuaris (
   usuari INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -65,7 +69,7 @@ CREATE TABLE IF NOT EXISTS dib_reserves (
   exemplar_id INT NOT NULL,
   usuari_id INT NOT NULL,
   data_inici DATE,
-  data_fi DATE,
+  data_fi DATE DEFAULT DATE_ADD(CURRENT_DATE, INTERVAL 7 DAY),
   estat ENUM('finalitzada', 'en-curs', 'pendent') NOT NULL,
   prolongada BOOLEAN,
   motiu_prolongacio TEXT NULL,
@@ -81,6 +85,24 @@ CREATE TABLE IF NOT EXISTS dib_prestecs (
   data_real_tornada DATE,
   estat ENUM('prestat', 'retornat', 'retardat') NOT NULL,
   comentaris TEXT,
+  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
+);
+
+CREATE TABLE IF NOT EXISTS dib_estrelles (
+  id_estrella INT AUTO_INCREMENT PRIMARY KEY,
+  usuari_id INT NOT NULL,
+  puntuacio INT NOT NULL,
+  exemplar_id INT NOT NULL,
+  data_puntuacio DATE NULL,
+  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
+);
+
+CREATE TABLE IF NOT EXISTS dib_valoracions (
+  id_comentari INT AUTO_INCREMENT PRIMARY KEY,
+  usuari_id INT NOT NULL,
+  exemplar_id INT NOT NULL,
+  data_comentari DATE NULL,
+  comentari TEXT NOT NULL,
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
 );
 
@@ -119,18 +141,35 @@ CREATE TABLE IF NOT EXISTS dib_notificacions (
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
 );
 
+COMMIT;
+
+-- Creación de índices
+START TRANSACTION;
+
 CREATE INDEX idx_notificacions_usuari ON dib_notificacions(usuari_id);
 CREATE INDEX idx_notificacions_estat ON dib_notificacions(estat);
 CREATE INDEX idx_notificacions_data ON dib_notificacions(data_creada);
 
+COMMIT;
 
--- TRIGGERS
-CREATE TRIGGER `trg_after_insert_reserva` 
-AFTER INSERT ON `dib_reserves` 
-FOR EACH ROW BEGIN
-  INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus) 
-  VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('Tu reserva con ID ', NEW.reserva, ' ha sido registrada con éxito.'), 'Reserva');
+
+-- Triggers y eventos
+START TRANSACTION;
+CREATE TRIGGER trg_after_insert_reserva AFTER INSERT ON dib_reserves FOR EACH ROW
+BEGIN
+    INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus) 
+    VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('Tu reserva con ID ', NEW.reserva, ' ha sido registrada con éxito.'), 'Reserva');
 END;
 
+CREATE TRIGGER trg_after_insert_prestec AFTER INSERT ON dib_prestecs FOR EACH ROW
+BEGIN
+    INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus)
+    VALUES (NEW.usuari_id, 'Préstec Confirmado', CONCAT('Tu préstec con ID ', NEW.id_prestec, ' ha sido registrado con éxito.'), 'Préstec');
+END;
 
+CREATE EVENT IF NOT EXISTS eliminar_reservas_expirades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO
+    DELETE FROM dib_reserves WHERE DATE_ADD(fecha_columna, INTERVAL 30 DAY) < CURRENT_DATE;
+
+CREATE EVENT IF NOT EXISTS eliminar_notificacions_expirades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO
+    DELETE FROM dib_notificacions WHERE DATE_ADD(fecha_columna, INTERVAL 30 DAY) < CURRENT_DATE;
 COMMIT;

@@ -7,19 +7,20 @@
 <!-- Nav DINAMICO -->
 <?php require "dynamo/nav-dinamico.php"; ?>
 <main>
-    <section class="frame">
+    <section class="frame reservas">
         <div class="header-libros">
-        <span>Llibre a reservar: <span id="nombreLibro" class="fuenteH1"></span></span>
+        <span>Les teves reserves apareixeran aquí.</span>
         </div>   
-        <div class="container">
-            <aside class="aside-text">
-                <p>Títol: <span class="fuenteH1"></span></p>
-                <label>Data inici:</label>
-                <input type="date" id="fechaReserva" class="fuenteTexto"> <br>
-                <label>Data fi:</label>
-                <input type="date" id="fechaReserva" class="fuenteTexto"> <br>
-                <button id="reservar" class="botonUniversal">Reservar</button>
-            </aside>    
+        <div class="tableContainer">
+            <table id="reservasList" class="tablaUsuarios">
+                <tr>
+                    <th>Reserva</th>
+                    <th>Exemplar</th>
+                    <th>Data Inici</th>
+                    <th>Data Fi</th>
+                    <th>Estat</th>
+                </tr>
+            </table>
         </div>
     </section>
 </main>

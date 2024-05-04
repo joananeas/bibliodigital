@@ -44,6 +44,7 @@
 
 
     $peticion = $_POST["pttn"] ?? null;
+    $peticion = $peticion ?? $_GET["pttn"] ?? null;
 
     switch($peticion){
         case 'checkDB':
@@ -69,6 +70,10 @@
                 "response" => "ok",
                 "ip" => $_SERVER['REQUEST_URI']
             ]);
+            break;
+
+        case 'getID':
+            echo $apiUsuarios->getID();
             break;
 
         case 'getRol':
@@ -131,16 +136,6 @@
             reservarLibro($conn, $titulo, $fechaInicio, $fechaFin);
             break;
 
-        case 'genPasswd':
-            $password = '1234';
-            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-            $isValid = password_verify($password, $hashedPassword);
-            if ($isValid) {
-                echo json_encode('La contraseña es válida! (hashed: '.$hashedPassword.', passwd: '.$password.')');
-            } else {
-                echo json_encode('La contraseña no es válida! (hashed: '.$hashedPassword.', passwd: '.$password.')');
-            }
-            break;
 
         case 'authUsuario':
             $email = $_POST["email"];
@@ -176,7 +171,13 @@
             $resp = getReserves($conn, $id);
             echo $resp;
             break;
-
+        
+        case 'getReservesFromUser':
+            $usuari = $apiUsuarios->getID();
+            $resp = $apiUsuarios->getReservas($usuari);
+            echo $resp;
+            break;
+        
         case 'reservar':
             $conn = peticionSQL();
             $id = $_POST['id'];
@@ -188,10 +189,9 @@
             break;
 
         case 'getNotifications':
-            $conn = peticionSQL();
-            $usuari = $apiUsuarios->getID();
-                
-            $resp = $apiUsuarios->getNotifications($usuari);
+            $id = 1;
+            
+            $resp = $apiUsuarios->getNotifications();
             echo $resp;
             break;
 
