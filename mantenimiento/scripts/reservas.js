@@ -11,38 +11,69 @@ const getAllUsers = async () => {
     });
     const data = await response.json();
     
-    let table = document.getElementById('userList');
+    let table = document.getElementById('reservasTable');
     console.log(data);
-    // if (Array.isArray(data)) {
-    //     data.forEach(user => {
-    //         let tr = document.createElement('tr');
+    if (Array.isArray(data)) {
+        data.forEach(reserva => {
+            let tr = document.createElement('tr');
 
-    //         // Crear y asignar los elementos para 'Nombre', que será el correo
-    //         let tdNombre = document.createElement('td');
-    //         tdNombre.textContent = user.email;
-    //         tdNombre.classList.add('user-row');
-    //         tr.appendChild(tdNombre);
+            let tdReserva = document.createElement('td');
+            tdReserva.textContent = reserva.reserva;
+            tdReserva.classList.add('user-row');
+            tr.appendChild(tdReserva);
 
-    //         // Crear y asignar los elementos para 'Correo', que será el rol
-    //         let tdCorreo = document.createElement('td');
-    //         tdCorreo.textContent = user.rol;
-    //         tdCorreo.classList.add('user-row');
-    //         tr.appendChild(tdCorreo);
+            let tdCorreo = document.createElement('td');
+            tdCorreo.textContent = reserva.exemplar_id;
+            tdCorreo.classList.add('user-row');
+            tr.appendChild(tdCorreo);
 
-    //         // Crear y asignar los elementos vacíos para 'Estado'
-    //         let tdEstado = document.createElement('td');
-    //         tdEstado.classList.add('user-row');
-    //         tr.appendChild(tdEstado);
+            let tdDataInici = document.createElement('td');
+            tdDataInici.textContent = reserva.data_inici;
+            tdDataInici.classList.add('user-row');
+            tr.appendChild(tdDataInici);
 
-    //         // Crear y asignar los elementos vacíos para 'Acciones'
-    //         let tdAcciones = document.createElement('td');
-    //         tr.appendChild(tdAcciones);
+            let tdDataFi = document.createElement('td');
+            tdDataFi.textContent = reserva.data_fi;
+            tdDataFi.classList.add('user-row');
+            tr.appendChild(tdDataFi);
 
-    //         tr.classList.add('user-row-bottom');
-    //         // Añadir la fila completa a la tabla
-    //         table.appendChild(tr);
-    //     });
-    // }
+            let tdEstat = document.createElement('td');
+            tdEstat.textContent = reserva.estat;
+            tdEstat.classList.add('user-row');
+            tr.appendChild(tdEstat);
+            
+            let tdPrestec = document.createElement('td');
+            tdPrestec.classList.add('user-row');
+
+            let btnPedirPrestamo = document.createElement('button');
+            btnPedirPrestamo.textContent = 'Demana préstec';
+            btnPedirPrestamo.classList.add('btn');
+            btnPedirPrestamo.classList.add('botonUniversal_alt');
+            btnPedirPrestamo.addEventListener('click', async () => {
+                let formData = new FormData();
+                formData.append('pttn', 'prestarExemplar');
+                formData.append('reserva', reserva.reserva);
+                const response = await fetch('../mantenimiento/api.php', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                console.log(data);
+                if (data.status == 'ok') {
+                    alert('Préstec realitzat correctament');
+                    location.reload();
+                } else {
+                    alert('Error al realitzar el préstec');
+                }
+            });
+            
+            tdPrestec.appendChild(btnPedirPrestamo);
+            tr.appendChild(tdPrestec);
+
+            tr.classList.add('user-row-bottom');
+            table.appendChild(tr);
+        });
+    }
 }
 
 getAllUsers();

@@ -6,7 +6,7 @@ SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 START TRANSACTION;
 SET foreign_key_checks = 0;
-DROP TABLE IF EXISTS `dib_prestecs`, `dib_reserves`, `dib_expulsions`, `dib_exemplars`, `dib_cataleg`, `dib_config`, `dib_usuaris`, `dib_notificacions`;
+DROP TABLE IF EXISTS `dib_prestecs`, `dib_reserves`, `dib_expulsions`, `dib_exemplars`, `dib_cataleg`, `dib_config`, `dib_usuaris`, `dib_notificacions`, `dib_logs_errores`, `dib_estrelles`, `dib_valoracions`;
 SET foreign_key_checks = 1;
 COMMIT;
 
@@ -141,6 +141,13 @@ CREATE TABLE IF NOT EXISTS dib_notificacions (
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
 );
 
+CREATE TABLE IF NOT EXISTS dib_logs_errores (
+  id_error INT AUTO_INCREMENT PRIMARY KEY,
+  fecha_error TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  descripcion_error TEXT,
+  contexto_error VARCHAR(255)
+);
+
 COMMIT;
 
 -- Creación de índices
@@ -155,8 +162,15 @@ COMMIT;
 
 -- Triggers y eventos
 START TRANSACTION;
+
 CREATE TRIGGER trg_after_insert_reserva AFTER INSERT ON dib_reserves FOR EACH ROW
 BEGIN
+    DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
+    BEGIN
+        INSERT INTO dib_logs_errores (descripcion_error, contexto_error)
+        VALUES ('Error al insertar notificación de reserva', CONCAT('Reserva ID: ', NEW.reserva));
+    END;
+
     INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus) 
     VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('Tu reserva con ID ', NEW.reserva, ' ha sido registrada con éxito.'), 'Reserva');
 END;

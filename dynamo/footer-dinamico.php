@@ -8,11 +8,11 @@
 
 <footer id="footerMobile" class="centrado">
     <div>
-        <a href="" aria-label="Inici"><img src="./media/icons/home.png" width="40" height="40"></a>
-        <a href="" aria-label="Comunitat"><img src="./media/icons/heart.png" width="40" height="40"></a>
-        <a href="" aria-label="Escanejar QR"><img src="./media/icons/qr-code-white.png" width="40" height="40"></a>
-        <a href="" aria-label="Marcadors"><img src="./media/icons/markers.png" width="40" height="40"></a>
-        <a href="" aria-label="Perfil Usuari"><img src="./media/icons/user.png" width="40" height="40"></a>
+        <a id="footer-m-home" href="" aria-label="Inici"><img id="footer-img-home" src="./media/icons/home.png" width="40" height="40"></a>
+        <a id="footer-m-community" href="" aria-label="Comunitat"><img id="footer-img-community" src="./media/icons/heart.png" width="40" height="40"></a>
+        <a id="footer-m-qr" href="" aria-label="Escanejar QR"><img id="footer-img-qr" src="./media/icons/qr-code-white.png" width="40" height="40"></a>
+        <a id="footer-m-markers" href="" aria-label="Marcadors"><img id="footer-img-markers" src="./media/icons/markers.png" width="40" height="40"></a>
+        <a id="footer-m-profile" href="" aria-label="Perfil Usuari"><img id="footer-img-user" src="./media/icons/user.png" width="40" height="40"></a>
     </div>
 </footer>
 

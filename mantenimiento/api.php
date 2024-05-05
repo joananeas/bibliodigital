@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.3'; # 🌟 Install fully working (v1.5.3)
+    const VERSION =  'v1.5.4'; # 🐛 Fix bug preventing notifications from being retrieved and minor improvements (v1.5.4)
     # Conexión a la base de datos, constantes de db.php.
 
     // Instancias de las APIs
@@ -189,9 +189,9 @@
             break;
 
         case 'getNotifications':
-            $id = 1;
+            $user_id = $apiUsuarios->getID();
             
-            $resp = $apiUsuarios->getNotifications();
+            $resp = $apiUsuarios->getNotifications($user_id);
             echo $resp;
             break;
 

@@ -38,10 +38,9 @@ article {
 
 .tablaUsuarios{
     text-align: center;
-    border-collapse: collapse;
+    /* border-collapse: collapse; */
     background-color: var(--color-principal);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
+    border-radius: 4px;
 }
 
 .tablaUsuarios th{
@@ -55,10 +54,14 @@ article {
     background-color: var(--color-secundario);
 }
 
-.user-row{
+/* .user-row{
     border-right: 1px solid #333333;
 }
 
 .user-row-bottom{
     border-bottom: 1px solid #333333;
+} */
+
+.btn {
+    margin: 0;
 }

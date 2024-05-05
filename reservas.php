@@ -12,13 +12,14 @@
         <span>Les teves reserves apareixeran aquí.</span>
         </div>   
         <div class="tableContainer">
-            <table id="reservasList" class="tablaUsuarios">
+            <table id="reservasTable" class="tablaUsuarios">
                 <tr>
                     <th>Reserva</th>
                     <th>Exemplar</th>
                     <th>Data Inici</th>
                     <th>Data Fi</th>
                     <th>Estat</th>
+                    <th>Demanar prèstec</th>
                 </tr>
             </table>
         </div>

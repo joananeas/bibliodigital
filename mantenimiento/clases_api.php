@@ -309,27 +309,34 @@ class API_Usuarios{
         return $result;
     }
 
-    public function getNotifications() {
-        $conn = peticionSQL();  // Obtener la conexión de la base de datos.
-        mysqli_begin_transaction($conn);  // Iniciar una transacción.
-    
-        try {
-            $sql = "SELECT * FROM dib_notificacions";  // Consulta SQL para seleccionar los datos.
-            $result = mysqli_query($conn, $sql);
-            $users = [];
-            
-            while($row = mysqli_fetch_assoc($result)){
-                array_push($users, $row);
-            }
-            
-            mysqli_commit($conn);  // Realizar COMMIT si todo ha ido bien.
-            return json_encode($users);
-        } catch (Exception $e) {
-            mysqli_rollback($conn);  // Realizar ROLLBACK en caso de error.
-            return json_encode([]);  // O manejar el error de alguna otra manera.
-        } finally {
-            mysqli_close($conn);  // Asegurarse de cerrar la conexión independientemente del resultado.
+    public function getNotifications($user_id) {
+        $conn = peticionSQL(); 
+        if ($conn->connect_errno) {
+            return json_encode(["status" => "error", "message" => "Fallo al conectar a MySQL: " . $conn->connect_error]);
         }
+        $conn->set_charset("utf8mb4");
+        
+        $stmt = $conn->prepare("SELECT * FROM dib_notificacions WHERE usuari_id = ?");
+        if (!$stmt) {
+            return json_encode(["status" => "error", "message" => "Error en la preparación de la consulta: " . $conn->error]);
+        }
+        
+        $stmt->bind_param("i", $user_id);
+        
+        if ($stmt->execute()) {
+            $result = $stmt->get_result();
+            $data = [];
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            if (count($data) > 0) {
+                return json_encode(["status" => "ok", "data" => $data]);
+            } else {
+                return json_encode(["status" => "ok", "data" => []]); # Así muestra un 0
+            }
+        } else {
+            return json_encode(["status" => "error", "message" => "Error en la ejecución de la consulta: " . $stmt->error]);
+        }        
     }
     
 

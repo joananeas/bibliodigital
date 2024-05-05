@@ -43,17 +43,25 @@ function getNotificaciones() {
         return response.json();
     })
     .then(data => {
-        number.textContent = data.length;
-        data.forEach(notification => {
-            let link = document.createElement("a");
-            link.textContent = notification.titol;
-            submenu.appendChild(link);
-        });
+        // Comprobar el estado de la respuesta
+        if (data.status === "ok") {
+            number.textContent = data.data.length;
+            data.data.forEach(notification => {
+                let link = document.createElement("a");
+                link.textContent = notification.titol;
+                link.href = "#"; 
+                link.title = notification.missatge;
+                submenu.appendChild(link);
+            });
+        } else {
+            console.error("Error al recuperar notificaciones: ", data.message);
+        }
     })
     .catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
+        console.error("[ERROR (API_Request)] ", error);
     });
 }
+
 
 getNotificaciones();
 
@@ -80,6 +88,49 @@ const comprobarConexionBBDD = async () => {
         window.location.href = "./error.php?error=0001";
     }
 }
+
+const menuMobile = () => {
+    let menu = document.getElementById("footerMobile");
+
+    const linksNormal = [
+        { id: "footer-m-home", href: "./"},
+        { id: "footer-m-community", href: "./comunitat.php"},
+        { id: "footer-m-qr", href: "./qr.php"},
+        { id: "footer-m-markers", href: "./marcadors.php"},
+        { id: "footer-m-profile", href: "./cuenta.php"}
+    ];
+
+    const linksAdmin = [
+        { id: "footer-m-home", href: "../", src: "../media/icons/home.png", id_img: "footer-img-home"},
+        { id: "footer-m-community", href: "../comunitat.php", src: "../media/icons/heart.png", id_img: "footer-img-community"},
+        { id: "footer-m-qr", href: "../qr.php", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr"},
+        { id: "footer-m-markers", href: "../marcadors.php", src: "../media/icons/markers.png", id_img: "footer-img-markers"},
+        { id: "footer-m-profile", href: "../cuenta.php", src: "../media/icons/user.png", id_img: "footer-img-user"},
+    ];
+
+    if (window.location.href.includes("admin")) {
+        linksAdmin.forEach(link => {
+            let a = document.getElementById(link.id);
+            let img = document.getElementById(link.id_img);
+            a.href = link.href;
+            img.src = link.src;
+        });
+    }
+    else {
+        linksNormal.forEach(link => {
+            let a = document.getElementById(link.id);
+            a.href = link.href;
+        });
+    }
+}
+
+const menuHeader = () => {
+    let menu = document.getElementById("menu-nav");
+    // TODO: Finish this
+}
+
+
+
 
 const getBanner = () => {
     let formData = new FormData();
@@ -132,6 +183,7 @@ const loadGlobals = () => {
 
         let tituloFavicon = document.getElementById("tituloTab");
         let tituloH1 = document.getElementById("titulo");
+        let linkTituloH1 = document.getElementById("title-nav");
         const versionElement = document.getElementById("version");
         const escuelaFooter = document.getElementById("escuela-footer");
 
@@ -139,13 +191,21 @@ const loadGlobals = () => {
         let favicon = document.getElementById("favicon");
         
         // En caso de que sea admin, se añade un punto al inicio para que funcione correctamente (../)
-        if (window.location.href.includes("admin")) favicon.href = "." + data.favicon;
-        else favicon.href = data.favicon;
+        if (window.location.href.includes("admin")) {
+            favicon.href = "." + data.favicon;
+            linkTituloH1.href = "../index.php";
+        }
+        else {
+            linkTituloH1.href = "./index.php";
+            favicon.href = data.favicon;
+        }
         escuelaFooter.textContent = data.nomBiblioteca + " 📚";
         // Solo lo imprime si existe (en login no).
         tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
         versionElement.textContent = data.version;
         let path = data.rootPath;
+
+        menuMobile();
     })
     .catch(error => {
         console.log("[ERROR (API_Request)] ", error);
@@ -183,12 +243,8 @@ const getRol = () => {
 
         r.textContent = data.username + " - " + rol + " ";
 
-        // Luego crea y agrega el enlace
-        // const l = document.createElement("a");
-        // l.textContent = "⚙️";
-        // l.href = "cuenta.php";  
-        // l.className = "info-usuari-conf";
-        // r.appendChild(l);
+        let menu = document.getElementById("menu-nav");
+    
         return data.username;
     }).catch(error => {
         console.log("[ERROR (API_Request)] ", error);
@@ -240,8 +296,11 @@ const cargarEstilos = (estilos) => {
 
 switch (true) {
     case url.includes("index"):
-        cargarEstilos(estilosIndex);
-        if (!url.includes("admin")) cargarScripts(scriptsIndex);
+        if (url.includes("admin")) cargarEstilos(estilosAdmin);
+        else cargarEstilos(estilosIndex);
+
+        if (url.includes("admin")) cargarScripts(scriptsAdmin);
+        else cargarScripts(scriptsIndex);
         console.log("indice");
         break;
     case url.includes("cuenta"):
@@ -270,23 +329,27 @@ switch (true) {
         cargarEstilos(estilosInstall); 
         cargarScripts(scriptsInstall);
         console.log("install");
-        break;
+        break
     case url.includes("libro"):
         cargarEstilos(estilosLibro);
         cargarScripts(scriptsLibro);
         console.log("libro");
         break;
+
     case url.includes("admin"):
+    case url.includes("admin/index"): 
         cargarEstilos(estilosAdmin);
         cargarScripts(scriptsAdmin);
         console.log("admin");
         break;
+
     default:
         cargarEstilos(estilosIndex); // normalmente sale / en vez de /index.php
         cargarScripts(scriptsIndex);
         break;
     // Agregar más casos según sea necesario
 }
+
 // Aplica estilos de carga
 document.documentElement.style.display = 'block';
 document.documentElement.className += ' loading';
@@ -300,4 +363,6 @@ document.addEventListener("DOMContentLoaded", () => { getColores(); });
 document.addEventListener("DOMContentLoaded", () => { getBanner(); });
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
 document.addEventListener("DOMContentLoaded", () => { getRol(); });
+setInterval(loadGlobals, 30000); // Cada 30 segundos se comprueban los globales
+setInterval(getBanner, 10000); // Cada 10 segundos se comprueba el banner
 setInterval(getNotificaciones, 10000); // Cada 10 segundos se comprueban las notis
