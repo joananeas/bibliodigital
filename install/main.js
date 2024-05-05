@@ -126,6 +126,7 @@ const config = async () => {
     formData.append("titolWeb", document.getElementById("titolWeb").value);
     formData.append("h1Web", document.getElementById("h1Web").value);
     formData.append("favicon", document.getElementById("favicon").value);
+    formData.append("favicon", document.getElementById("favicon").files[0]);
     formData.append("colorPrincipal", document.getElementById("colorPrincipal").value);
     formData.append("colorSecundario", document.getElementById("colorSecundario").value);
     formData.append("colorTerciario", document.getElementById("colorTerciario").value);

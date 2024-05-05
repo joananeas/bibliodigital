@@ -275,6 +275,10 @@ h1{
     float: right;
 }
 
+main{
+    padding-bottom: 50px;
+}
+
 footer {
     font-family:'Staatliches', sans-serif;
     color: white;

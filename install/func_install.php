@@ -133,35 +133,52 @@
     }
     
     function config($nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario) {
-        // Crear una conexión a la base de datos
         $conn = peticionSQL();
         
-        // Verificar si la conexión fue exitosa
         if ($conn->connect_error) {
             return json_encode(["status" => "error", "message" => "Error de conexión: " . $conn->connect_error]);
         }
     
+        // Procesar el archivo subido
+        if (isset($_FILES['favicon'])) {
+            $file = $_FILES['favicon'];
+            $filename = $file['name'];
+            $tempPath = $file['tmp_name'];
+            $fileError = $file['error'];
+    
+            if ($fileError === 0) {
+                $uploadPath = '../media/sistema/favicon/' . basename($filename);
+                if (move_uploaded_file($tempPath, $uploadPath)) {
+                    $favicon = $filename;  // Aquí se asigna el nuevo nombre de archivo para guardarlo en la base de datos
+                } else {
+                    return json_encode(["status" => "error", "message" => "Error al mover el archivo"]);
+                }
+            } else {
+                return json_encode(["status" => "error", "message" => "Error en la carga del archivo"]);
+            }
+        } else {
+            return json_encode(["status" => "error", "message" => "Archivo no proporcionado"]);
+        }
+    
         // Preparar la sentencia SQL
         $stmt = $conn->prepare("INSERT INTO dib_config (NOM_BIBLIOTECA, TITOL_WEB, H1_WEB, FAVICON, COLOR_PRINCIPAL, COLOR_SECUNDARIO, COLOR_TERCIARIO, BANNER_STATE, BANNER_TEXT) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    
-        // Verificar si la sentencia se preparó correctamente
+        
         if (!$stmt) {
             return json_encode(["status" => "error", "message" => "Error al preparar la consulta: " . $conn->error]);
         }
-
-        # El banner y el texto se dejan vacíos (se configura posteriormente).
-        $b = 0;
-        $bT = "";
-        // Vincular los parámetros a la sentencia SQL
-        $stmt->bind_param("sssssssis", $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario, $b, $bT);
     
-        // Ejecutar la sentencia
+        $bannerState = 0;
+        $bannerText = "";
+    
+        $stmt->bind_param("sssssssis", $nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario, $bannerState, $bannerText);
+        
         if ($stmt->execute()) {
             return json_encode(["status" => "ok", "message" => "config-ok"]);
         } else {
             return json_encode(["status" => "error", "message" => "error-config"]);
         }
     }
+    
 
     function subirXls($files) {
         $conn = peticionSQL();

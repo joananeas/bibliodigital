@@ -357,4 +357,3 @@ class API_Usuarios{
         return json_encode($reservas);
     }
 }
-

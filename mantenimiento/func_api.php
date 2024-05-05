@@ -22,7 +22,9 @@ function peticionSQL(){
 }
 
 function cercaLlibresLite($conn, $llibre){
-    $sql = "SELECT dib_cataleg.TITOL AS nom, dib_exemplars.ESTAT as estadoActual, dib_cataleg.NUMERO as id FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `TITOL` LIKE '%$llibre%'";
+    $sql = "SELECT dib_cataleg.TITOL AS nom, dib_exemplars.ESTAT as estadoActual, dib_cataleg.NUMERO as id 
+    FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
+    WHERE `TITOL` LIKE '%$llibre%' OR AUTOR LIKE '%$llibre%'";
         $result = mysqli_query($conn, $sql);
         if (mysqli_num_rows($result) > 0) {
             $rows = array();
@@ -41,6 +43,36 @@ function cercaLlibresLite($conn, $llibre){
         }
 }
 
+function cercaLlibresAll($conn, $libroId){
+    $conn->set_charset("utf8mb4");
+    $sql = "SELECT * FROM `dib_cataleg` WHERE `NUMERO` = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    
+    if (!$stmt) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta']);
+        return;
+    }
+    
+    // Enlazar el parámetro
+    mysqli_stmt_bind_param($stmt, 'i', $libroId);
+    
+    // Ejecutar la consulta
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    
+    // Comprobar los resultados
+    if ($result && mysqli_num_rows($result) > 0) {
+        $detalleLibro = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'detallesLibro' => $detalleLibro]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontraron detalles para el libro']);
+    }
+    
+    // Cerrar el statement
+    mysqli_stmt_close($stmt);
+}
+
+
 function cercaLlibresFull($conn, $llibre){
     $sql = "SELECT dib_cataleg.TITOL AS nom,
     dib_exemplars.ESTAT as estadoActual,
@@ -58,6 +90,7 @@ function cercaLlibresFull($conn, $llibre){
         echo json_encode(['response' => 'ERROR']);
     }
 }
+
 
 function reservarLibro($conn, $titulo, $fechaInicio, $fechaFin){
     // Primero, verifica si el libro existe en la base de datos
@@ -107,5 +140,66 @@ function reservar($conn, $exemplar_id, $usuari_id, $data_inici, $estat = 'penden
         return json_encode(['response' => 'OK']);
     } else {
         return json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar la reserva en la base de datos: ' . mysqli_error($conn)]);
+    }
+}
+
+
+function modificarLlibre($conn, $id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat){
+    $sql = "UPDATE `dib_cataleg` SET `ID_CATÀLEG` = ?, `ID_BIBLIOTECA` = ?, `TITOL` = ?, `ISBN` = ?, `CDU` = ?, `FORMAT` = ?, `AUTOR` = ?,
+            `EDITORIAL` = ?, `LLOC` = ?, `COL·LECCIÓ` = ?, `PAÍS` = ?, `DATA` = ?, `LLENGUA` = ?, 
+            `MATERIA` = ?, `DESCRIPTOR` = ?, `NIVELL` = ?, `RESUM` = ?, `URL` = ?, `ADREÇA` = ?, 
+            `DIMENSIÓ` = ?, `VOLÚM` = ?, `PÀGINES` = ?, `PROC` = ?, `CARC` = ?, `CAMP_LLIURE` = ?, 
+            `NPRES` = ?, `REC` = ?, `ESTAT` = ? WHERE `NUMERO` = ?";
+            
+    $conn->set_charset("utf8mb4");
+    $stmt = mysqli_prepare($conn, $sql);
+
+    if (!$stmt) {
+        return json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
+    }
+    
+    mysqli_stmt_bind_param($stmt, 'iissssssssssssssssssissssisssi', 
+        $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio,
+        $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url,
+        $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure,
+        $npres, $rec, $estat, $id);
+
+    if (mysqli_stmt_execute($stmt)) {
+        return json_encode(['response' => 'OK']);
+    } else {
+        $error = mysqli_stmt_error($stmt);
+        return json_encode(['response' => 'ERROR', 'message' => 'Error al ejecutar la consulta: ' . $error]);
+    }
+}
+
+function crearLlibre($conn, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat) {
+    // Asegurar que todos los valores no proporcionados son convertidos a NULL o a un valor por defecto adecuado
+    $params = [$cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat];
+    $types = ''; // Inicializar la cadena de tipos
+    foreach ($params as &$param) {
+        if ($param === '') {
+            $param = NULL; // Convertir cadenas vacías a NULL para campos que pueden aceptarlo
+        }
+        $types .= is_int($param) ? 'i' : 's'; // Añadir especificador de tipo basado en el tipo de dato
+    }
+    $types .= 'i'; // Añadir un 'i' para el último parámetro que es el ID y es un entero
+
+    $sql = "INSERT INTO `dib_cataleg` (`ID_CATÀLEG`, `ID_BIBLIOTECA`, `NUMERO`, `ISBN`, `CDU`, `FORMAT`, `TITOL`, `AUTOR`, `EDITORIAL`, `LLOC`, `COL·LECCIÓ`, `PAÍS`, `DATA`, `LLENGUA`, `MATERIA`, `DESCRIPTOR`, `NIVELL`, `RESUM`, `URL`, `ADREÇA`, `DIMENSIÓ`, `VOLÚM`, `PÀGINES`, `PROC`, `CARC`, `CAMP_LLIURE`, `NPRES`, `REC`, `ESTAT`) VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    if (!$stmt) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
+        return;
+    }
+
+    mysqli_stmt_bind_param($stmt, $types, ...$params); // Usar desempaquetado de argumentos para pasar variables
+
+    if (mysqli_stmt_execute($stmt)) {
+        mysqli_stmt_close($stmt);
+        echo json_encode(['response' => 'OK']);
+    } else {
+        $error = mysqli_stmt_error($stmt);
+        mysqli_stmt_close($stmt);
+        echo json_encode(['response' => 'ERROR', 'message' => 'Error al ejecutar la consulta: ' . $error]);
     }
 }

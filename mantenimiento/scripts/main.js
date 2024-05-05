@@ -93,11 +93,11 @@ const menuMobile = () => {
     let menu = document.getElementById("footerMobile");
 
     const linksNormal = [
-        { id: "footer-m-home", href: "./"},
-        { id: "footer-m-community", href: "./comunitat.php"},
-        { id: "footer-m-qr", href: "./qr.php"},
-        { id: "footer-m-markers", href: "./marcadors.php"},
-        { id: "footer-m-profile", href: "./cuenta.php"}
+        { id: "footer-m-home", href: "./", src: "./media/icons/home.png", id_img: "footer-img-home"},
+        { id: "footer-m-community", href: "./comunitat.php", src: "./media/icons/heart.png", id_img: "footer-img-community"},
+        { id: "footer-m-qr", href: "./qr.php", src: "./media/icons/qr-code-white.png", id_img: "footer-img-qr"},
+        { id: "footer-m-markers", href: "./marcadors.php", src: "./media/icons/markers.png", id_img: "footer-img-markers"},
+        { id: "footer-m-profile", href: "./cuenta.php", src: "./media/icons/user.png", id_img: "footer-img-user"}
     ];
 
     const linksAdmin = [
@@ -109,6 +109,7 @@ const menuMobile = () => {
     ];
 
     if (window.location.href.includes("admin")) {
+        console.log("fotos admin");
         linksAdmin.forEach(link => {
             let a = document.getElementById(link.id);
             let img = document.getElementById(link.id_img);
@@ -117,9 +118,12 @@ const menuMobile = () => {
         });
     }
     else {
+        console.log("fotos normal");
         linksNormal.forEach(link => {
             let a = document.getElementById(link.id);
+            let img = document.getElementById(link.id_img);
             a.href = link.href;
+            img.src = link.src;
         });
     }
 }
@@ -128,8 +132,6 @@ const menuHeader = () => {
     let menu = document.getElementById("menu-nav");
     // TODO: Finish this
 }
-
-
 
 
 const getBanner = () => {
@@ -189,16 +191,13 @@ const loadGlobals = () => {
 
         tituloFavicon.textContent = data.titolWeb;
         let favicon = document.getElementById("favicon");
-        
-        // En caso de que sea admin, se añade un punto al inicio para que funcione correctamente (../)
         if (window.location.href.includes("admin")) {
-            favicon.href = "." + data.favicon;
-            linkTituloH1.href = "../index.php";
+            favicon.href = "../media/sistema/favicon/" + data.favicon;
         }
         else {
-            linkTituloH1.href = "./index.php";
-            favicon.href = data.favicon;
+            favicon.href = "./media/sistema/favicon/" + data.favicon;
         }
+        
         escuelaFooter.textContent = data.nomBiblioteca + " 📚";
         // Solo lo imprime si existe (en login no).
         tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
@@ -363,6 +362,7 @@ document.addEventListener("DOMContentLoaded", () => { getColores(); });
 document.addEventListener("DOMContentLoaded", () => { getBanner(); });
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
 document.addEventListener("DOMContentLoaded", () => { getRol(); });
+document.addEventListener("DOMContentLoaded", () => { menuMobile(); });
 setInterval(loadGlobals, 30000); // Cada 30 segundos se comprueban los globales
 setInterval(getBanner, 10000); // Cada 10 segundos se comprueba el banner
 setInterval(getNotificaciones, 10000); // Cada 10 segundos se comprueban las notis

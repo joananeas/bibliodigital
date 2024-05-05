@@ -73,8 +73,8 @@
                 <input type="text" id="h1Web" placeholder="Títol de la pàgina"><br>
                 
                 <label for="favicon">Favicon</label><br>
-                <input type="text" id="favicon" placeholder="Ruta al favicon"><br>
-                
+                <input type="file" id="favicon" accept="image/png, image/jpeg"><br>
+
                 <label for="colorPrincipal">Color principal</label><br>
                 <input type="text" id="colorPrincipal" placeholder="#4A68A0"><br>
                 

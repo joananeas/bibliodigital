@@ -26,6 +26,7 @@ document.getElementById('formColores').addEventListener('submit', function(e) {
         return response.json();
     })
     .then(data => {
+        getColores();
         console.log(data);
     })
     .catch(error => {
@@ -91,6 +92,7 @@ document.getElementById('formBanner').addEventListener('submit', function(e) {
     })
     .then(data => {
         console.log(data);
+        getBanner();
     })
     .catch(error => {
         console.error('Error al hacer la petición:', error);
@@ -201,6 +203,202 @@ document.getElementById("submitFormCreateUser").addEventListener('click', () => 
             alert('Error al crear el usuario');
         }
     });
+});
+
+const llenarDetallesLibro = async (libroId) => {
+    const formData = new FormData();
+    formData.append('llibre', libroId);
+    formData.append('pttn', 'cercaLlibresAll'); // Asegúrate de que el backend pueda manejar esta petición
+
+    const response = await fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        alert("Error al obtener detalles del libro");
+        return;
+    }
+
+    let l = document.getElementById('vistaLibro');
+    let b = document.getElementById('buscadorLlibres');
+
+    const data = await response.json();
+    if (data.response === "OK") {
+        const detalles = data.detallesLibro;
+        l.style.display = 'block';
+        b.style.display = 'none';
+        document.getElementById('identificador').value = detalles.NUMERO || '';
+        document.getElementById('cataleg').value = detalles.ID_CATÀLEG || '';
+        document.getElementById('biblioteca').value = detalles.ID_BIBLIOTECA || '';
+        document.getElementById('titol').value = detalles.TITOL || '';
+        document.getElementById('isbn').value = detalles.ISBN || '';
+        document.getElementById('cdu').value = detalles.CDU || '';
+        document.getElementById('format').value = detalles.FORMAT || '';
+        document.getElementById('autor').value = detalles.AUTOR || '';
+        document.getElementById('editorial').value = detalles.EDITORIAL || '';
+        document.getElementById('lloc').value = detalles.LLOC || '';
+        document.getElementById('colleccio').value = detalles.COLLECCIO || '';
+        document.getElementById('pais').value = detalles.PAIS || '';
+        document.getElementById('data').value = detalles.DATA ? detalles.DATA.split(' ')[0] : ''; // Asumiendo que la fecha viene en formato datetime
+        document.getElementById('llengua').value = detalles.LLENGUA || '';
+        document.getElementById('materia').value = detalles.MATERIA || '';
+        document.getElementById('descriptor').value = detalles.DESCRIPTOR || '';
+        document.getElementById('nivell').value = detalles.NIVELL || '';
+        document.getElementById('resum').value = detalles.RESUM || '';
+        document.getElementById('url').value = detalles.URL || '';
+        document.getElementById('adreca').value = detalles.ADRECA || '';
+        document.getElementById('dimensio').value = detalles.DIMENSIO || '';
+        document.getElementById('volum').value = detalles.VOLUM || '';
+        document.getElementById('pagines').value = detalles.PAGINES || 0;
+        document.getElementById('proc').value = detalles.PROC || '';
+        document.getElementById('carc').value = detalles.CARC || '';
+        document.getElementById('camp_lliure').value = detalles.CAMP_LLIURE || '';
+        document.getElementById('npres').value = detalles.NPRES || 0;
+        document.getElementById('rec').value = detalles.REC || '';
+        document.getElementById('estat').value = detalles.ESTAT || '';
+    } else {
+        alert("No se encontraron detalles para el libro seleccionado");
+    }
+};
+
+
+const formCreateBook = () => {
+    let s = document.getElementById('crearLlibreSubmit');
+    let m = document.getElementById('modificarLlibreSubmit');
+    s.style.display = 'block';
+    m.style.display = 'none';
+
+    document.getElementById('vistaLibro').style.display = 'block';
+    document.getElementById('buscadorLlibres').style.display = 'none';
+    document.getElementById('campoBuscarLibroIndividual').value = '';
+
+    document.querySelectorAll('#vistaLibro input, #vistaLibro textarea').forEach(input => {
+        input.value = ''; // Vaciar todos los campos
+    });
+};
+
+const buscarLibroIndividual = async () => {
+    let formData = new FormData();
+    formData.append('llibre', document.getElementById('campoBuscarLibroIndividual').value);
+    formData.append('pttn', 'cercaLlibresLite');
+
+    const response = await fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    });
+    const data = await response.json();
+    
+    tabla = document.getElementById('tablaLibros');
+    if(data.response === "OK") {
+        let response = data.llibres;
+        let desplegable = document.getElementById("buscadorLlibres");
+        desplegable.innerHTML = "";
+        const inputs = document.querySelectorAll('#crearLlibre input, #crearLlibre textarea');
+        const botonModificar = document.getElementById('modificarLlibreSubmit');
+
+        if (document.getElementById('crearLlibreSubmit').style.display === 'none') {
+            inputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    botonModificar.style.display = 'block';
+                });
+            });
+        }
+
+        for(let i = 0; i < response.length; i++) {
+            let libro = response[i];
+
+            let estadoLibro = document.createElement("span");
+            let tituloLibro = document.createElement("li");
+
+            estadoLibro.className = "estadoLlibro";
+            if (libro.estadoActual === "Disponible") estadoLibro.style.color = "green", estadoLibro.innerHTML = "Disponible";
+            else estadoLibro.style.color = "red", estadoLibro.innerHTML = "No disponible";
+
+            tituloLibro.className = "llibre";
+            tituloLibro.appendChild(estadoLibro);
+            tituloLibro.appendChild(document.createTextNode(libro.nom));
+
+            let boton = document.createElement("button");
+            boton.innerHTML = "Veure";
+            boton.className = "botonUniversal";
+            boton.style.margin = "0px";
+            boton.style.marginLeft = "25px";
+            tituloLibro.appendChild(boton);
+
+            desplegable.appendChild(tituloLibro);
+
+            boton.addEventListener("click", async function() {
+                const libroId = libro.id; 
+                await llenarDetallesLibro(libroId);
+            });
+
+            if (i === response.length - 1) {
+                tituloLibro.style.borderBottom = "none";
+            }
+        }
+    
+    }
+}
+
+document.getElementById('modificarLlibreSubmit').addEventListener('click', function(event) {
+    event.preventDefault(); 
+
+    const formData = new FormData(document.getElementById('crearLlibre'));
+    formData.append('id', document.getElementById('identificador').value);
+    formData.append('pttn', 'modificarLlibre');
+
+    fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.response === 'OK') {
+            alert('Libro modificado correctamente!');
+        } else {
+            alert('Error al modificar el libro: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+});
+
+document.getElementById('crearLlibreSubmit').addEventListener('click', function(event) {
+    event.preventDefault(); 
+
+    const formData = new FormData(document.getElementById('crearLlibre'));
+    formData.append('pttn', 'crearLlibre');
+
+    fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.response === 'OK') {
+            alert('Libro creado correctamente!');
+        } else {
+            alert('Error al crear el libro: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+});
+
+document.getElementById("campoBuscarLibroIndividual").addEventListener('input', function() {
+    if (this.value.trim() === "" || this.value.trim() === null || this.value.trim() === undefined) {
+        document.getElementById("buscadorLlibres").style.display = "none";
+        return;
+    }
+
+    document.getElementById('buscadorLlibres').style.display = "block";
+    document.getElementById('vistaLibro').style.display = "none";
+    buscarLibroIndividual();
 });
 
 showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.

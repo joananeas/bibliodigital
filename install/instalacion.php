@@ -64,7 +64,7 @@
             $nomBiblioteca = $_POST['nomBiblioteca'] ?? null;
             $titolWeb = $_POST['titolWeb'] ?? null;
             $h1Web = $_POST['h1Web'] ?? null;
-            $favicon = $_POST['favicon'] ?? null;
+            $favicon = $_FILES['favicon'] ?? null;
             $colorPrincipal = $_POST['colorPrincipal'] ?? null;
             $colorSecundario = $_POST['colorSecundario'] ?? null;
             $colorTerciario = $_POST['colorTerciario'] ?? null;

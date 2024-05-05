@@ -14,8 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.4'; # 🐛 Fix bug preventing notifications from being retrieved and minor improvements (v1.5.4)
-    # Conexión a la base de datos, constantes de db.php.
+    const VERSION =  'v1.5.5'; # ✨ Minor improvements, books retrieving, but not inserting :/ (v1.5.5)
 
     // Instancias de las APIs
     $root = realpath(dirname(__FILE__));
@@ -122,10 +121,16 @@
             cercaLlibresLite($conn, $llibre);
             break;
         
-        case 'cercaLlibresFull': # Busca por todos los campos, para libro.php.
+        case 'cercaLlibresFull': # Busca por todos los campos (para usuario), para libro.php.
             $conn = peticionSQL();
             $llibre = $_POST["llibre"];
             cercaLlibresFull($conn, $llibre);
+            break;
+        
+        case 'cercaLlibresAll': # Busca por todos los campos (para bibliotecario), para libro.php.
+            $conn = peticionSQL();
+            $llibre = $_POST["llibre"];
+            cercaLlibresAll($conn, $llibre);
             break;
 
         case 'reservarLibro':
@@ -136,7 +141,77 @@
             reservarLibro($conn, $titulo, $fechaInicio, $fechaFin);
             break;
 
+        case 'modificarLlibre':
+            $conn = peticionSQL();
+            $conn -> set_charset("utf8mb4"); 
+            $id = $_POST["id"];
+            $cataleg = $_POST["cataleg"];
+            $biblioteca = $_POST["biblioteca"];
+            $titol = $_POST["titol"];
+            $isbn = $_POST["isbn"];
+            $cdu = $_POST["cdu"];
+            $format = $_POST["format"];
+            $autor = $_POST["autor"];
+            $editorial = $_POST["editorial"];
+            $lloc = $_POST["lloc"];
+            $colleccio = $_POST["colleccio"];
+            $pais = $_POST["pais"];
+            $data = $_POST["data"];
+            $llengua = $_POST["llengua"];
+            $materia = $_POST["materia"];
+            $descriptor = $_POST["descriptor"];
+            $nivell = $_POST["nivell"];
+            $resum = $_POST["resum"];
+            $url = $_POST["url"];
+            $adreca = $_POST["adreca"];
+            $dimensio = $_POST["dimensio"];
+            $volum = $_POST["volum"];
+            $pagines = $_POST["pagines"];
+            $proc = $_POST["proc"];
+            $carc = $_POST["carc"];
+            $camp_lliure = $_POST["camp_lliure"];
+            $npres = $_POST["npres"];
+            $rec = $_POST["rec"];
+            $estat = $_POST["estat"];
 
+            echo modificarLlibre($conn, $id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+            break;
+
+        case 'crearLlibre':
+            $conn = peticionSQL();
+            $conn -> set_charset("utf8mb4"); 
+            $cataleg = $_POST["cataleg"];
+            $biblioteca = $_POST["biblioteca"];
+            $titol = $_POST["titol"];
+            $isbn = $_POST["isbn"];
+            $cdu = $_POST["cdu"];
+            $format = $_POST["format"];
+            $autor = $_POST["autor"];
+            $editorial = $_POST["editorial"];
+            $lloc = $_POST["lloc"];
+            $colleccio = $_POST["colleccio"];
+            $pais = $_POST["pais"];
+            $data = $_POST["data"];
+            $llengua = $_POST["llengua"];
+            $materia = $_POST["materia"];
+            $descriptor = $_POST["descriptor"];
+            $nivell = $_POST["nivell"];
+            $resum = $_POST["resum"];
+            $url = $_POST["url"];
+            $adreca = $_POST["adreca"];
+            $dimensio = $_POST["dimensio"];
+            $volum = $_POST["volum"];
+            $pagines = $_POST["pagines"];
+            $proc = $_POST["proc"];
+            $carc = $_POST["carc"];
+            $camp_lliure = $_POST["camp_lliure"];
+            $npres = $_POST["npres"];
+            $rec = $_POST["rec"];
+            $estat = $_POST["estat"];
+        
+            echo crearLlibre($conn, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+            break;
+        
         case 'authUsuario':
             $email = $_POST["email"];
             $password = $_POST["password"];
