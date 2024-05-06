@@ -28,7 +28,10 @@
         </div>
         
     </section>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"
+        integrity="sha256-C541EF06327885A8415BCA8DF6071E14189B4855336DEF4F36DB54BDE8484F36"
+        crossorigin="anonymous"></script>
+
 </main>
 
     <div class="popup" style="display:none;" id="popupQR">
