@@ -54,9 +54,7 @@
                 <li>Opció 1</li>
             </ul>
         </section>
-        <script src="https://unpkg.com/jsqr/dist/jsQR.js"
-        integrity="sha256-BC40C8A15196236B2314DB0856F72CA0B49980CD5413B8C852A7349F5FEE0859"
-        crossorigin="anonymous"></script>
+        <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
 
     </main>
     <!-- Para la api de la cámara -->

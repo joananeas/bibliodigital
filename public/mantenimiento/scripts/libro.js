@@ -81,7 +81,7 @@ else {
                 document.getElementById('tituloLibro').innerHTML = libro.nom;
                 document.getElementById('estrellas').innerHTML = libro.estrellas;
                 document.getElementById('libroImagen').src = "https://aplicacions.ensenyament.gencat.cat" + libro.url;
-                document.getElementById('resumLibro').innerHTML = libro.resum;
+                //document.getElementById('resumLibro').innerHTML = libro.resum;
                 document.getElementById('autorLibro').innerHTML = libro.autor;
             });
         }

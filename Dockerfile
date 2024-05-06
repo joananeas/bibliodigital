@@ -32,11 +32,11 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 RUN a2enmod rewrite
 
 # Copiar el contenido del directorio del host al contenedor
-COPY ./public/ /var/www/html/
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
-COPY apache.conf /etc/apache2/conf-available/
-RUN a2enconf apache
-RUN a2ensite 000-default
+COPY . /var/www/html/
+#COPY apache.conf /etc/apache2/sites-available/000-default.conf
+#COPY apache.conf /etc/apache2/conf-available/
+#RUN a2enconf apache
+#RUN a2ensite 000-default
 
 # Configurar los permisos adecuados para el directorio raíz del servidor web
 RUN chown -R www-data:www-data /var/www/html
@@ -51,6 +51,7 @@ RUN echo 'output_buffering = On' >> /usr/local/etc/php/php.ini \
 
 # Exponer el puerto 80 para el servidor web
 EXPOSE 80
+EXPOSE 3306
 
 # Por defecto, Apache se ejecutará en primer plano. Puedes especificar un comando diferente si es necesario.
 CMD ["apache2-foreground"]
