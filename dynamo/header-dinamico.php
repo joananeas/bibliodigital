@@ -23,8 +23,12 @@
         session_start();
             $url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
             if((!isset($_SESSION['email']) && (strpos($url, 'login') === false) && (strpos($url, 'error') === false))) { 
-                if (strpos($url, 'admin') !== false) header("Location: ../login.php"); 
-                else header("Location: ./login.php"); 
+                if (strpos($url, 'admin') !== false) { 
+                    header("Location: ../login.php");
+                } 
+                else {
+                    header("Location: ./login.php"); 
+                }
                 exit();
             }
 
@@ -35,8 +39,12 @@
             }
             
             if (phpversion() < 8) {
-                if (strpos($url, 'admin') !== false) header("Location: ../error.php?error=0008"); 
-                else header("Location: ./error.php?error=0008");
+                if (strpos($url, 'admin') !== false) {
+                    header("Location: ../error.php?error=0008");
+                } 
+                else {
+                    header("Location: ./error.php?error=0008");
+                }
             }
             
             const ROL_LVL = [
@@ -73,8 +81,12 @@
             
             foreach (PAGES_ROL_LVL as $page => $level) {
                 if (strpos($url, $page) !== false && ROL_LVL[$_COOKIE['rol']] < $level){
-                    if (strpos($url, 'admin') !== false) header("Location: ../error.php?error=403"); 
-                    else header("Location: ./error.php?error=403");
+                    if (strpos($url, 'admin') !== false) {
+                        header("Location: ../error.php?error=403");
+                    } 
+                    else {
+                        header("Location: ./error.php?error=403");
+                    }
                     exit();
                 }
             }

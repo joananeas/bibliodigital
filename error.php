@@ -1,6 +1,6 @@
 
 <!-- Header DINAMICO -->
-<?php require "dynamo/header-dinamico.php"; ?>
+<?php require_once "dynamo/header-dinamico.php"; ?>
 <body>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -53,6 +53,6 @@
             <p><a style="text-decoration:underline; color: #333333;" href="./index.php">Torna a l'inici...</a></p>
         </section>
     </main>
-    <?php require "dynamo/footer-dinamico.php"; ?>
+    <?php require_once "dynamo/footer-dinamico.php"; ?>
 </body>
 

@@ -281,7 +281,7 @@ const formCreateBook = () => {
     .then(response => response.json())
     .then(data => {
         if (data.response === 'OK') {
-            id.value = data.last + 1;
+            id.value = data.last;
         } else {
             alert('Error al trobar [last] llibre: ' + data.message);
         }

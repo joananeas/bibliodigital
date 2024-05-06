@@ -1,11 +1,11 @@
 <!--© Joan Aneas-->
 <!-- Header DINAMICO -->
-<?php require "../dynamo/header-dinamico.php"; ?>
+<?php require_once "../dynamo/header-dinamico.php"; ?>
 
 <body class="colorPrincipalBg fuenteTexto">
 
 <!-- Nav DINAMICO -->
-<?php require "../dynamo/nav-dinamico.php"; ?>
+<?php require_once "../dynamo/nav-dinamico.php"; ?>
     <main>
         <br>
         <!-- nav de admin -->
@@ -40,7 +40,10 @@
                 <div class="vistaLibro" id="vistaLibro">
                     <form id="crearLlibre">
                         <label for="identificador">Identificador:</label>
-                        <input style="width: fit-content;" type="text" id="identificador" name="identificador" readonly>
+                        <input style="width: fit-content;" class="primerInput" type="text" id="identificador" name="identificador" readonly>
+
+                        <label>Exemplars:</label>
+                        <input type="number" id="exemplars" name="exemplars" class="primerInput">
                         <br>
 
                         <label for="titol">Catàleg:</label>
@@ -221,10 +224,10 @@
             <p class="fuenteH1">Crear Usuario</p>
             <form id="formUser">
                 <label for="nombre">Correo:</label>
-                <input type="text" id="email" name="nombre" required>
+                <input type="text" id="email" name="nombre" require_onced>
                 <br>
                 <label for="correo">Password:</label>
-                <input type="text" id="passwd" name="correo" required>
+                <input type="text" id="passwd" name="correo" require_onced>
                 <br>
                 <label for="password">Rol:</label>
                 <select id="rol" name="rol">
@@ -239,6 +242,6 @@
         </section>
     </div>
 <!-- Footer DINAMICO -->
-<?php require "../dynamo/footer-dinamico.php"; ?>
+<?php require_once "../dynamo/footer-dinamico.php"; ?>
 </body>
 </html>

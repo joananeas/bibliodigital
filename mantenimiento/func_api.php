@@ -191,6 +191,7 @@ function getLastLlibre(){
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
+        $row['last'] = $row['last'] + 1;
         return json_encode(['response' => 'OK', 'last' => $row['last']]);
     } else {
         return json_encode(['response' => 'ERROR' , 'message' => $conn->error]);
@@ -212,7 +213,7 @@ $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp
     }
 
     mysqli_stmt_bind_param($stmt, 'iiisssssssssisssssssssisssiss', 
-        $cataleg, $biblioteca, $id, $titol, $isbn, $cdu, $format, 
+        $cataleg, $biblioteca, $id, $isbn, $cdu, $format, $titol,  
         $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, 
         $materia, $descriptor, $nivell, $resum, $url, $adreca, 
         $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, 

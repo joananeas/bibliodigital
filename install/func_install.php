@@ -1,6 +1,7 @@
 <?php
     require_once "../mantenimiento/func_api.php";
 
+    const db_file = "../mantenimiento/db.php";
     function installation($db_server, $db_user, $db_name, $db_pass){
         /*
         * Encriptación de las credenciales de la base de datos.
@@ -15,7 +16,7 @@
         $db_name = openssl_encrypt($db_name, 'aes-256-cbc', $randKey, 0, $iv);
         $db_pass = openssl_encrypt($db_pass, 'aes-256-cbc', $randKey, 0, $iv);
     
-        file_exists("../mantenimiento/db.php") ? unlink("../mantenimiento/db.php") : null;
+        file_exists(db_file) ? unlink(db_file) : null;
         //return json_encode(["status" => "error", "message" => "El archivo db.php ya existe."]);
         
         $msg = crearFicheroDB($db_server, $db_user, $db_name, $db_pass, $randKey, $iv);
@@ -25,7 +26,7 @@
 
     function crearFicheroDB($db_server, $db_user, $db_name, $db_pass, $randKey, $iv){
         sleep(1);
-        $archivo_db = fopen("../mantenimiento/db.php", "w");
+        $archivo_db = fopen(db_file, "w");
         if (!$archivo_db) {
             // Si fopen devuelve false, no se pudo abrir el archivo
             return json_encode(["status" => "error", "message" => "No se pudo abrir el archivo para escritura. Verifique los permisos o la ruta del archivo."]);
@@ -66,7 +67,7 @@
     
         fclose($archivo_db);
     
-        if (!file_exists("../mantenimiento/db.php")) {
+        if (!file_exists(db_file)) {
             return json_encode(["status" => "error", "message" => "archivo-no-creado"]);
         }
     

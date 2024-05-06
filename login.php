@@ -1,5 +1,5 @@
 <!-- Header DINAMICO -->
-<?php require "dynamo/header-dinamico.php"; ?>
+<?php require_once "dynamo/header-dinamico.php"; ?>
 <body>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Staatliches&display=swap');
@@ -21,6 +21,6 @@
         </div>
         <a href="https://github.com/joananeas/bibliodigital"><span class="copyright">&copy; Diblio</span></a>
     </main>
-    <?php require "dynamo/footer-dinamico.php"; ?>
+    <?php require_once "dynamo/footer-dinamico.php"; ?>
 </body>
 

@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.6'; # - 👑 Admin: Create and modify books OK.
+    const VERSION =  'v1.5.7'; # - 🐛 minor fixes.
 
     // Instancias de las APIs
     $root = realpath(dirname(__FILE__));
@@ -145,6 +145,9 @@
             $conn = peticionSQL();
             $conn -> set_charset("utf8mb4"); 
             $id = $_POST["id"];
+
+            $exemplars = $_POST["exemplars"];
+
             $cataleg = $_POST["cataleg"];
             $biblioteca = $_POST["biblioteca"];
             $titol = $_POST["titol"];

@@ -194,7 +194,7 @@ document.getElementById('reservar').addEventListener('click', function() {
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const currentDay = new Date().getDate();
 
-        let reserves = getReserves();
+        //let reserves = getReserves();
         console.log("Reserves: " + reserves);
         monthYear.textContent = `${monthNames[currentMonth]} ${currentYear}`;
         calendarBody.innerHTML = '';

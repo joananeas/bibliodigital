@@ -3,8 +3,11 @@
     header('Content-Type: application/json');
     require_once "func_install.php";
     
-    if(isset($_POST['peticion'])) $peticion = $_POST['peticion'];
-    else if(isset($_GET['peticion'])) $peticion = $_GET['peticion'];  
+    if(isset($_POST['peticion'])) {
+        $peticion = $_POST['peticion'];
+    } else if(isset($_GET['peticion'])) {
+        $peticion = $_GET['peticion'];
+    }
 
     switch ($peticion){
         case 'comprobarConn':

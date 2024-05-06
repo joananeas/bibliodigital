@@ -1,11 +1,11 @@
 <!--© Joan Aneas-->
 <!-- Header DINAMICO -->
-<?php require "dynamo/header-dinamico.php"; ?>
+<?php require_once "dynamo/header-dinamico.php"; ?>
 
 <body class="colorPrincipalBg fuenteTexto">
 
 <!-- Nav DINAMICO -->
-<?php require "dynamo/nav-dinamico.php"; ?>
+<?php require_once "dynamo/nav-dinamico.php"; ?>
     <main>
         <section id="buscador" class="frame" style="padding: 0;">
             <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">    
@@ -74,6 +74,6 @@
     </div>
 
 <!-- Footer DINAMICO -->
-<?php require "dynamo/footer-dinamico.php"; ?>
+<?php require_once "dynamo/footer-dinamico.php"; ?>
 </body>
 </html>
