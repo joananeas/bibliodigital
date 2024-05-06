@@ -269,6 +269,28 @@ const formCreateBook = () => {
     s.style.display = 'block';
     m.style.display = 'none';
 
+    let id = document.getElementById('identificador');
+
+    let formData = new FormData();
+    formData.append('pttn', 'getLastLlibre');
+
+    fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.response === 'OK') {
+            id.value = data.last + 1;
+        } else {
+            alert('Error al trobar [last] llibre: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+
     document.getElementById('vistaLibro').style.display = 'block';
     document.getElementById('buscadorLlibres').style.display = 'none';
     document.getElementById('campoBuscarLibroIndividual').value = '';

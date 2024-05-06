@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.5'; # ✨ Minor improvements, books retrieving, but not inserting :/ (v1.5.5)
+    const VERSION =  'v1.5.6'; # - 👑 Admin: Create and modify books OK.
 
     // Instancias de las APIs
     $root = realpath(dirname(__FILE__));
@@ -174,14 +174,18 @@
             $rec = $_POST["rec"];
             $estat = $_POST["estat"];
 
-            echo modificarLlibre($conn, $id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+            echo modificarLlibre($id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+            break;
+
+        case 'getLastLlibre':
+            $conn = peticionSQL();
+            echo getLastLlibre();
             break;
 
         case 'crearLlibre':
-            $conn = peticionSQL();
-            $conn -> set_charset("utf8mb4"); 
             $cataleg = $_POST["cataleg"];
             $biblioteca = $_POST["biblioteca"];
+            $id = $_POST["identificador"];
             $titol = $_POST["titol"];
             $isbn = $_POST["isbn"];
             $cdu = $_POST["cdu"];
@@ -209,7 +213,7 @@
             $rec = $_POST["rec"];
             $estat = $_POST["estat"];
         
-            echo crearLlibre($conn, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+            echo crearLlibre($cataleg, $biblioteca, $id, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
             break;
         
         case 'authUsuario':

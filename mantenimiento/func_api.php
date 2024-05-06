@@ -144,22 +144,35 @@ function reservar($conn, $exemplar_id, $usuari_id, $data_inici, $estat = 'penden
 }
 
 
-function modificarLlibre($conn, $id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat){
-    $sql = "UPDATE `dib_cataleg` SET `ID_CATÀLEG` = ?, `ID_BIBLIOTECA` = ?, `TITOL` = ?, `ISBN` = ?, `CDU` = ?, `FORMAT` = ?, `AUTOR` = ?,
-            `EDITORIAL` = ?, `LLOC` = ?, `COL·LECCIÓ` = ?, `PAÍS` = ?, `DATA` = ?, `LLENGUA` = ?, 
-            `MATERIA` = ?, `DESCRIPTOR` = ?, `NIVELL` = ?, `RESUM` = ?, `URL` = ?, `ADREÇA` = ?, 
-            `DIMENSIÓ` = ?, `VOLÚM` = ?, `PÀGINES` = ?, `PROC` = ?, `CARC` = ?, `CAMP_LLIURE` = ?, 
-            `NPRES` = ?, `REC` = ?, `ESTAT` = ? WHERE `NUMERO` = ?";
-            
+function modificarLlibre($id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat){
+    $conn = peticionSQL();
     $conn->set_charset("utf8mb4");
+    $sql = "UPDATE `dib_cataleg` SET `ID_CATÀLEG`=?, `ID_BIBLIOTECA`=?, `ISBN`=?, 
+            `CDU`=?, `FORMAT`=?, `TITOL`=?, `AUTOR`=?, `EDITORIAL`=?, `LLOC`=?,
+            `COL·LECCIÓ`=?, `PAÍS`=?, `DATA`=?, `LLENGUA`=?, `MATERIA`=?, `DESCRIPTOR`=?, 
+            `NIVELL`=?, `RESUM`=?, `URL`=?, `ADREÇA`=?, `DIMENSIÓ`=?, `VOLÚM`=?, 
+            `PÀGINES`=?, `PROC`=?, `CARC`=?, `CAMP_LLIURE`=?, `NPRES`=?, `REC`=?, 
+            `ESTAT`=? WHERE `NUMERO` = ?";
+            
     $stmt = mysqli_prepare($conn, $sql);
+    
+    $params = [$cataleg, $biblioteca, $titol, $isbn, $cdu, 
+               $format, $autor, $editorial, $lloc, $colleccio, 
+               $pais, $data, $llengua, $materia, $descriptor, 
+               $nivell, $resum, $url, $adreca, $dimensio, $volum, 
+               $pagines, $proc, $carc, $camp_lliure, $npres, $rec, 
+               $estat, $id];
+
+    for($i = 0; $i < count($params); $i++){
+        if($params[$i] == '') $params[$i] = NULL;
+    }
 
     if (!$stmt) {
         return json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
     }
     
-    mysqli_stmt_bind_param($stmt, 'iissssssssssssssssssissssisssi', 
-        $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio,
+    mysqli_stmt_bind_param($stmt, 'iisssssssssisssssssssisssissi', # 30 parámetros
+        $cataleg, $biblioteca, $isbn, $cdu, $format, $titol, $autor, $editorial, $lloc, $colleccio,
         $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url,
         $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure,
         $npres, $rec, $estat, $id);
@@ -172,19 +185,25 @@ function modificarLlibre($conn, $id, $cataleg, $biblioteca, $titol, $isbn, $cdu,
     }
 }
 
-function crearLlibre($conn, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat) {
-    // Asegurar que todos los valores no proporcionados son convertidos a NULL o a un valor por defecto adecuado
-    $params = [$cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat];
-    $types = ''; // Inicializar la cadena de tipos
-    foreach ($params as &$param) {
-        if ($param === '') {
-            $param = NULL; // Convertir cadenas vacías a NULL para campos que pueden aceptarlo
-        }
-        $types .= is_int($param) ? 'i' : 's'; // Añadir especificador de tipo basado en el tipo de dato
+function getLastLlibre(){
+    $conn = peticionSQL();
+    $sql = "SELECT MAX(NUMERO) as last FROM dib_cataleg";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        return json_encode(['response' => 'OK', 'last' => $row['last']]);
+    } else {
+        return json_encode(['response' => 'ERROR' , 'message' => $conn->error]);
     }
-    $types .= 'i'; // Añadir un 'i' para el último parámetro que es el ID y es un entero
+}
 
-    $sql = "INSERT INTO `dib_cataleg` (`ID_CATÀLEG`, `ID_BIBLIOTECA`, `NUMERO`, `ISBN`, `CDU`, `FORMAT`, `TITOL`, `AUTOR`, `EDITORIAL`, `LLOC`, `COL·LECCIÓ`, `PAÍS`, `DATA`, `LLENGUA`, `MATERIA`, `DESCRIPTOR`, `NIVELL`, `RESUM`, `URL`, `ADREÇA`, `DIMENSIÓ`, `VOLÚM`, `PÀGINES`, `PROC`, `CARC`, `CAMP_LLIURE`, `NPRES`, `REC`, `ESTAT`) VALUES (?, ?, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+function crearLlibre($cataleg, $biblioteca, $id, $titol, $isbn, $cdu, $format, 
+$autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, 
+$nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat) {
+    $conn = peticionSQL();
+    $conn -> set_charset("utf8mb4");
+    
+    $sql = "INSERT INTO `dib_cataleg` (`ID_CATÀLEG`, `ID_BIBLIOTECA`, `NUMERO`, `ISBN`, `CDU`, `FORMAT`, `TITOL`, `AUTOR`, `EDITORIAL`, `LLOC`, `COL·LECCIÓ`, `PAÍS`, `DATA`, `LLENGUA`, `MATERIA`, `DESCRIPTOR`, `NIVELL`, `RESUM`, `URL`, `ADREÇA`, `DIMENSIÓ`, `VOLÚM`, `PÀGINES`, `PROC`, `CARC`, `CAMP_LLIURE`, `NPRES`, `REC`, `ESTAT`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($conn, $sql);
     if (!$stmt) {
@@ -192,7 +211,12 @@ function crearLlibre($conn, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format,
         return;
     }
 
-    mysqli_stmt_bind_param($stmt, $types, ...$params); // Usar desempaquetado de argumentos para pasar variables
+    mysqli_stmt_bind_param($stmt, 'iiisssssssssisssssssssisssiss', 
+        $cataleg, $biblioteca, $id, $titol, $isbn, $cdu, $format, 
+        $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, 
+        $materia, $descriptor, $nivell, $resum, $url, $adreca, 
+        $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, 
+        $npres, $rec, $estat); 
 
     if (mysqli_stmt_execute($stmt)) {
         mysqli_stmt_close($stmt);

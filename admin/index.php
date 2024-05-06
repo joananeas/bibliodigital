@@ -40,7 +40,7 @@
                 <div class="vistaLibro" id="vistaLibro">
                     <form id="crearLlibre">
                         <label for="identificador">Identificador:</label>
-                        <input style="width: fit-content;" type="text" id="identificador" name="identificador" disabled>
+                        <input style="width: fit-content;" type="text" id="identificador" name="identificador" readonly>
                         <br>
 
                         <label for="titol">Catàleg:</label>
