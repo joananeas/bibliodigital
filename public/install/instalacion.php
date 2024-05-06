@@ -67,13 +67,12 @@
             $nomBiblioteca = $_POST['nomBiblioteca'] ?? null;
             $titolWeb = $_POST['titolWeb'] ?? null;
             $h1Web = $_POST['h1Web'] ?? null;
-            $favicon = $_FILES['favicon'] ?? null;
             $colorPrincipal = $_POST['colorPrincipal'] ?? null;
             $colorSecundario = $_POST['colorSecundario'] ?? null;
             $colorTerciario = $_POST['colorTerciario'] ?? null;
         
             // Llamar a la función config con todos los parámetros
-            echo config($nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario);
+            echo config($nomBiblioteca, $titolWeb, $h1Web, $colorPrincipal, $colorSecundario, $colorTerciario);
             break;
         
         case 'subir-xls':

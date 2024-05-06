@@ -133,7 +133,7 @@
         }
     }
     
-    function config($nomBiblioteca, $titolWeb, $h1Web, $favicon, $colorPrincipal, $colorSecundario, $colorTerciario) {
+    function config($nomBiblioteca, $titolWeb, $h1Web, $colorPrincipal, $colorSecundario, $colorTerciario) {
         $conn = peticionSQL();
         
         if ($conn->connect_error) {

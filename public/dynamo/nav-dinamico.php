@@ -21,14 +21,16 @@
     </div>
 </header>
 <nav id="menu-nav" class="frame" style="margin-left:0; margin-right:0; margin-top:20px; padding:0;">
-    <li><a href="index.php">🏠 Inici</a></li>
-    <li><a href="llibres.php">🔍 Cerca de llibres</a></li>
-    <li><a href="prestecs.php">💡 Buffet lectura</a></li>
-    <li><a href="perfil.php">📚 Gestió de reserves</a></li>
-    <li><a href="perfil.php">🚩 Enquestes </a></li>
-    <li><a href="perfil.php">⚙️ Gestió del compte</a></li>
-    <li><a href="./admin">👑 Administració</a></li>
-    <li style="border: none;"><a href="perfil.php">📬 Bústia suggerim.</a>
+    <ul>
+        <li><a href="index.php">🏠 Inici</a></li>
+        <li><a href="llibres.php">🔍 Cerca de llibres</a></li>
+        <li><a href="prestecs.php">💡 Buffet lectura</a></li>
+        <li><a href="perfil.php">📚 Gestió de reserves</a></li>
+        <li><a href="perfil.php">🚩 Enquestes </a></li>
+        <li><a href="perfil.php">⚙️ Gestió del compte</a></li>
+        <li><a href="./admin">👑 Administració</a></li>
+        <li style="border: none;"><a href="perfil.php">📬 Bústia suggerim.</a>
+    </ul>
 </nav>
 
 <script>

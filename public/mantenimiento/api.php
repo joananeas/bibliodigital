@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.8'; # - 🛡️ Moving to /public 
+    const VERSION =  'v1.5.8'; # - 🐛 minor fixes
 
     // Instancias de las APIs
     $root = realpath(dirname(__FILE__));
