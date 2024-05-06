@@ -212,7 +212,7 @@ class API_Usuarios{
     
         $cookie = isset($row['rol']) && $row['rol'] != "" ? $row['rol'] : 'lector';
     
-        setcookie('rol', $cookie, time() + (86400 * 30), "/");
+        setcookie('rol', $cookie, time() + (86400 * 30), "/", "", true, true);
     
         return json_encode([
             "api" => $row,
