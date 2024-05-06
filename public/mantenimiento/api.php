@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.7'; # - 🐛 minor fixes.
+    const VERSION =  'v1.5.8'; # - 🛡️ Moving to /public 
 
     // Instancias de las APIs
     $root = realpath(dirname(__FILE__));
@@ -250,8 +250,8 @@
         case 'getReserves':
             $conn = peticionSQL();
             $id = $_POST["id"];
-            $resp = getReserves($conn, $id);
-            echo $resp;
+            getReserves($conn, $id);
+            #echo $resp;
             break;
         
         case 'getReservesFromUser':

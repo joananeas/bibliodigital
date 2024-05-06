@@ -32,10 +32,15 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 RUN a2enmod rewrite
 
 # Copiar el contenido del directorio del host al contenedor
-COPY . /var/www/html/
+COPY ./public/ /var/www/html/
+COPY apache.conf /etc/apache2/sites-available/000-default.conf
+COPY apache.conf /etc/apache2/conf-available/
+RUN a2enconf apache
+RUN a2ensite 000-default
 
 # Configurar los permisos adecuados para el directorio raíz del servidor web
 RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html/
 
 # Establecer el búfer de salida y aumentar el tamaño máximo de carga y post
 RUN echo 'output_buffering = On' >> /usr/local/etc/php/php.ini \

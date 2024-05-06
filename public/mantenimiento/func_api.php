@@ -112,16 +112,19 @@ function reservarLibro($conn, $titulo, $fechaInicio, $fechaFin){
 }
 
 function getReserves($conn, $id){
-    $sql = "SELECT * FROM dib_reserves WHERE exemplar_id = '$id'";
-    $result = mysqli_query($conn, $sql);
+    $sql = "SELECT * FROM dib_reserves WHERE exemplar_id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     if (mysqli_num_rows($result) > 0) {
         $rows = array();
         while ($row = mysqli_fetch_assoc($result)) {
             $rows[] = $row;
         }
-        return json_encode(['response' => 'OK', 'reserves' => $rows]);
+        echo json_encode(['response' => 'OK', 'reserves' => $rows]);
     } else {
-        return json_encode(['response' => 'no-data']);
+        echo json_encode(['response' => 'no-data']);
     }
 }
 
