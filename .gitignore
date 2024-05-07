@@ -1,8 +1,8 @@
 # Cada proyecto tiene que venir sin db.php, se crea automáticamente
-mantenimiento/db.php
+public/mantenimiento/db.php
 
 # Se crea con el dockerfile
-temporal/* 
+/public/temporal/* 
 
 # Estos archivos son únicos por proyecto
 *.xls
@@ -12,3 +12,7 @@ temporal/*
 # IDE config
 .vscode/
 .idea/
+
+# Media
+public/media/sistema/*.png
+public/media/sistema/*.jpg

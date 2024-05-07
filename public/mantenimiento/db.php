@@ -4,14 +4,14 @@
 # NO MODIFICAR SI SE DESCONOCE EL FUNCIONAMIENTO.
 
 # IV, Key, cifrado openssl. 
-define('DB_SERVER_IV', 'ACui/GI8RtyFlrhHKMLs5Q==');
-define('DB_SERVER_KEY', 'bGriah4SP/W3o/LCesLMSVKYp3jLcpi9jj2s09598VQ=');
+define('DB_SERVER_IV', 'jHQE3TfO7Zhkw1IyDTNBgQ==');
+define('DB_SERVER_KEY', 'oRX/gcmwh1xHCahx3A7i24j1hKWJtmdIUS8joEerpo0=');
 # Constantes de la BBDD, si se modifican manualmente, luego no se podrán leer.
 # Luego se usa el decrypt, por lo que poner texto plano es mala idea 😅
-define('DB_HOST', '6jQ3X7cmOIbYkiGTEXBX7w==');
-define('DB_USER', '65yew55zWmY38FgHBkOWzQ==');
-define('DB_PASSWORD', 'msFGZ2+y8eCmp5MAx35fwA==');
-define('DB_NAME', 'EoAJfV9+AR1PZA7/yiqQdQ==');
+define('DB_HOST', 'Yw8cz20ZOOzVwBefWMFLkg==');
+define('DB_USER', '2ulNUtO1Owh5hjevkD4qLw==');
+define('DB_PASSWORD', 'GEuwpSYT8/xn6UHdHX181A==');
+define('DB_NAME', 'CxyTgDjW2WsRWA8SjvcrRA==');
 
 # Sígueme en github ^^ (joananeas).
 # Si tienes alguna duda, puedes abrir un issue en el repositorio.

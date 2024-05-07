@@ -14,7 +14,7 @@
     ###########################################################################
 
     # Versión del core.
-    const VERSION =  'v1.5.8'; # - 🐛 minor fixes
+    const VERSION =  'v1.5.9'; # - 🐛 Prevent FUOC, still visible default colors.
 
     // Instancias de las APIs
     $root = realpath(dirname(__FILE__));

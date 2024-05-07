@@ -1,3 +1,4 @@
+<!-- <div id="splash-screen" style="position: fixed; width: 100%; height: 100%; background: white; z-index: 9999; margin: 0; padding: 0;">Cargando...</div> -->
 
 <div id="info-dinamica" class="news-bar">
     <div class="news-content">

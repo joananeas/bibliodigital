@@ -34,8 +34,10 @@
 
             if (strpos($url, 'admin') !== false) {
                 echo '<script src="../mantenimiento/scripts/colores.js"></script>';
+                echo '<script src="../mantenimiento/scripts/cargarEstilos.js"></script>';
             } else {
                 echo '<script src="mantenimiento/scripts/colores.js"></script>';
+                echo '<script src="mantenimiento/scripts/cargarEstilos.js"></script>';
             }
             
             if (phpversion() < 8) {

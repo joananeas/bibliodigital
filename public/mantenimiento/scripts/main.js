@@ -252,15 +252,6 @@ const getRol = () => {
 
 // Realizo un fetch de mantenimiento para recibir todos los datos
 
-const estilosIndex = ["componentes.css", "paginas/index.css"];
-const estilosCuenta = ["componentes.css", "paginas/cuenta.css"];
-const estilosLogin = ["componentes.css", "paginas/login.css"];
-const estilosReservas = ["componentes.css", "paginas/reservas.css"];
-const estilosLibro = ["componentes.css", "paginas/libro.css"];
-const estilosError = ["componentes.css", "paginas/error.css"];
-const estilosInstall = ["componentes.css", "instalacion.css"];
-const estilosAdmin = ["componentes.css", "paginas/admin.css"];
-
 const scriptsIndex = ["home.js"];
 const scriptsLibro = ["libro.js"];
 const scriptsLogin = ["login.js"];
@@ -268,8 +259,6 @@ const scriptsReservas = ["reservas.js"];
 const scriptsInstall = ["install.js"];
 const scriptsError = ["error.js"];
 const scriptsAdmin = ["admin.js"];
-
-const url = window.location.href;
 
 const cargarScripts = (scripts) => {
     for (let i = 0; i < scripts.length; i++) {
@@ -280,70 +269,47 @@ const cargarScripts = (scripts) => {
     }
 }
 
-const cargarEstilos = (estilos) => {
-    for (let i = 0; i < estilos.length; i++) {
-        let linkEstilos = document.createElement("link");
-        linkEstilos.rel = "stylesheet";
-        linkEstilos.type = "text/css";
-        if (url.includes("admin")) linkEstilos.href = "../estilos/" + estilos[i];
-        else linkEstilos.href = "./estilos/" + estilos[i];
-        document.head.appendChild(linkEstilos);
-    }
-}
-
-
 
 switch (true) {
     case url.includes("index"):
-        if (url.includes("admin")) cargarEstilos(estilosAdmin);
-        else cargarEstilos(estilosIndex);
-
         if (url.includes("admin")) cargarScripts(scriptsAdmin);
         else cargarScripts(scriptsIndex);
         console.log("indice");
         break;
     case url.includes("cuenta"):
-        cargarEstilos(estilosCuenta);
         cargarScripts(scriptsCuenta);
         console.log("cuenta");
         break;
     case url.includes("login"):
-        cargarEstilos(estilosLogin); 
         cargarScripts(scriptsLogin);
         console.log("login");
         break;
     case url.includes("reservas"):
-        cargarEstilos(estilosReservas);
         cargarScripts(scriptsReservas);
         console.log("reservas");
         break;
     
     case url.includes("error"):
-        cargarEstilos(estilosError);
         cargarScripts(scriptsError);
         console.log("error");
         break;    
 
     case url.includes("install"):
-        cargarEstilos(estilosInstall); 
         cargarScripts(scriptsInstall);
         console.log("install");
         break
     case url.includes("libro"):
-        cargarEstilos(estilosLibro);
         cargarScripts(scriptsLibro);
         console.log("libro");
         break;
 
     case url.includes("admin"):
     case url.includes("admin/index"): 
-        cargarEstilos(estilosAdmin);
         cargarScripts(scriptsAdmin);
         console.log("admin");
         break;
 
     default:
-        cargarEstilos(estilosIndex); // normalmente sale / en vez de /index.php
         cargarScripts(scriptsIndex);
         break;
     // Agregar más casos según sea necesario
