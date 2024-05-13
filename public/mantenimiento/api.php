@@ -15,7 +15,7 @@ require_once(__DIR__ . "/func_api.php");                                #
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.1'; # - ✨ Creació de llibres amb exemplars
+const VERSION =  'v1.6.2'; # - ✨ Refactor SQL queries for book search (DISTINCT)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));

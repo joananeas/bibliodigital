@@ -24,7 +24,7 @@ function peticionSQL()
 
 function cercaLlibresLite($conn, $llibre)
 {
-    $sql = "SELECT dib_cataleg.TITOL 
+    $sql = "SELECT DISTINCT dib_cataleg.TITOL 
             AS nom, dib_exemplars.ESTAT 
             as estadoActual, dib_cataleg.NUMERO 
             as id 
@@ -54,7 +54,7 @@ function cercaLlibresLite($conn, $llibre)
 function cercaLlibresAll($conn, $libroId)
 {
     $conn->set_charset("utf8mb4");
-    $sql = "SELECT 
+    $sql = "SELECT DISTINCT
                 dib_cataleg.*,
                 COUNT(dib_exemplars.IDENTIFICADOR) AS num_exemplars
             FROM 
@@ -95,14 +95,15 @@ function cercaLlibresAll($conn, $libroId)
 
 function cercaLlibresFull($conn, $llibre)
 {
-    $sql = "SELECT dib_cataleg.TITOL AS nom,
-            dib_exemplars.ESTAT as estadoActual,
-            dib_cataleg.URL as 'url',
-            dib_cataleg.NIVELL as 'nivell',
-            dib_cataleg.RESUM as 'resum',
-            dib_cataleg.AUTOR as 'autor' 
-            FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
-            WHERE `NUMERO` = '$llibre'";
+    $sql = "SELECT DISTINCT dib_cataleg.TITOL AS nom,
+                dib_exemplars.ESTAT as estadoActual,
+                dib_cataleg.URL as 'url',
+                dib_cataleg.NIVELL as 'nivell',
+                dib_cataleg.RESUM as 'resum',
+                dib_cataleg.AUTOR as 'autor' 
+            FROM `dib_cataleg` 
+            INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
+            WHERE `NUMERO` = '$llibre';";
 
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {

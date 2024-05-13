@@ -121,8 +121,6 @@ const comprobarConexionBBDD = async () => {
 }
 
 const menuMobile = () => {
-    let menu = document.getElementById("footerMobile");
-
     const linksNormal = [
         { id: "footer-m-home", href: "./", src: "./media/icons/home.png", id_img: "footer-img-home"},
         { id: "footer-m-community", href: "./comunitat.php", src: "./media/icons/heart.png", id_img: "footer-img-community"},
@@ -140,7 +138,6 @@ const menuMobile = () => {
     ];
 
     if (window.location.href.includes("admin")) {
-        console.log("fotos admin");
         linksAdmin.forEach(link => {
             let a = document.getElementById(link.id);
             let img = document.getElementById(link.id_img);
@@ -149,7 +146,6 @@ const menuMobile = () => {
         });
     }
     else {
-        console.log("fotos normal");
         linksNormal.forEach(link => {
             let a = document.getElementById(link.id);
             let img = document.getElementById(link.id_img);
@@ -160,8 +156,45 @@ const menuMobile = () => {
 }
 
 const menuHeader = () => {
-    let menu = document.getElementById("menu-nav");
-    // TODO: Finish this
+    const linksNormal = [
+        { id: "title-nav", href: "./index.php"},
+        { id: "iniciNav", href: "./index.php"},
+        { id: "llibresNav", href: "./llibres.php"},
+        { id: "prestecsNav", href: "./prestecs.php"},
+        { id: "gestioReservesNav", href: "./perfil.php"},
+        { id: "enquestesNav", href: "./perfil.php"},
+        { id: "gestioCompteNav", href: "./perfil.php"},
+        { id: "adminNav", href: "./admin"},
+        { id: "suggNav", href: "./perfil.php"}
+    ]; 
+
+    const linksAdmin = [
+        { id: "title-nav", href: "../index.php"},
+        { id: "iniciNav", href: "../index.php"},
+        { id: "llibresNav", href: "../llibres.php"},
+        { id: "prestecsNav", href: "../prestecs.php"},
+        { id: "gestioReservesNav", href: "../perfil.php"},
+        { id: "enquestesNav", href: "../perfil.php"},
+        { id: "gestioCompteNav", href: "../perfil.php"},
+        { id: "adminNav", href: "#"},
+        { id: "suggNav", href: "../perfil.php"}
+    ];
+
+    if (window.location.href.includes("admin")) {
+        console.log("admin");
+        linksAdmin.forEach(link => {
+            let a = document.getElementById(link.id);
+            if (a !== null) a.href = link.href;
+        });
+
+    }
+    else {
+        console.log("normal");
+        linksNormal.forEach(link => {
+            let a = document.getElementById(link.id);
+            if (a !== null) a.href = link.href;
+        });
+    }
 }
 
 
@@ -360,9 +393,14 @@ document.addEventListener("DOMContentLoaded", () => { getBanner(); });
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
 document.addEventListener("DOMContentLoaded", () => { getRol(); });
 document.addEventListener("DOMContentLoaded", () => { menuMobile(); });
-document.getElementById('notificacionesNavBtn').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
-document.getElementById('esborrarNotificacions').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
-document.getElementById('esborrarNotificacions').addEventListener("click", () => { clearNotifications() });
+document.addEventListener("DOMContentLoaded", () => { menuHeader(); });
+
 setInterval(loadGlobals, 30000); // Cada 30 segundos se comprueban los globales
 setInterval(getBanner, 10000); // Cada 10 segundos se comprueba el banner
 setInterval(getNotificaciones, 10000); // Cada 10 segundos se comprueban las notis
+
+if (!url.includes("login") && !url.includes("error")) {
+    document.getElementById('notificacionesNavBtn').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
+    document.getElementById('esborrarNotificacions').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
+    document.getElementById('esborrarNotificacions').addEventListener("click", () => { clearNotifications() });
+}

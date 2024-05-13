@@ -26,14 +26,19 @@
     </div>
 </header>
 <nav id="menu-nav" class="frame" style="margin-left:0; margin-right:0; margin-top:20px; padding:0;">
-    <li><a href="index.php">🏠 Inici</a></li>
-    <li><a href="llibres.php">🔍 Cerca de llibres</a></li>
-    <li><a href="prestecs.php">💡 Buffet lectura</a></li>
-    <li><a href="perfil.php">📚 Gestió de reserves</a></li>
-    <li><a href="perfil.php">🚩 Enquestes </a></li>
-    <li><a href="perfil.php">⚙️ Gestió del compte</a></li>
-    <li><a href="./admin">👑 Administració</a></li>
-    <li style="border: none;"><a href="perfil.php">📬 Bústia suggerim.</a>
+    <li><a id="iniciNav" href="">🏠 Inici</a></li>
+    <li><a id="llibresNav" href="">🔍 Cerca de llibres</a></li>
+    <li><a id="prestecsNav" href="">💡 Buffet lectura</a></li>
+    <li><a id="gestioReservesNav" href="">📚 Gestió de reserves</a></li>
+    <li><a id="enquestesNav" href="">🚩 Enquestes </a></li>
+    <li><a id="gestioCompteNav" href="">⚙️ Gestió del compte</a></li>
+    <?php
+    if ($_COOKIE['rol'] == 'admin') {
+        echo '<li><a id="adminNav" href="./admin">👑 Administració</a></li>';
+    }
+    ?>
+    <li style="border: none;"><a id="suggNav" href="">📬 Bústia suggerim.</a>
+        <!-- <li style="border: none;"><a id="logoutNav" href="">🚪 Logout</a> -->
 </nav>
 
 <!-- Centre notificacions 🔔 -->
@@ -80,7 +85,7 @@ let urlLogout = "";
 if (window.location.href.includes("admin")) urlLogout = "../mantenimiento/api.php";
 else urlLogout = "./mantenimiento/api.php";
 
-document.getElementById("logoutBoton").addEventListener("click", () => {
+const logout = () => {
     console.log("[LOGOUT] Cerrando sesión...");
     let formData = new FormData();
     formData.append('pttn', 'logout');
@@ -101,7 +106,10 @@ document.getElementById("logoutBoton").addEventListener("click", () => {
         .catch(error => {
             console.log("[ERROR (API_Request)] ", error);
         });
-});
+};
+
+document.getElementById("logoutBoton").addEventListener("click", () => logout());
+//document.getElementById("logoutNav").addEventListener("click", () => logout());
 </script>
 
 <script>
