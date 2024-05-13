@@ -4,19 +4,20 @@
 
 <body class="colorPrincipalBg fuenteTexto">
 
-<!-- Nav DINAMICO -->
-<?php require_once "../dynamo/nav-dinamico.php"; ?>
+    <!-- Nav DINAMICO -->
+    <?php require_once "../dynamo/nav-dinamico.php"; ?>
     <main>
         <br>
         <!-- nav de admin -->
         <section class="frame nav-admin">
             <ul>
-                <li><a id="admin-config" href="#" class="nav-link" data-target="admin-config-panel">Configuració</a></li>
+                <li><a id="admin-config" href="#" class="nav-link" data-target="admin-config-panel">Configuració</a>
+                </li>
                 <li><a id="admin-books" href="#" class="nav-link" data-target="admin-books-panel">Llibres</a></li>
                 <li><a id="admin-users" href="#" class="nav-link" data-target="admin-users-panel">Usuaris</a></li>
                 <li><a id="admin-styles" href="#" class="nav-link" data-target="admin-styles-panel">Estètica</a></li>
                 <li><a id="admin-stats" href="#" class="nav-link" data-target="admin-stats-panel">Estadístiques</a></li>
-                
+
             </ul>
         </section>
         <br>
@@ -52,7 +53,7 @@
                         <label for="isbn">Biblioteca:</label>
                         <input type="text" id="biblioteca" name="biblioteca">
                         <br>
-                        
+
                         <label for="titol">Títol:</label>
                         <input type="text" id="titol" name="titol" class="primerInput">
 
@@ -144,7 +145,8 @@
                         <label for="estat">Estat:</label>
                         <input type="text" id="estat" name="estat">
                         <br>
-                        <button type="submit" class="botonUniversal" id="crearLlibreSubmit" style="display: none;">Crear Llibre 💾</button>
+                        <button type="submit" class="botonUniversal" id="crearLlibreSubmit" style="display: none;">Crear
+                            Llibre 💾</button>
                         <button type="submit" class="botonUniversal" id="modificarLlibreSubmit" style="display: none;">Modificar 💾</button>
                     </form>
                 </div>
@@ -182,7 +184,7 @@
                     <label for="banner">Banner:</label>
                     <input type="text" id="banner" name="banner"">
                     <br>
-                    <button type="submit" class="botonUniversal">Cambiar banner</button>
+                    <button type=" submit" class="botonUniversal">Cambiar banner</button>
                 </form>
             </section>
             <br>
@@ -219,7 +221,7 @@
 
     <!-- Los "popups" tienen que estar fuera de main -->
     <div class="popup" style="display:none;" id="formCreateUser">
-        <section class="frame popup-content" >
+        <section class="frame popup-content">
             <a id="close">&times;</a>
             <p class="fuenteH1">Crear Usuario</p>
             <form id="formUser">
@@ -241,7 +243,8 @@
             </form>
         </section>
     </div>
-<!-- Footer DINAMICO -->
-<?php require_once "../dynamo/footer-dinamico.php"; ?>
+    <!-- Footer DINAMICO -->
+    <?php require_once "../dynamo/footer-dinamico.php"; ?>
 </body>
+
 </html>

@@ -15,7 +15,7 @@ require_once(__DIR__ . "/func_api.php");                                #
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.0'; # - 🐛 Prevent FUOC, still visible default colors.
+const VERSION =  'v1.6.1'; # - ✨ Creació de llibres amb exemplars
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -195,6 +195,7 @@ switch ($peticion) {
         $cataleg = $_POST["cataleg"];
         $biblioteca = $_POST["biblioteca"];
         $id = $_POST["identificador"];
+        $exemplars = $_POST["exemplars"];
         $titol = $_POST["titol"];
         $isbn = $_POST["isbn"];
         $cdu = $_POST["cdu"];
@@ -222,7 +223,7 @@ switch ($peticion) {
         $rec = $_POST["rec"];
         $estat = $_POST["estat"];
 
-        echo crearLlibre($cataleg, $biblioteca, $id, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+        echo crearLlibre($cataleg, $biblioteca, $id, $exemplars, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
         break;
 
     case 'authUsuario':

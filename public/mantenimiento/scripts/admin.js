@@ -229,6 +229,7 @@ const llenarDetallesLibro = async (libroId) => {
         l.style.display = 'block';
         b.style.display = 'none';
         document.getElementById('identificador').value = detalles.NUMERO || '';
+        document.getElementById('exemplars').value = detalles.num_exemplars || '';
         document.getElementById('cataleg').value = detalles.ID_CATÀLEG || '';
         document.getElementById('biblioteca').value = detalles.ID_BIBLIOTECA || '';
         document.getElementById('titol').value = detalles.TITOL || '';
@@ -387,6 +388,25 @@ document.getElementById('modificarLlibreSubmit').addEventListener('click', funct
         alert('Error al procesar la solicitud');
     });
 });
+
+// const crearExemplars = async () => {
+//     let formData = new FormData();
+//     formData.append('id', document.getElementById('identificador').value);
+//     formData.append('exemplars', document.getElementById('exemplars').value);
+//     formData.append('pttn', 'crearExemplars');
+
+//     const response = await fetch('../mantenimiento/api.php', {
+//         method: 'POST',
+//         body: formData
+//     });
+//     const data = await response.json();
+
+//     if (data.response === 'OK') {
+//         alert('Exemplares creados correctamente!');
+//     } else {
+//         alert('Error al crear los exemplares: ' + data.message);
+//     }
+// }
 
 document.getElementById('crearLlibreSubmit').addEventListener('click', function(event) {
     event.preventDefault(); 
