@@ -1,7 +1,7 @@
 <?php
 # © Joan Aneas
-    
-   /*___ ___ ___ _    ___ ___  
+
+/*___ ___ ___ _    ___ ___  
     |   \_ _| _ ) |  |_ _/ _ \ 
     | |) | || _ \ |__ | | (_) |
     |___/___|___/____|___\___/  (ASCII art)*/
@@ -9,16 +9,19 @@
 
 #TODO: Añadir autoloader
 #TODO: Crear clase para las sesiones
-class API_Globales {
+class API_Globales
+{
     private $version;
     private $rootPath;
 
-    public function __construct($version, $rootPath) {
+    public function __construct($version, $rootPath)
+    {
         $this->version = $version;
         $this->rootPath = $rootPath;
     }
-    
-    public function obtenerDatos() {
+
+    public function obtenerDatos()
+    {
         $sql = "SELECT `NOM_BIBLIOTECA` AS `nomBiblioteca`, `TITOL_WEB` AS `titolWeb`, `H1_WEB` AS `h1Web`, `FAVICON` AS `favicon` FROM `dib_config`";
         $mysqli = peticionSQL();
         $result = mysqli_query($mysqli, $sql);
@@ -26,7 +29,7 @@ class API_Globales {
             echo json_encode(['response' => 'ERROR', 'msg' => mysqli_error($mysqli)]);
             return;
         }
-    
+
         if (mysqli_num_rows($result) > 0) {
             $row = mysqli_fetch_assoc($result);
             $datos = array(
@@ -43,7 +46,8 @@ class API_Globales {
         }
     }
 
-    public function getColores() {
+    public function getColores()
+    {
         $sql = "SELECT `COLOR_PRINCIPAL` AS 'colorPrincipal', `COLOR_SECUNDARIO` AS 'colorSecundario', `COLOR_TERCIARIO` AS 'colorTerciario' FROM `dib_config`";
         $result = mysqli_query(peticionSQL(), $sql);
         if (mysqli_num_rows($result) > 0) {
@@ -54,34 +58,36 @@ class API_Globales {
 
         return json_encode($row);
     }
-    public function setColores($colorPrincipal, $colorSecundario, $colorTerciario) {
+    public function setColores($colorPrincipal, $colorSecundario, $colorTerciario)
+    {
         $conexion = peticionSQL();
         $stmt = $conexion->prepare("UPDATE `dib_config` SET `COLOR_PRINCIPAL` = ?, `COLOR_SECUNDARIO` = ?, `COLOR_TERCIARIO` = ?");
-    
+
         if ($stmt === false) {
             die("Error preparando la consulta: " . $conexion->error);
         }
-    
+
         $stmt->bind_param("sss", $colorPrincipal, $colorSecundario, $colorTerciario);
-    
+
         if (!$stmt->execute()) {
             return json_encode([
                 "response" => "error",
                 "message" => "colors-not-changed"
             ]);
         }
-    
+
         $stmt->close();
         return json_encode([
             "response" => "ok",
             "message" => "colors-changed"
         ]);
     }
-
 }
 
-class API_Banner {
-    public function getBanner() {
+class API_Banner
+{
+    public function getBanner()
+    {
         $sql = "SELECT `BANNER_STATE` AS 'bannerState', `BANNER_TEXT` AS 'bannerText' FROM `dib_config`";
         $result = mysqli_query(peticionSQL(), $sql);
         if (mysqli_num_rows($result) > 0) {
@@ -99,20 +105,21 @@ class API_Banner {
         return json_encode($row);
     }
 
-    public function setBanner($bannerState, $bannerText) {
+    public function setBanner($bannerState, $bannerText)
+    {
         $conexion = peticionSQL();
         $stmt = $conexion->prepare("UPDATE `dib_config` SET `BANNER_STATE` = ?, `BANNER_TEXT` = ?");
-    
+
         if ($stmt === false) {
             die("Error preparando la consulta: " . $conexion->error);
         }
-    
+
         $stmt->bind_param("ss", $bannerState, $bannerText);
-    
+
         if (!$stmt->execute()) {
             die("Error al ejecutar la consulta: " . $stmt->error);
         }
-    
+
         $stmt->close();
         return json_encode([
             "response" => "ok",
@@ -123,17 +130,20 @@ class API_Banner {
     }
 }
 
-class API_Carroussel {
+class API_Carroussel
+{
     private $foto;
     private $ancho;
     private $alto;
     private $url;
 
-    public function __construct($url_fotos) {
+    public function __construct($url_fotos)
+    {
         $this->url = $url_fotos;
     }
 
-    public function obtenerDatos() {
+    public function obtenerDatos()
+    {
         $datos = array(
             "foto" => $this->foto,
             "ancho" => $this->ancho,
@@ -142,13 +152,14 @@ class API_Carroussel {
         return json_encode($datos);
     }
 
-    public function obtenerFotos(){
+    public function obtenerFotos()
+    {
         $i = 0;
         $flag = true;
-        if(!dir($this->url)) return json_encode(["api" => "url doesn't exist."]);
-        while($flag){
+        if (!dir($this->url)) return json_encode(["api" => "url doesn't exist."]);
+        while ($flag) {
             $i++;
-            if(!file_exists($this->url . 'prueba-' . $i . '.jpg')){
+            if (!file_exists($this->url . 'prueba-' . $i . '.jpg')) {
                 $flag = false;
                 $i--; # Compensa la vuelta extra
             }
@@ -158,18 +169,21 @@ class API_Carroussel {
     }
 }
 
-class API_Usuarios{
+class API_Usuarios
+{
     private $email;
     private $password;
     private $rol; # Admin, Bibliotecario, Moderador y Usuario
 
-    public function __construct($email, $password, $rol){
+    public function __construct($email, $password, $rol)
+    {
         $this->email = $email;
         $this->password = $password;
         $this->rol = $rol;
     }
 
-    public function obtenerDatos(){
+    public function obtenerDatos()
+    {
         $datos = array(
             "email" => $this->email,
             "password" => $this->password,
@@ -178,7 +192,8 @@ class API_Usuarios{
         return json_encode($datos);
     }
 
-    public function autenticarUsuario($email, $password){
+    public function autenticarUsuario($email, $password)
+    {
         $conn = peticionSQL();
         $sql = "SELECT * FROM dib_usuaris WHERE email = ?";
         $stmt = mysqli_prepare($conn, $sql);
@@ -186,14 +201,14 @@ class API_Usuarios{
         mysqli_stmt_execute($stmt);
         $result = mysqli_stmt_get_result($stmt);
         $row = mysqli_fetch_assoc($result);
-        
-        if(!$row){
+
+        if (!$row) {
             return json_encode([
                 "api" => null,
                 "response" => "error"
             ]);
-        }  
-    
+        }
+
         if (!password_verify($password, $row['passwd'])) {
             return json_encode([
                 "api" => null,
@@ -205,22 +220,23 @@ class API_Usuarios{
                 // "message2" => password_verify($password, $row['passwd']),
             ]);
         }
-        
+
         session_start();
         $_SESSION['email'] = $row['email'];
         $_SESSION['u_id'] = $row['usuari'];
-    
+
         $cookie = isset($row['rol']) && $row['rol'] != "" ? $row['rol'] : 'lector';
-    
+
         setcookie('rol', $cookie, time() + (86400 * 30), "/", "", true, true);
-    
+
         return json_encode([
             "api" => $row,
             "response" => "ok"
         ]);
     }
 
-    public function getRol(){
+    public function getRol()
+    {
         session_start();
         // if (!isset($_COOKIE['rol'])) {
         //     return json_encode([
@@ -237,7 +253,8 @@ class API_Usuarios{
         ]);
     }
 
-    public function getID(){
+    public function getID()
+    {
         session_start();
         if (!isset($_SESSION['email'])) {
             return json_encode([
@@ -256,8 +273,9 @@ class API_Usuarios{
         $row = mysqli_fetch_assoc($result);
         return $row['usuari'];
     }
-    
-    public function headerAuthUsuario(){
+
+    public function headerAuthUsuario()
+    {
         session_start();
         if (!isset($_SESSION['email'])) {
             return json_encode([
@@ -273,56 +291,59 @@ class API_Usuarios{
         ]);
     }
 
-    public function getAllUsers(){
+    public function getAllUsers()
+    {
         $sql = "SELECT * FROM dib_usuaris";
         $result = mysqli_query(peticionSQL(), $sql);
         $users = [];
-        while($row = mysqli_fetch_assoc($result)){
+        while ($row = mysqli_fetch_assoc($result)) {
             array_push($users, $row);
         }
         return json_encode($users);
     }
 
-    public function createUser($email, $passwd, $rol) {
+    public function createUser($email, $passwd, $rol)
+    {
         $conn = peticionSQL();
         $email = mysqli_real_escape_string($conn, $email);
         $passwd = mysqli_real_escape_string($conn, $passwd);
         $rol = mysqli_real_escape_string($conn, $rol);
-    
+
         $sql = "INSERT INTO dib_usuaris (email, passwd, rol) VALUES (?, ?, ?)";
         $stmt = mysqli_prepare($conn, $sql);
         if (!$stmt) {
             die("Error: " . mysqli_error($conn));
         }
-        
+
         $hashedPasswd = password_hash($passwd, PASSWORD_DEFAULT);
         mysqli_stmt_bind_param($stmt, 'sss', $email, $hashedPasswd, $rol);
-    
+
         $result = mysqli_stmt_execute($stmt);
         if (!$result) {
             die("Error: " . mysqli_error($conn));
         }
-    
+
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
-    
+
         return $result;
     }
 
-    public function getNotifications($user_id) {
-        $conn = peticionSQL(); 
+    public function getNotifications($user_id)
+    {
+        $conn = peticionSQL();
         if ($conn->connect_errno) {
             return json_encode(["status" => "error", "message" => "Fallo al conectar a MySQL: " . $conn->connect_error]);
         }
         $conn->set_charset("utf8mb4");
-        
-        $stmt = $conn->prepare("SELECT * FROM dib_notificacions WHERE usuari_id = ?");
+
+        $stmt = $conn->prepare("SELECT * FROM dib_notificacions WHERE usuari_id = ? AND `estat`= 'pendent' ORDER BY `id_notificacio` DESC");
         if (!$stmt) {
             return json_encode(["status" => "error", "message" => "Error en la preparación de la consulta: " . $conn->error]);
         }
-        
+
         $stmt->bind_param("i", $user_id);
-        
+
         if ($stmt->execute()) {
             $result = $stmt->get_result();
             $data = [];
@@ -336,11 +357,34 @@ class API_Usuarios{
             }
         } else {
             return json_encode(["status" => "error", "message" => "Error en la ejecución de la consulta: " . $stmt->error]);
-        }        
+        }
     }
-    
 
-    public function getReservas($userId){
+    public function clearNotifications($user_id)
+    {
+        $conn = peticionSQL();
+        if ($conn->connect_errno) {
+            return json_encode(["status" => "error", "message" => "Fallo al conectar a MySQL: " . $conn->connect_error]);
+        }
+        $conn->set_charset("utf8mb4");
+
+        $stmt = $conn->prepare("UPDATE dib_notificacions SET `estat` = 'llegida' WHERE usuari_id = ?");
+        if (!$stmt) {
+            return json_encode(["status" => "error", "message" => "Error en la preparación de la consulta: " . $conn->error]);
+        }
+
+        $stmt->bind_param("i", $user_id);
+
+        if ($stmt->execute()) {
+            return json_encode(["status" => "ok", "message" => "Notificaciones marcadas como vistas"]);
+        } else {
+            return json_encode(["status" => "error", "message" => "Error en la ejecución de la consulta: " . $stmt->error]);
+        }
+    }
+
+
+    public function getReservas($userId)
+    {
         $conn = peticionSQL();
         $reservas = [];
         if ($stmt = mysqli_prepare($conn, "SELECT * FROM dib_reserves WHERE usuari_id = ?")) {

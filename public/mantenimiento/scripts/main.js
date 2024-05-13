@@ -46,12 +46,25 @@ function getNotificaciones() {
         // Comprobar el estado de la respuesta
         if (data.status === "ok") {
             number.textContent = data.data.length;
+            notificationsFrame = document.getElementById("notificationsFrame"); // En el popup de notis
+            notificationsFrame.innerHTML = '';
+            if (data.data.length === 0) {
+                notificationsFrame.innerHTML = 'Sense notificacions.';
+                return;
+            }
+
             data.data.forEach(notification => {
                 let link = document.createElement("a");
+                let p = document.createElement("p");
+
                 link.textContent = notification.titol;
                 link.href = "#"; 
                 link.title = notification.missatge;
+
+                p.textContent = notification.id_notificacio + " - " + notification.missatge;
+
                 submenu.appendChild(link);
+                notificationsFrame.appendChild(p);
             });
         } else {
             console.error("Error al recuperar notificaciones: ", data.message);
@@ -62,6 +75,24 @@ function getNotificaciones() {
     });
 }
 
+const clearNotifications = () => {
+    // Clear content
+    document.getElementById("notificationsFrame").innerHTML = 'Sense notificacions.';
+
+    let formData = new FormData();
+    formData.append('pttn', 'clearNotifications');
+    fetch(urlForFetch, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error("[ERROR (API_Request)] ", error);
+    });
+}
 
 getNotificaciones();
 
@@ -329,6 +360,9 @@ document.addEventListener("DOMContentLoaded", () => { getBanner(); });
 document.addEventListener("DOMContentLoaded", () => { loadGlobals(); });
 document.addEventListener("DOMContentLoaded", () => { getRol(); });
 document.addEventListener("DOMContentLoaded", () => { menuMobile(); });
+document.getElementById('notificacionesNavBtn').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
+document.getElementById('esborrarNotificacions').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
+document.getElementById('esborrarNotificacions').addEventListener("click", () => { clearNotifications() });
 setInterval(loadGlobals, 30000); // Cada 30 segundos se comprueban los globales
 setInterval(getBanner, 10000); // Cada 10 segundos se comprueba el banner
 setInterval(getNotificaciones, 10000); // Cada 10 segundos se comprueban las notis

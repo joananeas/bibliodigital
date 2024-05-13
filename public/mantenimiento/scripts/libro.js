@@ -1,29 +1,5 @@
-const viewQR = (formulari, close) => {
-    let menuActivo = false;
-    let form = document.getElementById(formulari);
-    if (menuActivo) {
-        menuImg.style.transform = "rotate(0deg)";
-        form.style.display = "none";
-        document.querySelector("main").style.display = "block";
-        document.querySelector("main").style.opacity = "1";
-        menuActivo = false;
-    } else {
-        menuImg.style.transform = "rotate(90deg)";
-        form.style.display = "flex";
-        document.querySelector("main").style.opacity = "0.2";
-        form.style.opacity = "1";
-        menuActivo = true;
-    }
-    
-    document.getElementById(close).addEventListener('click', () => {
-        document.getElementById(formulari).style.display = 'none';
-        document.querySelector("main").style.display = "block";
-        document.querySelector("main").style.opacity = "1";
-    });
-};
-
 const getLibro = () => {
-    document.getElementById('min-qr').addEventListener('click', () => viewQR('popupQR', 'closeQR'));
+    document.getElementById('min-qr').addEventListener('click', () => viewPopUp('popupQR', 'closeQR'));
     let urlString = window.location.href;
     let paramString = urlString.split('?')[1];
     let queryString = new URLSearchParams(paramString);
@@ -60,6 +36,33 @@ const loadQR = () => {
 
 let l = getLibro(); // No se por que, no funcionaba una funcion DOMContentLoaded, asi que lo he puesto aqui.
 
+const getStars = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getStars');
+    formData.append('llibre', l);
+    fetch("./mantenimiento/api.php", {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.response === "ok") {
+            console.log(data);
+            let qr = new QRCode(document.getElementById('qrcode'), {
+                text: window.location.href,
+                width: 128,
+                height: 128,
+                colorDark : "#000000",
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+    })
+    .catch(error => {
+        console.log("[ERROR (API_Request)] ", error);
+    });
+} 
+
 if (!l) {
     window.location.href = "./index.php";
 }
@@ -79,9 +82,21 @@ else {
             console.log(data);
             data.llibres.forEach(libro => {
                 document.getElementById('tituloLibro').innerHTML = libro.nom;
-                document.getElementById('estrellas').innerHTML = libro.estrellas;
+                if (libro.estrellas == 0 || libro.estrellas == null || libro.estrellas == undefined) {
+                    document.getElementById('estrellas').innerHTML = "Sense puntuació";
+                }
+
+                let estrelles = getStars();
+                if (estrelles == 0 || estrelles == null || estrelles == undefined) {
+                    document.getElementById('estrellas').innerHTML = "Sense puntuació";
+                }
+                else {
+                    document.getElementById('estrellas').innerHTML = estrelles;
+                }
+                
                 document.getElementById('libroImagen').src = "https://aplicacions.ensenyament.gencat.cat" + libro.url;
-                //document.getElementById('resumLibro').innerHTML = libro.resum;
+                document.getElementById('nivell').innerHTML = libro.nivell;
+                document.getElementById('resumLibro').innerHTML = libro.resum;
                 document.getElementById('autorLibro').innerHTML = libro.autor;
             });
         }
@@ -106,8 +121,10 @@ document.getElementById('share-copy').addEventListener('click', () => {
     });
 });
 
+
+
 document.getElementById('reservar').addEventListener('click', function() {
-    viewQR('popupReserva', 'closeReserva');
+    viewPopUp('popupReserva', 'closeReserva');
     const monthNames = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", 
         "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
     let currentMonth = new Date().getMonth();
@@ -195,7 +212,7 @@ document.getElementById('reservar').addEventListener('click', function() {
         const currentDay = new Date().getDate();
 
         //let reserves = getReserves();
-        console.log("Reserves: " + reserves);
+        //console.log("Reserves: " + reserves);
         monthYear.textContent = `${monthNames[currentMonth]} ${currentYear}`;
         calendarBody.innerHTML = '';
 
@@ -210,9 +227,9 @@ document.getElementById('reservar').addEventListener('click', function() {
                 } else {
                     const cell = document.createElement('td');
 
-                    if (reserves == null || reserves == undefined) {
-                        cell.style.backgroundColor = "#53DD6C";
-                    }
+                    // if (reserves == null || reserves == undefined) {
+                    //     cell.style.backgroundColor = "#53DD6C";
+                    // }
 
                     if (date < currentDay && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear()){
                         cell.style.backgroundColor = "#9C0D38";
@@ -233,6 +250,5 @@ document.getElementById('reservar').addEventListener('click', function() {
             }
         }
     }
-
     fillCalendar();
 });

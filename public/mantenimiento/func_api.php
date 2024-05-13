@@ -77,6 +77,7 @@ function cercaLlibresFull($conn, $llibre){
     $sql = "SELECT dib_cataleg.TITOL AS nom,
     dib_exemplars.ESTAT as estadoActual,
     dib_cataleg.URL as 'url',
+    dib_cataleg.NIVELL as 'nivell',
     dib_cataleg.RESUM as 'resum',
     dib_cataleg.AUTOR as 'autor' FROM `dib_cataleg` INNER JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR WHERE `NUMERO` = '$llibre'";
     $result = mysqli_query($conn, $sql);
@@ -91,6 +92,20 @@ function cercaLlibresFull($conn, $llibre){
     }
 }
 
+function getStars($conn, $llibre){
+    $sql = "SELECT AVG(puntuacio) as estrelles FROM dib_estrelles WHERE exemplar_id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $llibre);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'estrelles' => $row['estrelles']]);
+    } else {
+        echo json_encode(['response' => 'no-data']);
+    }
+
+}
 
 function reservarLibro($conn, $titulo, $fechaInicio, $fechaFin){
     // Primero, verifica si el libro existe en la base de datos
@@ -229,5 +244,20 @@ $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp
         $error = mysqli_stmt_error($stmt);
         mysqli_stmt_close($stmt);
         echo json_encode(['response' => 'ERROR', 'message' => 'Error al ejecutar la consulta: ' . $error]);
+    }
+}
+
+
+function valorarLlibre($idLlibre, $idUsuari, $estrelles, $comentari){
+    $conn = peticionSQL();
+    $sql = "INSERT INTO `dib_valoracions`(`id_comentari`, `usuari_id`, `exemplar_id`, `data_comentari`, `comentari`) 
+    VALUES (NULL, ?, ?, ?, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "iii", $idLlibre, $idUsuari, $estrelles);
+    
+    if (mysqli_stmt_execute($stmt)) {
+        echo json_encode(['response' => 'OK']);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar la valoración en la base de datos']);
     }
 }

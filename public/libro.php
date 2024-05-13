@@ -4,37 +4,37 @@
 
 <body class="colorPrincipalBg fuenteTexto">
 
-<!-- Nav DINAMICO -->
-<?php require_once "dynamo/nav-dinamico.php"; ?>
-<main>
-    <section class="frame vistaLibro">
-        <div class="header-libros">
-            <h3 class="fuenteH1">
-                <span id="tituloLibro"></span>&nbsp;📖
-                <img id="min-qr" class="min-qr" src="./media/icons/qr-code.png" width="20" height="20">  
-            </h3>
-        </div>   
-        <div class="container">
-            <aside class="aside-image">
-                <img id="libroImagen" src="./media/sistema/pruebas.jpg" class="book-image">
-            </aside>
-            <aside class="aside-text">
-                <p><span class="fuenteH1">👤Autor:</span>&nbsp;<span id="autorLibro"></span></p>
-                <p><span class="fuenteH1">🧩Categoria:</span>&nbsp;</p>
-                <p><span class="fuenteH1">🎓Nivell:</span>&nbsp;<span id="nivell"></span></p>
-                <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;<span id="estrellas"></span></p>
-                <button id="reservar" class="botonUniversal">Reservar</button>
-            </aside>    
-        </div>
-        
-    </section>
-    <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+    <!-- Nav DINAMICO -->
+    <?php require_once "dynamo/nav-dinamico.php"; ?>
+    <main>
+        <section class="frame vistaLibro">
+            <div class="header-libros">
+                <h3 class="fuenteH1">
+                    <span id="tituloLibro"></span>&nbsp;📖
+                    <img id="min-qr" class="min-qr" src="./media/icons/qr-code.png" width="20" height="20">
+                </h3>
+            </div>
+            <div class="container">
+                <aside class="aside-image">
+                    <img id="libroImagen" src="./media/sistema/pruebas.jpg" class="book-image">
+                </aside>
+                <aside class="aside-text">
+                    <p><span class="fuenteH1">👤Autor:</span>&nbsp;<span id="autorLibro"></span></p>
+                    <p><span class="fuenteH1">🧩Categoria:</span>&nbsp;</p>
+                    <p><span class="fuenteH1">🎓Nivell:</span>&nbsp;<span id="nivell"></span></p>
+                    <p><span class="fuenteH1">💬Resum:</span>&nbsp;<span id="resumLibro"></span></p>
+                    <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;<span id="estrellas"></span></p>
+                    <button id="reservar" class="botonUniversal">Reservar</button>
+                </aside>
+            </div>
 
-</main>
+        </section>
+        <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
+    </main>
     <div class="popup" style="display:none;" id="popupQR">
         <div class="popup-content">
-            <section class="frame" >
+            <section class="frame">
                 <a id="closeQR" class="close">&times;</a>
                 <p class="fuenteH1" style="text-align:center;">Escaneja el QR del Llibre</p>
                 <div id="qrcode" class="qr"></div>
@@ -51,12 +51,11 @@
             </section>
         </div>
     </div>
-
     <div class="popup" style="display:none;" id="popupReserva">
         <div class="popup-content">
-            <section class="frame" >
+            <section class="frame">
                 <a id="closeReserva" class="close">&times;</a>
-                <p class="fuenteH1" style="text-align:center;">Reserva [titulo]</p>
+                <p class="fuenteH1" style="text-align:center;">Reservar ahsou</p>
                 <div id="calendar-container">
                     <div id="calendar-header">
                         <button id="prev-month" class="botonUniversal">&laquo;</button>
@@ -86,7 +85,8 @@
         </div>
     </div>
 
-<!-- Footer DINAMICO -->
-<?php require_once "dynamo/footer-dinamico.php"; ?>
+    <!-- Footer DINAMICO -->
+    <?php require_once "dynamo/footer-dinamico.php"; ?>
 </body>
-</html> 
+
+</html>

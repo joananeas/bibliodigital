@@ -33,9 +33,9 @@ RUN a2enmod rewrite
 
 # Copiar el contenido del directorio del host al contenedor
 COPY . /var/www/html/
-#COPY apache.conf /etc/apache2/sites-available/000-default.conf
+COPY apache.conf /etc/apache2/sites-available/
 #COPY apache.conf /etc/apache2/conf-available/
-#RUN a2enconf apache
+RUN a2ensite apache
 #RUN a2ensite 000-default
 
 # Configurar los permisos adecuados para el directorio raíz del servidor web

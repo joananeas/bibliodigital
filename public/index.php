@@ -4,23 +4,24 @@
 
 <body class="colorPrincipalBg fuenteTexto">
 
-<!-- Nav DINAMICO -->
-<?php require_once "dynamo/nav-dinamico.php"; ?>
+    <!-- Nav DINAMICO -->
+    <?php require_once "dynamo/nav-dinamico.php"; ?>
     <main>
         <section id="buscador" class="frame" style="padding: 0;">
-            <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">    
-            <a id="qrCerca"><img src="./media/icons/qr-code.png" alt="Cerca Per QR" class="cercaLlibresPerQr" width="30" height="30"></a>            
+            <input type="text" id="inputCercaLlibres" placeholder="Cerca el llibre per: nom, autor, temàtica,...">
+            <a id="qrCerca"><img src="./media/icons/qr-code.png" alt="Cerca Per QR" class="cercaLlibresPerQr" width="30"
+                    height="30"></a>
             <div class="buscadorLlibres" id="buscadorLlibres"></div>
         </section>
         <section class="carroussel">
-            <button id="c-anterior" class="c-boton anterior"><</button>
+            <button id="c-anterior" class="c-boton anterior">
+            </button>
             <img id="c-foto" class="carroussel-img" src="media/sistema/carroussel/prueba-1.jpg">
             <button id="c-siguiente" class="c-boton siguiente">></button>
             <ul id="puntos-carroussel" class="carroussel-puntos">
                 <!-- Aquí se generan de forma automática-->
             </ul>
         </section>
-        
         <section class="frame">
             <div class="header-section">
                 <span style="float: left;">Cerca per:</span>
@@ -41,7 +42,7 @@
             </div>
         </section>
 
-        
+
         <section class="frame">
             <div class="header-section">
                 <span s="float: left;">Enquestes</span>
@@ -60,7 +61,7 @@
     <!-- Para la api de la cámara -->
     <div class="popup" style="display:none;" id="popupQR">
         <div class="popup-content">
-            <section class="frame" >
+            <section class="frame">
                 <a id="close">&times;</a>
                 <p class="fuenteH1" style="text-align:center;">Escaneja un QR vàlid</p>
                 <div class="qr">
@@ -74,7 +75,8 @@
         </div>
     </div>
 
-<!-- Footer DINAMICO -->
-<?php require_once "dynamo/footer-dinamico.php"; ?>
+    <!-- Footer DINAMICO -->
+    <?php require_once "dynamo/footer-dinamico.php"; ?>
 </body>
+
 </html>
