@@ -10,7 +10,7 @@ const getAllUsers = async () => {
         body: formData
     });
     const data = await response.json();
-    
+
     let table = document.getElementById('reservasTable');
     console.log(data);
     if (Array.isArray(data)) {
@@ -19,31 +19,31 @@ const getAllUsers = async () => {
 
             let tdReserva = document.createElement('td');
             tdReserva.textContent = reserva.reserva;
-            tdReserva.classList.add('user-row');
+            //tdReserva.classList.add('table-row');
             tr.appendChild(tdReserva);
 
             let tdCorreo = document.createElement('td');
             tdCorreo.textContent = reserva.exemplar_id;
-            tdCorreo.classList.add('user-row');
+            //tdCorreo.classList.add('table-row');
             tr.appendChild(tdCorreo);
 
             let tdDataInici = document.createElement('td');
             tdDataInici.textContent = reserva.data_inici;
-            tdDataInici.classList.add('user-row');
+            //tdDataInici.classList.add('table-row');
             tr.appendChild(tdDataInici);
 
             let tdDataFi = document.createElement('td');
             tdDataFi.textContent = reserva.data_fi;
-            tdDataFi.classList.add('user-row');
+            //tdDataFi.classList.add('table-row');
             tr.appendChild(tdDataFi);
 
             let tdEstat = document.createElement('td');
             tdEstat.textContent = reserva.estat;
-            tdEstat.classList.add('user-row');
+            //tdEstat.classList.add('table-row');
             tr.appendChild(tdEstat);
-            
+
             let tdPrestec = document.createElement('td');
-            tdPrestec.classList.add('user-row');
+            //tdPrestec.classList.add('table-row');
 
             let btnPedirPrestamo = document.createElement('button');
             btnPedirPrestamo.textContent = 'Demana préstec';
@@ -66,11 +66,11 @@ const getAllUsers = async () => {
                     alert('Error al realitzar el préstec');
                 }
             });
-            
+
             tdPrestec.appendChild(btnPedirPrestamo);
             tr.appendChild(tdPrestec);
 
-            tr.classList.add('user-row-bottom');
+            tr.classList.add('table-row-bottom');
             table.appendChild(tr);
         });
     }

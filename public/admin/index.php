@@ -164,7 +164,7 @@
                 <p class="fuenteH1">Usuarios <button class="botonUniversal" style="margin-top:0px; float:right;"
                         onclick="formCreateUser()">Crear Usuari</button></p>
                 <div class="tableContainer">
-                    <table id="userList" class="tablaUsuarios">
+                    <table id="userList" class="tableBody">
                         <tr>
                             <th>Nombre</th>
                             <th>Correo</th>

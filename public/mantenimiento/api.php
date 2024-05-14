@@ -15,7 +15,7 @@ require_once(__DIR__ . "/func_api.php");                             #
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.4'; # - ✨ Stats (books & users)
+const VERSION =  'v1.6.5'; # - 🧹Global table styling
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));

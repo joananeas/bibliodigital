@@ -1,5 +1,5 @@
 # Cada proyecto tiene que venir sin db.php, se crea automáticamente
-public/mantenimiento/db.php
+/public/mantenimiento/db.php
 
 # Se crea con el dockerfile
 /public/temporal/* 
@@ -14,5 +14,5 @@ public/mantenimiento/db.php
 .idea/
 
 # Media
-public/media/sistema/*.png
-public/media/sistema/*.jpg
+public/media/sistema/favicon/*.png
+public/media/sistema/favicon/*.jpg

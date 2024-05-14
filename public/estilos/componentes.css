@@ -1,20 +1,23 @@
 :root {
-    --color-principal: #4A68A0; /* Valor predeterminado */
-    --color-secundario: #F5F5F5; /* Valor predeterminado */
-    --color-terciario: #333333; /* Valor predeterminado */
+    --color-principal: #4A68A0;
+    /* Valor predeterminado */
+    --color-secundario: #F5F5F5;
+    /* Valor predeterminado */
+    --color-terciario: #333333;
+    /* Valor predeterminado */
 }
 
 /* ################# Otros ###################### */
-body{
+body {
     font-family: 'Inter', sans-serif;
 }
 
-.debug{
+.debug {
     border-style: solid;
     border-color: black;
 }
 
-.frame{
+.frame {
     background-color: var(--color-secundario);
     border-radius: 13px;
     margin-left: 20px;
@@ -38,30 +41,35 @@ body{
     border-radius: 4px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 } */
-.enFocus:focus{
-    outline: none; 
-    border: 2px solid var(--color-principal); 
+.enFocus:focus {
+    outline: none;
+    border: 2px solid var(--color-principal);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 /* old.principal.css */
-input{
+input {
     font-family: 'Inter', sans-serif;
 }
-input::placeholder{
+
+input::placeholder {
     font-family: 'Inter', sans-serif;
 }
-input:focus, textarea:focus {
+
+input:focus,
+textarea:focus {
     font-family: 'Inter', sans-serif;
-    outline: none; 
-    border: 2px solid var(--color-principal); 
+    outline: none;
+    border: 2px solid var(--color-principal);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
-a{
+
+a {
     text-decoration: none;
     color: white;
 }
-a:hover{
+
+a:hover {
     text-decoration: underline;
 }
 
@@ -71,28 +79,38 @@ a:hover{
     align-items: center;
     text-align: center;
     position: fixed;
-    left: 0; /* Cambia left a 0 para que comience desde el borde izquierdo */
-    right: 0; /* Cambia right a 0 para que termine en el borde derecho */
+    left: 0;
+    /* Cambia left a 0 para que comience desde el borde izquierdo */
+    right: 0;
+    /* Cambia right a 0 para que termine en el borde derecho */
     padding: 5px;
 }
 
-.izquierda, .central, .derecha {
-    flex: 1; /* Todos los elementos ocupan espacio igualmente */
+.izquierda,
+.central,
+.derecha {
+    flex: 1;
+    /* Todos los elementos ocupan espacio igualmente */
 }
-.izquierda{
+
+.izquierda {
     text-align: left;
     padding-left: 5px;
 }
-.derecha{
+
+.derecha {
     padding-right: 5px;
     text-align: right;
 }
-.central{
-    text-align: center; /* Alinea el texto al centro */
-    margin: 0; /* Elimina el margen para que no haya espacio adicional */
+
+.central {
+    text-align: center;
+    /* Alinea el texto al centro */
+    margin: 0;
+    /* Elimina el margen para que no haya espacio adicional */
 }
 
-.botonUniversal{
+.botonUniversal {
     font-family: 'Staatliches', sans-serif;
     text-align: center;
     float: none;
@@ -108,17 +126,19 @@ a:hover{
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: 0.3s;
 }
-.botonUniversal:hover{
+
+.botonUniversal:hover {
     padding-left: 12px;
     padding-right: 12px;
     transition: 0.3s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-.botonUniversal:focus{
+
+.botonUniversal:focus {
     font-family: 'Staatliches', sans-serif;
 }
 
-.botonUniversal_alt{
+.botonUniversal_alt {
     font-family: 'Staatliches', sans-serif;
     text-align: center;
     float: none;
@@ -135,57 +155,85 @@ a:hover{
     transition: 0.3s;
 }
 
-.botonUniversal_alt:hover{
+.botonUniversal_alt:hover {
     padding-left: 12px;
     padding-right: 12px;
     transition: 0.3s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-.botonUniversal_alt:focus{
+.botonUniversal_alt:focus {
     font-family: 'Staatliches', sans-serif;
 }
+
 /* ############################################# */
 
 
 /* ################# Animaciones ############### */
-.hovShadowPadd{ transition: 0.3s; }
-.hovShadowPadd:hover{
+.hovShadowPadd {
+    transition: 0.3s;
+}
+
+.hovShadowPadd:hover {
     padding-left: 12px;
     padding-right: 12px;
     transition: 0.3s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
+
 /* ############################################# */
 
 /* ################# Sombras #################### */
-.shadowAll{
+.shadowAll {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
+
 /* ############################################# */
 
 
 
 /* ################# Fuentes #################### */
-.fuenteH1{ font-family: 'Staatliches', sans-serif; }
-.fuenteTexto{ font-family: 'Inter', sans-serif; }
+.fuenteH1 {
+    font-family: 'Staatliches', sans-serif;
+}
+
+.fuenteTexto {
+    font-family: 'Inter', sans-serif;
+}
+
 /* ############################################# */
 
 
 
 /* ################# Colores #################### */
-.colorPrincipalBg{ background-color: var(--color-principal); }
-.colorPrincipalTx{ color: var(--color-principal); }
+.colorPrincipalBg {
+    background-color: var(--color-principal);
+}
 
-.colorSecundarioBg{ background-color: var(--color-secundario); }
-.colorSecundarioTx{ color: var(--color-secundario); }
+.colorPrincipalTx {
+    color: var(--color-principal);
+}
 
-.colorTextoTx{ background-color: var(--color-terciario); }
-.colorTextoBg{ background-color: var(--color-terciario); }
+.colorSecundarioBg {
+    background-color: var(--color-secundario);
+}
+
+.colorSecundarioTx {
+    color: var(--color-secundario);
+}
+
+.colorTextoTx {
+    background-color: var(--color-terciario);
+}
+
+.colorTextoBg {
+    background-color: var(--color-terciario);
+}
+
 /* ############################################# */
 
 /* ############### Head/Foot ################### */
-header{
+header {
     padding-bottom: 42px;
     padding-top: 10px;
     border-color: black;
@@ -195,11 +243,14 @@ header{
     margin-right: 22px;
 }
 
-nav{
+nav {
     box-sizing: border-box;
-    width: auto; /* Cambia esto a auto */
-    left: 20px; /* Añade esta línea */
-    right: 20px; /* Añade esta línea */
+    width: auto;
+    /* Cambia esto a auto */
+    left: 20px;
+    /* Añade esta línea */
+    right: 20px;
+    /* Añade esta línea */
     position: absolute;
     display: none;
     justify-content: space-between;
@@ -210,58 +261,62 @@ nav{
     padding: 0;
 }
 
-nav li{
-    box-sizing: border-box; /* Añade esta línea */
+nav li {
+    box-sizing: border-box;
+    /* Añade esta línea */
     width: 100%;
-    padding:10px;
+    padding: 10px;
     list-style: none;
     display: inline-block;
     border-bottom: 1px solid var(--color-terciario);
 }
 
-nav a{
+nav a {
     font-family: 'Staatliches', sans-serif;
     font-size: 24px;
     text-decoration: none;
     color: var(--color-terciario);
 }
 
-nav a:hover{
+nav a:hover {
     text-decoration: none;
 }
 
-.menu-links{
+.menu-links {
     margin-top: 10px;
-    margin-right: 10px; /* Espaciado entre links */
+    margin-right: 10px;
+    /* Espaciado entre links */
     float: left;
 }
 
-h1{ 
-    font-family: 'Staatliches', sans-serif; 
+h1 {
+    font-family: 'Staatliches', sans-serif;
     margin-top: 0;
     padding: 0;
     margin-right: 10px;
 }
-.menu-hamburguesa{
+
+.menu-hamburguesa {
     border-style: none;
     background-color: transparent;
-    padding-top: 1px; /* Sesnsación de título en el centro del menú hamburguesa*/
+    padding-top: 1px;
+    /* Sesnsación de título en el centro del menú hamburguesa*/
     margin-left: 0;
     float: left;
 }
 
-.titulo{
+.titulo {
     float: left;
     margin-left: 15px;
 }
 
-#info-usuari{
+#info-usuari {
     margin-right: 5px;
     background-color: var(--color-secundario);
-    color: var(--color-terciario);  
+    color: var(--color-terciario);
     padding: 3px;
     padding-left: 6px;
-    padding-right: 6px;  
+    padding-right: 6px;
     border-radius: 4px;
     border: 2px solid var(--color-terciario);
 }
@@ -270,17 +325,17 @@ h1{
     transition: 0.2s;
 }
 
-.logout{
+.logout {
     /* padding-top: 10px; */
     float: right;
 }
 
-main{
+main {
     padding-bottom: 50px;
 }
 
 footer {
-    font-family:'Staatliches', sans-serif;
+    font-family: 'Staatliches', sans-serif;
     color: white;
     background-color: var(--color-principal);
     border-color: black;
@@ -322,24 +377,33 @@ footer {
 .news-bar {
     width: 100%;
     left: 0;
-    background-color: var(--color-secundario); /* Color de fondo */
-    color: var(--color-terciario); /* Color del texto */
-    overflow: hidden; /* Esconde el contenido que se desborde */
-    position: fixed; /* Fija la barra en la parte superior */
-    top: 0; /* Posición en la parte superior */
+    background-color: var(--color-secundario);
+    /* Color de fondo */
+    color: var(--color-terciario);
+    /* Color del texto */
+    overflow: hidden;
+    /* Esconde el contenido que se desborde */
+    position: fixed;
+    /* Fija la barra en la parte superior */
+    top: 0;
+    /* Posición en la parte superior */
     z-index: 2;
     padding: 2px;
-    border-bottom: 1px solid var(--color-terciario); /* Añade un borde en la parte inferior */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Añade una sombra */
+    border-bottom: 1px solid var(--color-terciario);
+    /* Añade un borde en la parte inferior */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    /* Añade una sombra */
     display: block;
 }
 
 .news-content {
     width: 100%;
     text-align: right;
-    white-space: nowrap; /* Asegura que el texto se mantenga en una sola línea */
+    white-space: nowrap;
+    /* Asegura que el texto se mantenga en una sola línea */
     display: inline-block;
-    animation: scroll-news 20s linear infinite; /* Animación que se repite infinitamente */
+    animation: scroll-news 20s linear infinite;
+    /* Animación que se repite infinitamente */
 }
 
 /* Animación para desplazar las noticias */
@@ -347,6 +411,7 @@ footer {
     0% {
         transform: translateX(0%);
     }
+
     100% {
         transform: translateX(-100%);
     }
@@ -357,58 +422,94 @@ footer {
 .dropdown {
     position: relative;
     display: inline-block;
-  }
-  
-  /* Estilo del botón */
-  .dropbtn {
+}
+
+/* Estilo del botón */
+.dropbtn {
     background-color: #4CAF50;
     color: white;
     padding: 16px;
     font-size: 16px;
     border: none;
     cursor: pointer;
-  }
-  
-  /* Contenido del submenú */
-  .dropdown-content {
+}
+
+/* Contenido del submenú */
+.dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
-  }
-  
-  /* Elementos dentro del submenú */
-  .dropdown-content a {
+}
+
+/* Elementos dentro del submenú */
+.dropdown-content a {
     color: black;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
-  }
-  
-  /* Cambia el color del enlace al pasar el mouse */
-  .dropdown-content a:hover {background-color: #f1f1f1}
-  
-  /* Muestra el submenú en hover */
-  .dropdown:hover .dropdown-content {
-    display: block;
-  }
-  
-  /* Cambia el color del botón al pasar el mouse */
-  .dropdown:hover .dropbtn {background-color: #3e8e41;}
+}
 
-  .notificationsFrame{
+/* Cambia el color del enlace al pasar el mouse */
+.dropdown-content a:hover {
+    background-color: #f1f1f1
+}
+
+/* Muestra el submenú en hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/* Cambia el color del botón al pasar el mouse */
+.dropdown:hover .dropbtn {
+    background-color: #3e8e41;
+}
+
+.notificationsFrame {
     padding-top: 10px;
     max-height: 500px;
     overflow-y: auto;
-  }
+}
 
-  .notificationsFrame p{
+.notificationsFrame p {
     padding: 2px;
     background-color: #333333;
     color: white;
-  }
+}
+
+.tableContainer {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.tableBody {
+    text-align: center;
+    background-color: var(--color-principal);
+    border: 3px solid var(--color-principal);
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.tableBody th {
+    color: white;
+    padding: 10px;
+    border: none;
+}
+
+.tableBody td {
+    padding: 2px;
+    padding-left: 6px;
+    padding-right: 6px;
+    color: var(--color-terciario);
+    background-color: var(--color-secundario);
+    border: 2px solid var(--color-principal);
+}
 
 /* ############################################# */
 
@@ -424,18 +525,18 @@ footer {
 
 @media screen and (max-width: 700px) {
     .centrado a {
-        margin: 0 5%; 
+        margin: 0 5%;
         display: inline-block;
     }
 
     .centrado {
-        display: flex;             
+        display: flex;
         justify-content: space-around;
-        align-items: center;       
+        align-items: center;
     }
-    
+
     .centrado div {
-        width: 100%;             
+        width: 100%;
     }
 
     #footerDesktop {
@@ -450,14 +551,15 @@ footer {
 
 
 @media screen and (max-width: 500px) {
-    .menu-links{
+    .menu-links {
         display: none;
     }
 
-    #logoutBoton{
+    #logoutBoton {
         display: none;
     }
-    .logout{
+
+    .logout {
         display: none;
     }
 }

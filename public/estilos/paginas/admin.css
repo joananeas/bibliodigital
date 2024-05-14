@@ -1,19 +1,24 @@
 :root {
-    --color-principal: #4A68A0; /* Valor predeterminado */
-    --color-secundario: #F5F5F5; /* Valor predeterminado */
-    --color-terciario: #333333; /* Valor predeterminado */
+    --color-principal: #4A68A0;
+    /* Valor predeterminado */
+    --color-secundario: #F5F5F5;
+    /* Valor predeterminado */
+    --color-terciario: #333333;
+    /* Valor predeterminado */
 }
 
 /* Contenedor del Switch */
 .switch {
     position: relative;
     display: inline-block;
-    width: 50px; /* Tamaño más pequeño */
-    height: 24px; /* Tamaño más pequeño */
+    width: 50px;
+    /* Tamaño más pequeño */
+    height: 24px;
+    /* Tamaño más pequeño */
 }
-  
+
 /* Estilo del switch - off/on */
-.switch input { 
+.switch input {
     opacity: 0;
     width: 0;
     height: 0;
@@ -35,36 +40,42 @@
 .slider:before {
     position: absolute;
     content: "";
-    height: 18px; /* Ajuste al nuevo tamaño */
-    width: 18px; /* Ajuste al nuevo tamaño */
-    left: 2px; /* Ajuste para el borde */
-    bottom: 2px; /* Ajuste para el borde */
+    height: 18px;
+    /* Ajuste al nuevo tamaño */
+    width: 18px;
+    /* Ajuste al nuevo tamaño */
+    left: 2px;
+    /* Ajuste para el borde */
+    bottom: 2px;
+    /* Ajuste para el borde */
     background-color: var(--color-secundario);
     transition: .4s;
 }
 
-input:checked + .slider {
+input:checked+.slider {
     background-color: var(--color-principal);
 }
 
-input:focus + .slider {
+input:focus+.slider {
     box-shadow: 0 0 1px var(--color-secundario);
 }
 
-input:checked + .slider:before {
-    transform: translateX(24px); /* Ajuste al nuevo tamaño */
+input:checked+.slider:before {
+    transform: translateX(24px);
+    /* Ajuste al nuevo tamaño */
 }
 
 /* Estilo redondeado */
 .slider.round {
-    border-radius: 24px; /* Ajuste al nuevo tamaño */
+    border-radius: 24px;
+    /* Ajuste al nuevo tamaño */
 }
 
 .slider.round:before {
     border-radius: 50%;
 }
 
-.nav-admin{
+.nav-admin {
     color: var(--color-terciario);
 }
 
@@ -93,52 +104,19 @@ input:checked + .slider:before {
     background-color: var(--color-principal);
 }
 
-.active{
+.active {
     transition: 0.1s linear;
     color: white;
     background-color: var(--color-principal);
 }
 
-.active:hover{
+.active:hover {
     transition: 0.1s linear;
     color: white;
     background-color: var(--color-principal);
 }
 
-.tableContainer{
-    display: flex;
-    justify-content: center;
-    width: 100%;
-}
-
-.tablaUsuarios{
-    text-align: center;
-    border-collapse: collapse;
-    background-color: var(--color-principal);
-    border-top-left-radius: 4px;
-    border-top-right-radius: 4px;
-}
-
-.tablaUsuarios th{
-    color: white;
-    padding: 10px;
-}
-
-.tablaUsuarios td{
-    padding: 2px;
-    color: var(--color-terciario);
-    background-color: var(--color-secundario);
-}
-
-.user-row{
-    border-right: 1px solid #333333;
-}
-
-.user-row-bottom{
-    border-bottom: 1px solid #333333;
-}
-
-.vistaLibro{
+.vistaLibro {
     display: none;
     margin-top: 20px;
     flex-direction: column;
@@ -146,12 +124,12 @@ input:checked + .slider:before {
     transition: 0.3s;
 }
 
-.vistaLibro input[type="text"]{
+.vistaLibro input[type="text"] {
     width: 300px;
     padding: 5px;
     margin: 5px;
 }
 
-.primerInput{
+.primerInput {
     margin-right: 30px !important;
 }
