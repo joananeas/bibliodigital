@@ -364,6 +364,7 @@ const buscarLibroIndividual = async () => {
     }
 }
 
+
 document.getElementById('modificarLlibreSubmit').addEventListener('click', function(event) {
     event.preventDefault(); 
 

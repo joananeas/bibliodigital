@@ -9,13 +9,13 @@
 ##################
 #--- Includes ---#
 ###########################################################################
-/**/ require_once(__DIR__ . "/clases_api.php");                              #
+/**/ require_once(__DIR__ . "/clases_api.php");                           #
 /**/
-require_once(__DIR__ . "/func_api.php");                                #
+require_once(__DIR__ . "/func_api.php");                             #
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.2'; # - ✨ Refactor SQL queries for book search (DISTINCT)
+const VERSION =  'v1.6.3'; # - ✨ Update (add/rm) exemplars
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -183,7 +183,9 @@ switch ($peticion) {
         $rec = $_POST["rec"];
         $estat = $_POST["estat"];
 
-        echo modificarLlibre($id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+        $OGexemplars = cercaExemplars($conn, $id);
+
+        echo modificarLlibre($id, $exemplars, $OGexemplars, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
         break;
 
     case 'getLastLlibre':

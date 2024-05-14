@@ -51,6 +51,21 @@ function cercaLlibresLite($conn, $llibre)
     }
 }
 
+function cercaExemplars($conn, $llibre)
+{
+    $sql = "SELECT COUNT(dib_exemplars.IDENTIFICADOR) AS num_exemplars
+            FROM 
+                `dib_exemplars`
+            WHERE 
+                dib_exemplars.IDENTIFICADOR = ?";
+
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, 'i', $llibre);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    return mysqli_fetch_assoc($result)['num_exemplars'];
+}
+
 function cercaLlibresAll($conn, $libroId)
 {
     $conn->set_charset("utf8mb4");
@@ -190,7 +205,7 @@ function reservar($conn, $exemplar_id, $usuari_id, $data_inici, $estat = 'penden
 }
 
 
-function modificarLlibre($id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat)
+function modificarLlibre($id, $exemplars, $OGexemplars, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat)
 {
     $conn = peticionSQL();
     $conn->set_charset("utf8mb4");
@@ -204,12 +219,10 @@ function modificarLlibre($id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $forma
     $stmt = mysqli_prepare($conn, $sql);
 
     $params = [
-        $cataleg, $biblioteca, $titol, $isbn, $cdu,
-        $format, $autor, $editorial, $lloc, $colleccio,
-        $pais, $data, $llengua, $materia, $descriptor,
-        $nivell, $resum, $url, $adreca, $dimensio, $volum,
-        $pagines, $proc, $carc, $camp_lliure, $npres, $rec,
-        $estat, $id
+        $cataleg, $biblioteca, $isbn, $cdu, $format, $titol, $autor, $editorial,
+        $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell,
+        $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc,
+        $camp_lliure, $npres, $rec, $estat, $id
     ];
 
     for ($i = 0; $i < count($params); $i++) {
@@ -223,38 +236,46 @@ function modificarLlibre($id, $cataleg, $biblioteca, $titol, $isbn, $cdu, $forma
     mysqli_stmt_bind_param(
         $stmt,
         'iisssssssssisssssssssisssissi', # 30 parámetros
-        $cataleg,
-        $biblioteca,
-        $isbn,
-        $cdu,
-        $format,
-        $titol,
-        $autor,
-        $editorial,
-        $lloc,
-        $colleccio,
-        $pais,
-        $data,
-        $llengua,
-        $materia,
-        $descriptor,
-        $nivell,
-        $resum,
-        $url,
-        $adreca,
-        $dimensio,
-        $volum,
-        $pagines,
-        $proc,
-        $carc,
-        $camp_lliure,
-        $npres,
-        $rec,
-        $estat,
-        $id
+        ...$params
     );
 
     if (mysqli_stmt_execute($stmt)) {
+        if ($exemplars > $OGexemplars) {
+            $diff = $exemplars - $OGexemplars;
+            for ($i = 0; $i < $diff; $i++) {
+                $sqlInsert = "INSERT INTO `dib_exemplars` (`NUMERO_EXEMPLAR`, `SIGNATURA_EXEMPLAR`, `SITUACIO`, `ESTAT`) VALUES (?, ?, ?, ?)";
+                $stmtInsert = mysqli_prepare($conn, $sqlInsert);
+
+                if (!$stmtInsert) {
+                    return json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
+                }
+
+                $numero_exemplar = $id;
+                $signatura_exemplar = $cdu . " " . str_split($autor, 3)[0];
+                $situacio = 'Préstec';
+                $estat = 'Disponible';
+
+                mysqli_stmt_bind_param($stmtInsert, 'isss', $numero_exemplar, $signatura_exemplar, $situacio, $estat);
+
+                if (!mysqli_stmt_execute($stmtInsert)) {
+                    $error = mysqli_stmt_error($stmtInsert);
+                    return json_encode(['response' => 'ERROR', 'message' => 'Error al insertar la consulta: ' . $error]);
+                }
+            }
+        } elseif ($exemplars < $OGexemplars) {
+            $diff = $OGexemplars - $exemplars;
+            $sqlDelete = "DELETE FROM `dib_exemplars` WHERE `IDENTIFICADOR` = ? ORDER BY `NUMERO_EXEMPLAR` DESC LIMIT ?; ";
+            $stmtDelete = mysqli_prepare($conn, $sqlDelete);
+            if (!$stmtDelete) {
+                return json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
+            }
+            mysqli_stmt_bind_param($stmtDelete, 'ii', $id, $diff);
+            if (!mysqli_stmt_execute($stmtDelete)) {
+                $error = mysqli_stmt_error($stmtDelete);
+                return json_encode(['response' => 'ERROR', 'message' => 'Error al eliminar la consulta: ' . $error]);
+            }
+        }
+
         return json_encode(['response' => 'OK']);
     } else {
         $error = mysqli_stmt_error($stmt);
