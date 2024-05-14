@@ -30,10 +30,12 @@
         <!-- Panel de libros -->
         <div id="admin-books-panel" class="admin-panel">
             <section class="frame">
-                <p class="fuenteH1">Llibres <button class="botonUniversal" style="margin-top:0px; float:right;" onclick="formCreateBook()">Crear un nou llibre 📗</button></p>
+                <p class="fuenteH1">Llibres <button class="botonUniversal" style="margin-top:0px; float:right;"
+                        onclick="formCreateBook()">Crear un nou llibre 📗</button></p>
                 <form id="formSearchBooks">
                     <label for="searchBooks">Buscar:</label>
-                    <input type="text" id="campoBuscarLibroIndividual" name="searchBooks" placeholder="Cerca per títol o autor">
+                    <input type="text" id="campoBuscarLibroIndividual" name="searchBooks"
+                        placeholder="Cerca per títol o autor">
                 </form>
                 <ul id="buscadorLlibres" style="list-style-type: none; padding: 0;">
                     <!-- Los resultados de la búsqueda se añadirán aquí -->
@@ -41,7 +43,8 @@
                 <div class="vistaLibro" id="vistaLibro">
                     <form id="crearLlibre">
                         <label for="identificador">Identificador:</label>
-                        <input style="width: fit-content;" class="primerInput" type="text" id="identificador" name="identificador" readonly>
+                        <input style="width: fit-content;" class="primerInput" type="text" id="identificador"
+                            name="identificador" readonly>
 
                         <label>Exemplars:</label>
                         <input type="number" id="exemplars" name="exemplars" class="primerInput">
@@ -147,7 +150,8 @@
                         <br>
                         <button type="submit" class="botonUniversal" id="crearLlibreSubmit" style="display: none;">Crear
                             Llibre 💾</button>
-                        <button type="submit" class="botonUniversal" id="modificarLlibreSubmit" style="display: none;">Modificar 💾</button>
+                        <button type="submit" class="botonUniversal" id="modificarLlibreSubmit"
+                            style="display: none;">Modificar 💾</button>
                     </form>
                 </div>
             </section>
@@ -157,7 +161,8 @@
         <!-- Panel de usuarios -->
         <div id="admin-users-panel" class="admin-panel">
             <section class="frame">
-                <p class="fuenteH1">Usuarios <button class="botonUniversal" style="margin-top:0px; float:right;" onclick="formCreateUser()">Crear Usuari</button></p>
+                <p class="fuenteH1">Usuarios <button class="botonUniversal" style="margin-top:0px; float:right;"
+                        onclick="formCreateUser()">Crear Usuari</button></p>
                 <div class="tableContainer">
                     <table id="userList" class="tablaUsuarios">
                         <tr>
@@ -192,13 +197,19 @@
                 <p class="fuenteH1">Cambiar colores</p>
                 <form id="formColores">
                     <label for="colorPrincipal">Color Principal:</label>
-                    <input type="text" id="colorPrincipal" name="colorPrincipal" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" placeholder="#123ABC" title="Ingrese un código de color hexadecimal válido">
+                    <input type="text" id="colorPrincipal" name="colorPrincipal"
+                        pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" placeholder="#123ABC"
+                        title="Ingrese un código de color hexadecimal válido">
                     <br>
                     <label for="colorSecundario">Color Secundario:</label>
-                    <input type="text" id="colorSecundario" name="colorSecundario" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" placeholder="#123ABC" title="Ingrese un código de color hexadecimal válido">
+                    <input type="text" id="colorSecundario" name="colorSecundario"
+                        pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" placeholder="#123ABC"
+                        title="Ingrese un código de color hexadecimal válido">
                     <br>
                     <label for="colorTerciario">Color Terciario:</label>
-                    <input type="text" id="colorTerciario" name="colorTerciario" pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" placeholder="#123ABC" title="Ingrese un código de color hexadecimal válido">
+                    <input type="text" id="colorTerciario" name="colorTerciario"
+                        pattern="^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$" placeholder="#123ABC"
+                        title="Ingrese un código de color hexadecimal válido">
                     <br>
                     <button type="submit" class="botonUniversal">Cambiar colores</button>
                 </form>
@@ -208,13 +219,17 @@
         <!-- Panel de estadísticas -->
         <div id="admin-stats-panel" class="admin-panel">
             <section class="frame">
-                <p class="fuenteH1">Estadísticas</p>
-                <p>Usuarios registrados: <span id="usuariosRegistrados">0</span></p>
-                <p>Usuarios activos: <span id="usuariosActivos">0</span></p>
-                <p>Usuarios inactivos: <span id="usuariosInactivos">0</span></p>
-                <p>Usuarios baneados: <span id="usuariosBaneados">0</span></p>
-                <p>Usuarios eliminados: <span id="usuariosEliminados">0</span></p>
-                <p>Usuarios totales: <span id="usuariosTotales">0</span></p>
+                <p class="fuenteH1">Estadístiques 👥</p>
+                <p>Usuaris actius: <span id="usuariosActivos">0</span></p>
+                <p>Usuaris inactius: <span id="usuariosInactivos">0</span></p>
+                <p>Usuaris expulsats: <span id="usuariosBaneados">0</span></p>
+                <p>Usuaris eliminats: <span id="usuariosEliminados">0</span></p>
+                <p>Usuaris totals: <span id="usuariosTotales">0</span></p>
+            </section>
+            <section class="frame" style="margin-top:20px;">
+                <p class="fuenteH1">Estadístiques 📚</p>
+                <p>Total Llibres: <span id="librosTotal">0</span></p>
+                <p>Total Exemplars: <span id="librosExemplars">0</span></p>
             </section>
         </div>
     </main>

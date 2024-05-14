@@ -14,10 +14,9 @@
             <div class="buscadorLlibres" id="buscadorLlibres"></div>
         </section>
         <section class="carroussel">
-            <button id="c-anterior" class="c-boton anterior">
-            </button>
+            <button id="c-anterior" class="c-boton anterior">&lt;</button>
             <img id="c-foto" class="carroussel-img" src="media/sistema/carroussel/prueba-1.jpg">
-            <button id="c-siguiente" class="c-boton siguiente">></button>
+            <button id="c-siguiente" class="c-boton siguiente">&gt;</button>
             <ul id="puntos-carroussel" class="carroussel-puntos">
                 <!-- Aquí se generan de forma automática-->
             </ul>

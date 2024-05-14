@@ -155,13 +155,12 @@ class API_Carroussel
     public function obtenerFotos()
     {
         $i = 0;
-        $flag = true;
         if (!dir($this->url)) return json_encode(["api" => "url doesn't exist."]);
-        while ($flag) {
+        while (true) {
             $i++;
             if (!file_exists($this->url . 'prueba-' . $i . '.jpg')) {
-                $flag = false;
                 $i--; # Compensa la vuelta extra
+                break;
             }
             #echo "Fotos: ". $i;
         }
@@ -399,5 +398,44 @@ class API_Usuarios
         }
         mysqli_close($conn);
         return json_encode($reservas);
+    }
+}
+
+class API_Stats
+{
+    public function getUserStats()
+    {
+        $conn = peticionSQL();
+        $sql = "SELECT 
+                    COUNT(*) AS 'total', 
+                    COUNT(CASE WHEN estat = 'actiu' THEN 1 END) AS 'actius', 
+                    COUNT(CASE WHEN estat = 'inactiu' THEN 1 END) AS 'inactius', 
+                    COUNT(CASE WHEN estat = 'expulsat' THEN 1 END) AS 'expulsats', 
+                    COUNT(CASE WHEN estat = 'expulsat-temp' THEN 1 END) AS 'expulsat_temp'
+                FROM 
+                    dib_usuaris;";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            return json_encode(['response' => 'OK', 'stats' => $row]);
+        } else {
+            return json_encode(['response' => 'ERROR', 'message' => 'Error en la consulta: ' . mysqli_error($conn)]);
+        }
+    }
+
+    public function getBookStats()
+    {
+        $conn = peticionSQL();
+        $sql = "SELECT 
+                    (SELECT COUNT(DISTINCT NUMERO) FROM dib_cataleg) as total,
+                    (SELECT COUNT(IDENTIFICADOR) FROM dib_exemplars) as totalExemplars;
+                ";
+        $result = mysqli_query($conn, $sql);
+        if ($result) {
+            $row = mysqli_fetch_assoc($result);
+            return json_encode(['response' => 'OK', 'stats' => $row]);
+        } else {
+            return json_encode(['response' => 'ERROR', 'message' => 'Error en la consulta: ' . mysqli_error($conn)]);
+        }
     }
 }

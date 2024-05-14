@@ -15,7 +15,7 @@ require_once(__DIR__ . "/func_api.php");                             #
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.3'; # - ✨ Update (add/rm) exemplars
+const VERSION =  'v1.6.4'; # - ✨ Stats (books & users)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -41,6 +41,7 @@ $apiGlobales = new API_Globales(VERSION, $GLOBALS['paths']['root']);
 $apiBanner = new API_Banner();
 $apiCarroussel = new API_Carroussel("../media/sistema/carroussel/");
 $apiUsuarios = new API_Usuarios(null, null, null);
+$apiStats = new API_Stats();
 
 
 $peticion = $_POST["pttn"] ?? null;
@@ -290,6 +291,15 @@ switch ($peticion) {
         $user_id = $apiUsuarios->getID();
         $resp = $apiUsuarios->clearNotifications($user_id);
         echo $resp;
+        break;
+
+
+    case 'getUserStats':
+        echo $apiStats->getUserStats();
+        break;
+
+    case 'getBookStats':
+        echo $apiStats->getBookStats();
         break;
 
     default:

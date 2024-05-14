@@ -444,7 +444,52 @@ document.getElementById("campoBuscarLibroIndividual").addEventListener('input', 
     buscarLibroIndividual();
 });
 
+const loadStatsUsers = () => {
+    fetch('../mantenimiento/api.php?pttn=getUserStats', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        stats = data.stats;
+        if (data.response === 'OK') {
+            document.getElementById('usuariosActivos').textContent = stats.actius;
+            document.getElementById('usuariosInactivos').textContent = stats.inactius;
+            document.getElementById('usuariosBaneados').textContent = stats.expulsats;
+            document.getElementById('usuariosEliminados').textContent = stats.expulsat_temp;
+            document.getElementById('usuariosTotales').textContent = stats.total;
+        } else {
+            alert('Error al obtener las estadísticas de usuarios: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+}
+
+const loadBookStats = () => {
+    fetch('../mantenimiento/api.php?pttn=getBookStats', {
+        method: 'GET'
+    })
+    .then(response => response.json())
+    .then(data => {
+        stats = data.stats;
+        if (data.response === 'OK') {
+            document.getElementById('librosTotal').textContent = stats.total;
+            document.getElementById('librosExemplars').textContent = stats.totalExemplars;
+        } else {
+            alert('Error al obtener las estadísticas de libros: ' + data.message);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    });
+}
+
 showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.
 getColores(); // Suponiendo que estas funciones necesitan ser llamadas al cargar.
 getBanner();
 getAllUsers();
+loadStatsUsers();
+loadBookStats();
