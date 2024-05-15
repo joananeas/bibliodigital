@@ -40,10 +40,15 @@ function cercaLlibresLite($conn, $llibre)
         while ($row = mysqli_fetch_assoc($result)) {
             $i++;
             # Si datos están sucios
-            if (str_contains($row['estadoActual'], "Disponible")) $row['estadoActual'] = "Disponible";
-            else $row['estadoActual'] = "Prestat";
+            if  (str_contains($row['estadoActual'], "Disponible")) {
+                $row['estadoActual'] = "Disponible";
+            }
+            else {
+                $row['estadoActual'] = "Prestat";
+            }
             $rows[] = $row;
-            if ($i > 5) break;
+            
+            if ($i > 5) { break; }
         }
         echo json_encode(['response' => 'OK', 'llibres' => $rows]);
     } else {
@@ -54,10 +59,8 @@ function cercaLlibresLite($conn, $llibre)
 function cercaExemplars($conn, $llibre)
 {
     $sql = "SELECT COUNT(dib_exemplars.IDENTIFICADOR) AS num_exemplars
-            FROM 
-                `dib_exemplars`
-            WHERE 
-                dib_exemplars.IDENTIFICADOR = ?";
+            FROM `dib_exemplars`
+            WHERE dib_exemplars.IDENTIFICADOR = ?";
 
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, 'i', $llibre);
@@ -72,14 +75,10 @@ function cercaLlibresAll($conn, $libroId)
     $sql = "SELECT DISTINCT
                 dib_cataleg.*,
                 COUNT(dib_exemplars.IDENTIFICADOR) AS num_exemplars
-            FROM 
-                `dib_cataleg`
-            LEFT JOIN 
-                `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR
-            WHERE 
-                dib_cataleg.`NUMERO` = ?
-            GROUP BY 
-                dib_cataleg.NUMERO;";
+            FROM `dib_cataleg`
+            LEFT JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR
+            WHERE dib_cataleg.`NUMERO` = ?
+            GROUP BY dib_cataleg.NUMERO;";
 
     $stmt = mysqli_prepare($conn, $sql);
 
@@ -412,5 +411,34 @@ function valorarLlibre($idLlibre, $idUsuari, $estrelles, $comentari)
         echo json_encode(['response' => 'OK']);
     } else {
         echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar la valoración en la base de datos']);
+    }
+}
+
+function prestarExemplar($id_reserva) {
+    $conn = peticionSQL();
+    $sql_reserva = "SELECT exemplar_id, usuari_id FROM dib_reserves WHERE reserva = ?";
+    $stmt_reserva = mysqli_prepare($conn, $sql_reserva);
+    mysqli_stmt_bind_param($stmt_reserva, "s", $id_reserva);
+    mysqli_stmt_execute($stmt_reserva);
+    mysqli_stmt_bind_result($stmt_reserva, $exemplar_id, $usuari_id);
+    mysqli_stmt_fetch($stmt_reserva);
+    mysqli_stmt_close($stmt_reserva);
+
+    if ($exemplar_id && $usuari_id) {
+        $data_inici = date("Y-m-d");
+        $data_devolucio = date("Y-m-d", strtotime("+1 month"));
+
+        $sql_prestec = "INSERT INTO dib_prestecs (id_prestec, exemplar_id, usuari_id, data_inici, data_devolucio, data_real_tornada, estat, comentaris) 
+                        VALUES (NULL, ?, ?, ?, ?, NULL, 'Pendent', 'Pendent del bibliotecari.')";
+        $stmt_prestec = mysqli_prepare($conn, $sql_prestec);
+        mysqli_stmt_bind_param($stmt_prestec, "iiss", $exemplar_id, $usuari_id, $data_inici, $data_devolucio);
+        if (mysqli_stmt_execute($stmt_prestec)) {
+            echo json_encode(['response' => 'OK']);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => mysqli_error($conn)]);
+        }
+        mysqli_stmt_close($stmt_prestec);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'Reserva no encontrada o datos incompletos']);
     }
 }

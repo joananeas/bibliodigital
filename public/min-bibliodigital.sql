@@ -83,7 +83,7 @@ CREATE TABLE IF NOT EXISTS dib_prestecs (
   data_inici DATE NOT NULL,
   data_devolucio DATE NOT NULL,
   data_real_tornada DATE,
-  estat ENUM('prestat', 'retornat', 'retardat') NOT NULL,
+  estat ENUM('prestat', 'retornat', 'retardat', 'pendent') NOT NULL,
   comentaris TEXT,
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
 );
@@ -175,10 +175,22 @@ BEGIN
     VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('Tu reserva con ID ', NEW.reserva, ' ha sido registrada con éxito.'), 'Reserva');
 END;
 
-CREATE TRIGGER trg_after_insert_prestec AFTER INSERT ON dib_prestecs FOR EACH ROW
+CREATE TRIGGER noti_user_after_ask_prestec 
+AFTER INSERT ON dib_prestecs 
+FOR EACH ROW
 BEGIN
     INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus)
-    VALUES (NEW.usuari_id, 'Préstec Confirmado', CONCAT('Tu préstec con ID ', NEW.id_prestec, ' ha sido registrado con éxito.'), 'Préstec');
+    VALUES (NEW.usuari_id, 'Préstec Pendent', 'Préstec a la espera del/la bibliotecari/a.', 'Préstec (usuari)');
+END;
+
+CREATE TRIGGER noti_bibliotecari_after_ask_prestec 
+AFTER INSERT ON dib_prestecs 
+FOR EACH ROW
+BEGIN
+    INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus)
+    SELECT usuari, 'Préstec Confirmat', CONCAT('Préstec con ID: ', NEW.id_prestec, ' pendiente de confirmación.'), 'Préstec (bibliotecari)'
+    FROM dib_usuaris
+    WHERE rol = 'bibliotecari';
 END;
 
 CREATE EVENT IF NOT EXISTS eliminar_reservas_expirades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO

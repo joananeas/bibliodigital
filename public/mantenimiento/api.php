@@ -10,12 +10,11 @@
 #--- Includes ---#
 ###########################################################################
 /**/ require_once(__DIR__ . "/clases_api.php");                           #
-/**/
-require_once(__DIR__ . "/func_api.php");                             #
+/**/ require_once(__DIR__ . "/func_api.php");                             #
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.5'; # - 🧹Global table styling
+const VERSION =  'v1.6.6'; # - ✨ Prestecs & notis working
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -293,7 +292,6 @@ switch ($peticion) {
         echo $resp;
         break;
 
-
     case 'getUserStats':
         echo $apiStats->getUserStats();
         break;
@@ -302,6 +300,14 @@ switch ($peticion) {
         echo $apiStats->getBookStats();
         break;
 
+    case 'prestarExemplar':
+        $conn = peticionSQL();
+        $id = $_POST['id_reserva'];
+
+        $resp = prestarExemplar($id);
+        echo $resp;
+        break;
+        
     default:
         echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
         header('Location: ../error.php?error=404');

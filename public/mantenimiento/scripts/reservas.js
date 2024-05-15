@@ -52,18 +52,18 @@ const getAllUsers = async () => {
             btnPedirPrestamo.addEventListener('click', async () => {
                 let formData = new FormData();
                 formData.append('pttn', 'prestarExemplar');
-                formData.append('reserva', reserva.reserva);
+                formData.append('id_reserva', reserva.reserva); // ID de la reserva
                 const response = await fetch('../mantenimiento/api.php', {
                     method: 'POST',
                     body: formData
                 });
                 const data = await response.json();
                 console.log(data);
-                if (data.status == 'ok') {
+                if (data.status === 'OK') {
                     alert('Préstec realitzat correctament');
                     location.reload();
                 } else {
-                    alert('Error al realitzar el préstec');
+                    alert('Error: ' + data.message);
                 }
             });
 
