@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS dib_usuaris (
   passwd VARCHAR(255) NOT NULL,
   rol ENUM('guest', 'user', 'bibliotecari', 'admin') NOT NULL,
   estat ENUM('actiu', 'inactiu', 'expulsat', 'expulsat-temp') NOT NULL,
-  data_registre DATE,
+  data_registre DATE DEFAULT CURRENT_DATE,
   experiencia INT DEFAULT 0,
   nivell INT DEFAULT 1,
   INDEX (email)
@@ -118,10 +118,10 @@ CREATE TABLE IF NOT EXISTS dib_expulsions (
 
 CREATE TABLE IF NOT EXISTS dib_config (
   CONFIG_ID INT AUTO_INCREMENT PRIMARY KEY,
-  NOM_BIBLIOTECA VARCHAR(255),
-  TITOL_WEB VARCHAR(255),
-  H1_WEB VARCHAR(255),
-  FAVICON VARCHAR(255),
+  NOM_BIBLIOTECA VARCHAR(255) DEFAULT 'Diblio',
+  TITOL_WEB VARCHAR(255) DEFAULT 'Diblio',
+  H1_WEB VARCHAR(255) DEFAULT 'Diblio',
+  FAVICON VARCHAR(255) DEFAULT 'favicon.ico',
   COLOR_PRINCIPAL CHAR(7),
   COLOR_SECUNDARIO CHAR(7),
   COLOR_TERCIARIO CHAR(7),

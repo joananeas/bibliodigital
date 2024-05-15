@@ -252,6 +252,58 @@ class API_Usuarios
         ]);
     }
 
+    public function getUserCreationDate()
+    {
+        session_start();
+        if (!isset($_SESSION['email'])) {
+            return json_encode([
+                "api" => null,
+                "response" => "error",
+                "message" => "Usuario no autenticado"
+            ]);
+        }
+
+        $sql = "SELECT YEAR(`data_registre`) AS year FROM `dib_usuaris` WHERE `email` = ?";
+        $conn = peticionSQL();
+        $stmt = mysqli_prepare($conn, $sql);
+
+        if (!$stmt) {
+            return json_encode([
+                "api" => null,
+                "response" => "error",
+                "message" => "Error en la preparación de la consulta: " . mysqli_error($conn)
+            ]);
+        }
+
+        mysqli_stmt_bind_param($stmt, 's', $_SESSION['email']);
+        mysqli_stmt_execute($stmt);
+
+        $result = mysqli_stmt_get_result($stmt);
+        if ($result === false) {
+            return json_encode([
+                "api" => null,
+                "response" => "error",
+                "message" => "Error en la ejecución de la consulta: " . mysqli_stmt_error($stmt)
+            ]);
+        }
+
+        $row = mysqli_fetch_assoc($result);
+
+        if (!$row) {
+            return json_encode([
+                "api" => null,
+                "response" => "error",
+                "message" => "No se encontró el usuario"
+            ]);
+        }
+
+        return json_encode([
+            "api" => $row['year'],
+            "response" => "ok",
+            "message" => "Fecha de creación obtenida exitosamente"
+        ]);
+    }
+
     public function getID()
     {
         session_start();

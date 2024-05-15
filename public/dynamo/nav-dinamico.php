@@ -14,15 +14,30 @@
         <h1 id="titulo"></h1>
     </a>
     <div class="logout">
-        <span id="info-usuari"></span>
+        <!-- <span id="info-usuari"></span>
         <div class="dropdown">
             <button style="margin-top:0;" class="botonUniversal_alt" id="notificacionesNavBtn">🔔&nbsp;(<span
                     id="notification-number"></span>)</button>
             <div class="dropdown-content" id="notification-submenu">
-                <!-- Dinamico!!! -->
             </div>
         </div>
-        <button id="logoutBoton" class="botonUniversal_alt" style="margin-top:0;">Logout</button>
+        <button id="logoutBoton" class="botonUniversal_alt" style="margin-top:0;">Logout</button> -->
+        <div class="dropdown">
+            <span id="notification-number-pfp" class="badgeCounter_alt"
+                style="top: 0; right: 0; position: absolute; margin-right:-8px; margin-top:-3px;"></span>
+            <img id="" class="profileNav" src="./media/icons/user.jpg" alt="icono usuario" width="40px" height="40px">
+            <section class="dropdown-content" id="notification-submenu">
+                <article class="infoProfileNav">
+                    <p><strong>Rol: </strong><span id="info-usuari"></span></p>
+                    <p><strong>Correu: </strong><span id="nom-usuari"></span></p>
+                    <p><strong>Lector desde: </strong><span id="data-usuari"></span></p>
+                </article>
+                <a id="perfilNav" href="#">👤 Perfil</a>
+                <a id="notificacionesNavBtn" href="#">🔔 Notificacions &nbsp;<span id="notification-number"
+                        class="badgeCounter"></span></a>
+                <a id="logoutBoton" href="#">🚪 Logout</a>
+            </section>
+        </div>
     </div>
 </header>
 <nav id="menu-nav" class="frame" style="margin-left:0; margin-right:0; margin-top:20px; padding:0;">

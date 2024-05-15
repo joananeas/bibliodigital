@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.6'; # - ✨ Prestecs & notis working
+const VERSION =  'v1.6.7'; # - 🧹 UI Refactor (header)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -42,6 +42,7 @@ $apiCarroussel = new API_Carroussel("../media/sistema/carroussel/");
 $apiUsuarios = new API_Usuarios(null, null, null);
 $apiStats = new API_Stats();
 
+header('Content-Type: application/json');
 
 $peticion = $_POST["pttn"] ?? null;
 $peticion = $peticion ?? $_GET["pttn"] ?? null;
@@ -306,6 +307,10 @@ switch ($peticion) {
 
         $resp = prestarExemplar($id);
         echo $resp;
+        break;
+        
+    case 'getUserCreationDate':
+        echo $apiUsuarios->getUserCreationDate();
         break;
         
     default:

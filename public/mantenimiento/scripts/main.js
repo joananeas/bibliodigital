@@ -13,66 +13,68 @@ const getID = () => {
         method: "POST",
         body: new FormData().append('pttn', 'getID')
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        return data;
-    })
-    .catch(error => {
-        console.error('Error al hacer la petición:', error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            return data;
+        })
+        .catch(error => {
+            console.error('Error al hacer la petición:', error);
+        });
 }
 
 function getNotificaciones() {
     let formData = new FormData();
     let number = document.getElementById("notification-number");
-    let submenu = document.getElementById("notification-submenu");
-    if (submenu === null || number === null) return;
+    let numberPFP = document.getElementById("notification-number-pfp");
+    //let submenu = document.getElementById("notification-submenu");
+    if (number === null) return;
 
-    submenu.innerHTML = '';
+    //submenu.innerHTML = '';
 
     formData.append('pttn', 'getNotifications');
     fetch(urlForFetch, {
         method: "POST",
         body: formData
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Respuesta no válida');
-        }
-        return response.json();
-    })
-    .then(data => {
-        // Comprobar el estado de la respuesta
-        if (data.status === "ok") {
-            number.textContent = data.data.length;
-            notificationsFrame = document.getElementById("notificationsFrame"); // En el popup de notis
-            notificationsFrame.innerHTML = '';
-            if (data.data.length === 0) {
-                notificationsFrame.innerHTML = 'Sense notificacions.';
-                return;
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Respuesta no válida');
             }
+            return response.json();
+        })
+        .then(data => {
+            // Comprobar el estado de la respuesta
+            if (data.status === "ok") {
+                numberPFP.textContent = data.data.length;
+                number.textContent = data.data.length;
+                notificationsFrame = document.getElementById("notificationsFrame"); // En el popup de notis
+                notificationsFrame.innerHTML = '';
+                if (data.data.length === 0) {
+                    notificationsFrame.innerHTML = 'Sense notificacions.';
+                    return;
+                }
 
-            data.data.forEach(notification => {
-                let link = document.createElement("a");
-                let p = document.createElement("p");
+                data.data.forEach(notification => {
+                    //let link = document.createElement("a");
+                    let p = document.createElement("p");
 
-                link.textContent = notification.titol;
-                link.href = "#"; 
-                link.title = notification.missatge;
+                    // link.textContent = notification.titol;
+                    // link.href = "#"; 
+                    // link.title = notification.missatge;
 
-                p.textContent = notification.id_notificacio + " - " + notification.missatge;
+                    p.textContent = notification.id_notificacio + " - " + notification.missatge;
 
-                submenu.appendChild(link);
-                notificationsFrame.appendChild(p);
-            });
-        } else {
-            console.error("Error al recuperar notificaciones: ", data.message);
-        }
-    })
-    .catch(error => {
-        console.error("[ERROR (API_Request)] ", error);
-    });
+                    //submenu.appendChild(link);
+                    notificationsFrame.appendChild(p);
+                });
+            } else {
+                console.error("Error al recuperar notificaciones: ", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("[ERROR (API_Request)] ", error);
+        });
 }
 
 const clearNotifications = () => {
@@ -85,18 +87,18 @@ const clearNotifications = () => {
         method: "POST",
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error("[ERROR (API_Request)] ", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error("[ERROR (API_Request)] ", error);
+        });
 }
 
 getNotificaciones();
 
-const comprobarConexionBBDD = async () => {  
+const comprobarConexionBBDD = async () => {
     if (window.location.href.includes("install") || window.location.href.includes("error")) return;
     console.log("[CONEXION_BBDD] Comprobando conexión con la base de datos...");
     let formData = new FormData();
@@ -122,19 +124,19 @@ const comprobarConexionBBDD = async () => {
 
 const menuMobile = () => {
     const linksNormal = [
-        { id: "footer-m-home", href: "./", src: "./media/icons/home.png", id_img: "footer-img-home"},
-        { id: "footer-m-community", href: "./comunitat.php", src: "./media/icons/heart.png", id_img: "footer-img-community"},
-        { id: "footer-m-qr", href: "./qr.php", src: "./media/icons/qr-code-white.png", id_img: "footer-img-qr"},
-        { id: "footer-m-markers", href: "./marcadors.php", src: "./media/icons/markers.png", id_img: "footer-img-markers"},
-        { id: "footer-m-profile", href: "./cuenta.php", src: "./media/icons/user.png", id_img: "footer-img-user"}
+        { id: "footer-m-home", href: "./", src: "./media/icons/home.png", id_img: "footer-img-home" },
+        { id: "footer-m-community", href: "./comunitat.php", src: "./media/icons/heart.png", id_img: "footer-img-community" },
+        { id: "footer-m-qr", href: "./qr.php", src: "./media/icons/qr-code-white.png", id_img: "footer-img-qr" },
+        { id: "footer-m-markers", href: "./marcadors.php", src: "./media/icons/markers.png", id_img: "footer-img-markers" },
+        { id: "footer-m-profile", href: "./cuenta.php", src: "./media/icons/user.png", id_img: "footer-img-user" }
     ];
 
     const linksAdmin = [
-        { id: "footer-m-home", href: "../", src: "../media/icons/home.png", id_img: "footer-img-home"},
-        { id: "footer-m-community", href: "../comunitat.php", src: "../media/icons/heart.png", id_img: "footer-img-community"},
-        { id: "footer-m-qr", href: "../qr.php", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr"},
-        { id: "footer-m-markers", href: "../marcadors.php", src: "../media/icons/markers.png", id_img: "footer-img-markers"},
-        { id: "footer-m-profile", href: "../cuenta.php", src: "../media/icons/user.png", id_img: "footer-img-user"},
+        { id: "footer-m-home", href: "../", src: "../media/icons/home.png", id_img: "footer-img-home" },
+        { id: "footer-m-community", href: "../comunitat.php", src: "../media/icons/heart.png", id_img: "footer-img-community" },
+        { id: "footer-m-qr", href: "../qr.php", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr" },
+        { id: "footer-m-markers", href: "../marcadors.php", src: "../media/icons/markers.png", id_img: "footer-img-markers" },
+        { id: "footer-m-profile", href: "../cuenta.php", src: "../media/icons/user.png", id_img: "footer-img-user" },
     ];
 
     if (window.location.href.includes("admin")) {
@@ -157,27 +159,27 @@ const menuMobile = () => {
 
 const menuHeader = () => {
     const linksNormal = [
-        { id: "title-nav", href: "./index.php"},
-        { id: "iniciNav", href: "./index.php"},
-        { id: "llibresNav", href: "./llibres.php"},
-        { id: "prestecsNav", href: "./prestecs.php"},
-        { id: "gestioReservesNav", href: "./perfil.php"},
-        { id: "enquestesNav", href: "./perfil.php"},
-        { id: "gestioCompteNav", href: "./perfil.php"},
-        { id: "adminNav", href: "./admin"},
-        { id: "suggNav", href: "./perfil.php"}
-    ]; 
+        { id: "title-nav", href: "./index.php" },
+        { id: "iniciNav", href: "./index.php" },
+        { id: "llibresNav", href: "./llibres.php" },
+        { id: "prestecsNav", href: "./prestecs.php" },
+        { id: "gestioReservesNav", href: "./perfil.php" },
+        { id: "enquestesNav", href: "./perfil.php" },
+        { id: "gestioCompteNav", href: "./perfil.php" },
+        { id: "adminNav", href: "./admin" },
+        { id: "suggNav", href: "./perfil.php" }
+    ];
 
     const linksAdmin = [
-        { id: "title-nav", href: "../index.php"},
-        { id: "iniciNav", href: "../index.php"},
-        { id: "llibresNav", href: "../llibres.php"},
-        { id: "prestecsNav", href: "../prestecs.php"},
-        { id: "gestioReservesNav", href: "../perfil.php"},
-        { id: "enquestesNav", href: "../perfil.php"},
-        { id: "gestioCompteNav", href: "../perfil.php"},
-        { id: "adminNav", href: "#"},
-        { id: "suggNav", href: "../perfil.php"}
+        { id: "title-nav", href: "../index.php" },
+        { id: "iniciNav", href: "../index.php" },
+        { id: "llibresNav", href: "../llibres.php" },
+        { id: "prestecsNav", href: "../prestecs.php" },
+        { id: "gestioReservesNav", href: "../perfil.php" },
+        { id: "enquestesNav", href: "../perfil.php" },
+        { id: "gestioCompteNav", href: "../perfil.php" },
+        { id: "adminNav", href: "#" },
+        { id: "suggNav", href: "../perfil.php" }
     ];
 
     if (window.location.href.includes("admin")) {
@@ -205,34 +207,34 @@ const getBanner = () => {
         method: 'POST',
         body: formData
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Respuesta de la red no fue ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        if (document.getElementById("info-dinamica") === null) return data;
-        const header = document.getElementById("h");
-        let banner = document.getElementById("info-dinamica");
-        let content = banner.querySelector(".news-content");
-    
-        if (data.bannerState === "1") {
-            banner.innerHTML = `<div class="news-content"><span>${data.bannerText}</span></div>`;
-            banner.style.display = "block";
-            header.style.paddingTop = "30px";
-            
-            // Reiniciar la animación
-            content.classList.remove("news-content");
-            void banner.offsetWidth; // Truco para ayudar al navegador a reconocer el cambio
-            content.classList.add("news-content");
-        }
-        else {
-            banner.style.display = "none";
-            header.style.marginTop = "0px";
-        }
-        return data; // Devuelve los datos para su uso posterior
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Respuesta de la red no fue ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (document.getElementById("info-dinamica") === null) return data;
+            const header = document.getElementById("h");
+            let banner = document.getElementById("info-dinamica");
+            let content = banner.querySelector(".news-content");
+
+            if (data.bannerState === "1") {
+                banner.innerHTML = `<div class="news-content"><span>${data.bannerText}</span></div>`;
+                banner.style.display = "block";
+                header.style.paddingTop = "30px";
+
+                // Reiniciar la animación
+                content.classList.remove("news-content");
+                void banner.offsetWidth; // Truco para ayudar al navegador a reconocer el cambio
+                content.classList.add("news-content");
+            }
+            else {
+                banner.style.display = "none";
+                header.style.marginTop = "0px";
+            }
+            return data; // Devuelve los datos para su uso posterior
+        });
 }
 
 const loadGlobals = () => {
@@ -243,36 +245,36 @@ const loadGlobals = () => {
         method: "POST",
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        console.log("[RESPONSE] ", data);
+        .then(response => response.json())
+        .then(data => {
+            console.log("[RESPONSE] ", data);
 
-        let tituloFavicon = document.getElementById("tituloTab");
-        let tituloH1 = document.getElementById("titulo");
-        let linkTituloH1 = document.getElementById("title-nav");
-        const versionElement = document.getElementById("version");
-        const escuelaFooter = document.getElementById("escuela-footer");
+            let tituloFavicon = document.getElementById("tituloTab");
+            let tituloH1 = document.getElementById("titulo");
+            let linkTituloH1 = document.getElementById("title-nav");
+            const versionElement = document.getElementById("version");
+            const escuelaFooter = document.getElementById("escuela-footer");
 
-        tituloFavicon.textContent = data.titolWeb;
-        let favicon = document.getElementById("favicon");
-        if (window.location.href.includes("admin")) {
-            favicon.href = "../media/sistema/favicon/" + data.favicon;
-        }
-        else {
-            favicon.href = "./media/sistema/favicon/" + data.favicon;
-        }
-        
-        escuelaFooter.textContent = data.nomBiblioteca + " 📚";
-        // Solo lo imprime si existe (en login no).
-        tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
-        versionElement.textContent = data.version;
-        let path = data.rootPath;
+            tituloFavicon.textContent = data.titolWeb;
+            let favicon = document.getElementById("favicon");
+            if (window.location.href.includes("admin")) {
+                favicon.href = "../media/sistema/favicon/" + data.favicon;
+            }
+            else {
+                favicon.href = "./media/sistema/favicon/" + data.favicon;
+            }
 
-        menuMobile();
-    })
-    .catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
-    });
+            escuelaFooter.textContent = data.nomBiblioteca + " 📚";
+            // Solo lo imprime si existe (en login no).
+            tituloH1 !== null ? (tituloH1.textContent = data.h1Web) : null;
+            versionElement.textContent = data.version;
+            let path = data.rootPath;
+
+            menuMobile();
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
 }
 
 const getRol = () => {
@@ -283,37 +285,40 @@ const getRol = () => {
         method: "POST",
         body: formData
     }).then(response => response.json())
-    .then(data => {
-        // Agrega primero el texto
-        let r = document.getElementById("info-usuari");
-        switch(data.rol){
-            case "lector":
-                rol = "🕵️ (unknown)"; // anonimo
-                break;
-            case "user":
-                rol = "👨‍🎓 (estudiant)"; // Alumno
-                break;
-            case "bibliotecari":
-                rol = "👨‍🏫 (bibliotecari)"; // Profe / bibliotecario
-                break;
-            case "admin":
-                rol = "👨‍💻 (administrador)"; // Admin
-                break;
-            default:
-                rol = "🕵️ (unknown)"; // anonimo
-                break;
-        }
+        .then(data => {
+            // Agrega primero el texto
+            let r = document.getElementById("info-usuari");
+            let n = document.getElementById("nom-usuari");
+            n.textContent = data.username;
+            r.textContent = data.rol;
 
-        r.textContent = data.username + " - " + rol + " ";
-
-        let menu = document.getElementById("menu-nav");
-    
-        return data.username;
-    }).catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
-    });
+            return data.username;
+        }).catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
 }
 
+const getUserDataCreation = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getUserCreationDate');
+    fetch(urlForFetch, {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === "ok") {
+                console.log("[DATE] " + data);
+                document.getElementById("data-usuari").textContent = data.api;
+                return data.api;
+            }
+        })
+        .catch(error => {
+            console.error('Error al hacer la petición:', error);
+        });
+}
+
+getUserDataCreation();
 // Realizo un fetch de mantenimiento para recibir todos los datos
 
 const scriptsIndex = ["home.js"];
@@ -352,11 +357,11 @@ switch (true) {
         cargarScripts(scriptsReservas);
         console.log("reservas");
         break;
-    
+
     case url.includes("error"):
         cargarScripts(scriptsError);
         console.log("error");
-        break;    
+        break;
 
     case url.includes("install"):
         cargarScripts(scriptsInstall);
@@ -368,7 +373,7 @@ switch (true) {
         break;
 
     case url.includes("admin"):
-    case url.includes("admin/index"): 
+    case url.includes("admin/index"):
         cargarScripts(scriptsAdmin);
         console.log("admin");
         break;
@@ -383,7 +388,7 @@ switch (true) {
 document.documentElement.style.display = 'block';
 document.documentElement.className += ' loading';
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     document.documentElement.className = document.documentElement.className.replace('loading', '');
 });
 

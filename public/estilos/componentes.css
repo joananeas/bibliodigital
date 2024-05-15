@@ -310,7 +310,7 @@ h1 {
     margin-left: 15px;
 }
 
-#info-usuari {
+/* #info-usuari {
     margin-right: 5px;
     background-color: var(--color-secundario);
     color: var(--color-terciario);
@@ -319,7 +319,7 @@ h1 {
     padding-right: 6px;
     border-radius: 4px;
     border: 2px solid var(--color-terciario);
-}
+} */
 
 .info-usuari-conf {
     transition: 0.2s;
@@ -417,54 +417,78 @@ footer {
     }
 }
 
+.profileNav {
+    /* border: 2.5px solid var(--color-secundario); */
+    border-radius: 50%;
+    padding: 2px;
+    background-color: transparent;
+}
 
 /* Estilos para el botón de desplegar el submenú */
 .dropdown {
     position: relative;
     display: inline-block;
+    padding-left: 20px;
+    /*Así no desaparece tan rápido el submenu*/
 }
 
-/* Estilo del botón */
-.dropbtn {
-    background-color: #4CAF50;
-    color: white;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
-    cursor: pointer;
+.infoProfileNav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-/* Contenido del submenú */
 .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
-    min-width: 160px;
+    min-width: 200px;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
+    right: 0;
+    /* Alinea el borde derecho del contenido desplegable con el borde derecho del contenedor */
+    border-radius: 4px;
+    margin-top: 0;
+    padding-top: 0;
 }
 
-/* Elementos dentro del submenú */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropdown:hover .profileNav {
+    background-color: var(--color-terciario);
+    border-radius: 50%;
+}
+
+.dropdown-content a:hover {
+    background-color: #d3d3d3;
+}
+
 .dropdown-content a {
     color: black;
+    border-radius: 4px;
     padding: 12px 16px;
     text-decoration: none;
     display: block;
 }
 
-/* Cambia el color del enlace al pasar el mouse */
-.dropdown-content a:hover {
-    background-color: #f1f1f1
+.dropdown-content p:first-child {
+    padding-top: 12px;
 }
 
-/* Muestra el submenú en hover */
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-/* Cambia el color del botón al pasar el mouse */
-.dropdown:hover .dropbtn {
-    background-color: #3e8e41;
+.dropdown-content p {
+    width: 100%;
+    color: black;
+    border-radius: 4px;
+    padding: 12px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-decoration: none;
+    display: inline-block;
 }
 
 .notificationsFrame {
@@ -477,6 +501,32 @@ footer {
     padding: 2px;
     background-color: #333333;
     color: white;
+}
+
+.badgeCounter {
+    font-size: small;
+    padding: 4px;
+    padding-left: 7px;
+    padding-right: 8px;
+    border-radius: 50%;
+    background-color: var(--color-principal);
+    color: var(--color-secundario);
+    display: inline-block;
+    text-align: center;
+}
+
+.badgeCounter_alt {
+    font-weight: 600;
+    font-size: small;
+    padding: 4px;
+    padding-left: 7px;
+    padding-right: 8px;
+    border-radius: 50%;
+    background-color: var(--color-principal);
+    color: var(--color-secundario);
+    border: 1px solid var(--color-secundario);
+    display: inline-block;
+    text-align: center;
 }
 
 .tableContainer {
