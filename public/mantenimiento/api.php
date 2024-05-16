@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.7'; # - 🧹 UI Refactor (header)
+const VERSION =  'v1.6.8'; # - ✨ Prestecs with exemplars :))
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -266,7 +266,7 @@ switch ($peticion) {
 
     case 'getReservesFromUser':
         $usuari = $apiUsuarios->getID();
-        $resp = $apiUsuarios->getReservas($usuari);
+        $resp = $apiUsuarios->getReservesFromUser($usuari);
         echo $resp;
         break;
 
@@ -306,6 +306,16 @@ switch ($peticion) {
         $id = $_POST['id_reserva'];
 
         $resp = prestarExemplar($id);
+        echo $resp;
+        break;
+        
+    case 'viewAllPrestecs':
+        $resp = viewAllPrestecs();
+        echo $resp;
+        break;
+    
+    case 'viewAllReserves':
+        $resp = viewAllReserves();
         echo $resp;
         break;
         

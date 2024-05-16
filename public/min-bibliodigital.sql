@@ -79,6 +79,7 @@ CREATE TABLE IF NOT EXISTS dib_reserves (
 CREATE TABLE IF NOT EXISTS dib_prestecs (
   id_prestec INT AUTO_INCREMENT PRIMARY KEY,
   exemplar_id INT NOT NULL,
+  exemplar_num INT NOT NULL,
   usuari_id INT NOT NULL,
   data_inici DATE NOT NULL,
   data_devolucio DATE NOT NULL,
@@ -192,6 +193,7 @@ BEGIN
     FROM dib_usuaris
     WHERE rol = 'bibliotecari';
 END;
+
 
 CREATE EVENT IF NOT EXISTS eliminar_reservas_expirades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO
     DELETE FROM dib_reserves WHERE DATE_ADD(fecha_columna, INTERVAL 30 DAY) < CURRENT_DATE;

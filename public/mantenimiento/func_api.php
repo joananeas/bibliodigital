@@ -168,7 +168,10 @@ function reservarLibro($conn, $titulo, $fechaInicio, $fechaFin)
 
 function getReserves($conn, $id)
 {
-    $sql = "SELECT * FROM dib_reserves WHERE exemplar_id = ?";
+    $sql = "SELECT `reserva`, dib_cataleg.TITOL AS llibre, `usuari_id`, `data_inici`, `data_fi`, dib_reserves.`estat`, `prolongada`, `motiu_prolongacio` 
+            FROM dib_reserves 
+            JOIN dib_exemplars ON dib_reserves.exemplar_id = dib_exemplars.IDENTIFICADOR 
+            JOIN dib_cataleg ON dib_exemplars.IDENTIFICADOR = dib_cataleg.NUMERO WHERE exemplar_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $id);
     mysqli_stmt_execute($stmt);
@@ -423,22 +426,97 @@ function prestarExemplar($id_reserva) {
     mysqli_stmt_bind_result($stmt_reserva, $exemplar_id, $usuari_id);
     mysqli_stmt_fetch($stmt_reserva);
     mysqli_stmt_close($stmt_reserva);
+    #echo $exemplar_id; DEBUGGING
 
     if ($exemplar_id && $usuari_id) {
-        $data_inici = date("Y-m-d");
-        $data_devolucio = date("Y-m-d", strtotime("+1 month"));
+        $sql_exemplar = "SELECT NUMERO_EXEMPLAR 
+                        FROM dib_exemplars 
+                        JOIN dib_cataleg ON dib_exemplars.IDENTIFICADOR = dib_cataleg.NUMERO
+                        WHERE dib_exemplars.IDENTIFICADOR = ? AND dib_exemplars.ESTAT = 'Disponible' 
+                        ORDER BY dib_exemplars.NUMERO_EXEMPLAR DESC 
+                        LIMIT 1";
+        $stmt_exemplar = mysqli_prepare($conn, $sql_exemplar);
+        mysqli_stmt_bind_param($stmt_exemplar, "i", $exemplar_id);
+        mysqli_stmt_execute($stmt_exemplar);
+        mysqli_stmt_bind_result($stmt_exemplar, $exemplar_num);
+        mysqli_stmt_fetch($stmt_exemplar);
+        mysqli_stmt_close($stmt_exemplar);
 
-        $sql_prestec = "INSERT INTO dib_prestecs (id_prestec, exemplar_id, usuari_id, data_inici, data_devolucio, data_real_tornada, estat, comentaris) 
-                        VALUES (NULL, ?, ?, ?, ?, NULL, 'Pendent', 'Pendent del bibliotecari.')";
-        $stmt_prestec = mysqli_prepare($conn, $sql_prestec);
-        mysqli_stmt_bind_param($stmt_prestec, "iiss", $exemplar_id, $usuari_id, $data_inici, $data_devolucio);
-        if (mysqli_stmt_execute($stmt_prestec)) {
-            echo json_encode(['response' => 'OK']);
+        if ($exemplar_num) {
+            $data_inici = date("Y-m-d");
+            $data_devolucio = date("Y-m-d", strtotime("+1 month"));
+
+            $sql_prestec = "INSERT INTO dib_prestecs (id_prestec, exemplar_id, exemplar_num, usuari_id, data_inici, data_devolucio, data_real_tornada, estat, comentaris) 
+                            VALUES (NULL, ?, ?, ?, ?, ?, NULL, 'Pendent', 'Pendent del bibliotecari.')";
+            $stmt_prestec = mysqli_prepare($conn, $sql_prestec);
+            mysqli_stmt_bind_param($stmt_prestec, "iiiss", $exemplar_id, $exemplar_num, $usuari_id, $data_inici, $data_devolucio);
+            if (mysqli_stmt_execute($stmt_prestec)) {
+                $sql_update_exemplar = "UPDATE dib_exemplars SET ESTAT = 'Prestat' WHERE IDENTIFICADOR = ? AND NUMERO_EXEMPLAR = ?";
+                $stmt_update_exemplar = mysqli_prepare($conn, $sql_update_exemplar);
+                mysqli_stmt_bind_param($stmt_update_exemplar, "ii", $exemplar_id, $exemplar_num);
+                mysqli_stmt_execute($stmt_update_exemplar);
+                mysqli_stmt_close($stmt_update_exemplar);
+
+                echo json_encode(['response' => 'OK']);
+            } else {
+                echo json_encode(['response' => 'ERROR', 'message' => mysqli_error($conn)]);
+            }
+            mysqli_stmt_close($stmt_prestec);
         } else {
-            echo json_encode(['response' => 'ERROR', 'message' => mysqli_error($conn)]);
+            echo json_encode(['response' => 'ERROR', 'message' => 'No hay ejemplares disponibles']);
         }
-        mysqli_stmt_close($stmt_prestec);
     } else {
         echo json_encode(['response' => 'ERROR', 'message' => 'Reserva no encontrada o datos incompletos']);
     }
+
+    $conn->close();
+}
+
+
+
+function viewAllPrestecs() {
+    $conn = peticionSQL();
+
+    $sql = "SELECT DISTINCT dib_prestecs.id_prestec, dib_cataleg.TITOL AS llibre, dib_usuaris.email AS usuari, dib_prestecs.data_inici, dib_prestecs.data_devolucio, dib_prestecs.data_real_tornada, dib_prestecs.estat, dib_prestecs.comentaris 
+            FROM dib_prestecs 
+            JOIN dib_exemplars ON dib_prestecs.exemplar_id = dib_exemplars.IDENTIFICADOR 
+            JOIN dib_cataleg ON dib_exemplars.IDENTIFICADOR = dib_cataleg.NUMERO 
+            JOIN dib_usuaris ON dib_prestecs.usuari_id = dib_usuaris.usuari
+            ORDER BY dib_prestecs.estat = 'pendent'; ";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $prestecs = array();
+        while($row = $result->fetch_assoc()) {
+            $prestecs[] = $row;
+        }
+        echo json_encode(array('response' => 'OK', 'message' => $prestecs));
+    } else {
+        echo json_encode(array('response' => 'ERROR', 'message' => 'No records found'));
+    }
+
+    $conn->close();
+}
+
+function viewAllReserves(){
+    $conn = peticionSQL();
+
+    $sql = "SELECT DISTINCT dib_reserves.reserva, dib_cataleg.TITOL AS llibre, dib_usuaris.email AS usuari, dib_reserves.data_inici, dib_reserves.data_fi, dib_reserves.estat, dib_reserves.prolongada, dib_reserves.motiu_prolongacio 
+            FROM dib_reserves 
+            JOIN dib_exemplars ON dib_reserves.exemplar_id = dib_exemplars.IDENTIFICADOR 
+            JOIN dib_cataleg ON dib_exemplars.IDENTIFICADOR = dib_cataleg.NUMERO 
+            JOIN dib_usuaris ON dib_reserves.usuari_id = dib_usuaris.usuari";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        $reserves = array();
+        while($row = $result->fetch_assoc()) {
+            $reserves[] = $row;
+        }
+        echo json_encode(array('response' => 'OK', 'message' => $reserves));
+    } else {
+        echo json_encode(array('response' => 'ERROR', 'message' => 'No records found'));
+    }
+
+    $conn->close();
 }

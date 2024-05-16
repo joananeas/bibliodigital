@@ -14,10 +14,13 @@
                 <li><a id="admin-config" href="#" class="nav-link" data-target="admin-config-panel">Configuració</a>
                 </li>
                 <li><a id="admin-books" href="#" class="nav-link" data-target="admin-books-panel">Llibres</a></li>
+                <li><a id="admin-reserves" href="#" class="nav-link" data-target="admin-reserves-panel">Reserves</a>
+                </li>
+                <li><a id="admin-prestecs" href="#" class="nav-link" data-target="admin-prestecs-panel">Préstecs</a>
+                </li>
                 <li><a id="admin-users" href="#" class="nav-link" data-target="admin-users-panel">Usuaris</a></li>
                 <li><a id="admin-styles" href="#" class="nav-link" data-target="admin-styles-panel">Estètica</a></li>
                 <li><a id="admin-stats" href="#" class="nav-link" data-target="admin-stats-panel">Estadístiques</a></li>
-
             </ul>
         </section>
         <br>
@@ -157,6 +160,51 @@
             </section>
         </div>
 
+        <!-- Panel de reservas -->
+        <div id="admin-reserves-panel" class="admin-panel">
+            <section class="frame">
+                <p class="fuenteH1">Reserves</p>
+                <div class="tableContainer">
+                    <table id="reservesList" class="tableBody">
+                        <tr>
+                            <th>ID</th>
+                            <th>Llibre</th>
+                            <th>Usuari</th>
+                            <th>Data Inici</th>
+                            <th>Data Fi</th>
+                            <th>Estat</th>
+                            <th>Prolongada</th>
+                            <th>Motiu prolongació</th>
+                            <th>Accions</th>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Panel de préstamos -->
+        <div id="admin-prestecs-panel" class="admin-panel">
+            <section class="frame">
+                <p class="fuenteH1">
+                    Préstecs
+                </p>
+                <div class="tableContainer">
+                    <table id="prestecsList" class="tableBody">
+                        <tr>
+                            <th>ID</th>
+                            <th>Llibre</th>
+                            <th>Usuari</th>
+                            <th>Data Inici</th>
+                            <th>Data Fi</th>
+                            <th>Data Devolució</th>
+                            <th>Estat</th>
+                            <th>Comentaris</th>
+                            <th>Accions</th>
+                        </tr>
+                    </table>
+                </div>
+            </section>
+        </div>
 
         <!-- Panel de usuarios -->
         <div id="admin-users-panel" class="admin-panel">

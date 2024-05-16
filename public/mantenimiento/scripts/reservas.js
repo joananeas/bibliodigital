@@ -23,7 +23,7 @@ const getAllUsers = async () => {
             tr.appendChild(tdReserva);
 
             let tdCorreo = document.createElement('td');
-            tdCorreo.textContent = reserva.exemplar_id;
+            tdCorreo.textContent = reserva.llibre;
             //tdCorreo.classList.add('table-row');
             tr.appendChild(tdCorreo);
 

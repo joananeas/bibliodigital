@@ -51,7 +51,6 @@ RUN echo 'output_buffering = On' >> /usr/local/etc/php/php.ini \
 
 # Exponer el puerto 80 para el servidor web
 EXPOSE 80
-EXPOSE 3306
 
 # Por defecto, Apache se ejecutará en primer plano. Puedes especificar un comando diferente si es necesario.
 CMD ["apache2-foreground"]

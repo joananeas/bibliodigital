@@ -71,16 +71,13 @@
 <script>
 const viewPopUp = (formulari, close) => {
     console.log("[POPUP]", formulari);
-    let menuActivo = false;
     let form = document.getElementById(formulari);
     if (menuActivo) {
-        menuImg.style.transform = "rotate(0deg)";
         form.style.display = "none";
         document.querySelector("main").style.display = "block";
         document.querySelector("main").style.opacity = "1";
         menuActivo = false;
     } else {
-        menuImg.style.transform = "rotate(90deg)";
         form.style.display = "flex";
         document.querySelector("main").style.opacity = "0.2";
         form.style.opacity = "1";

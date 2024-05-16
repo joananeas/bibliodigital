@@ -9,16 +9,20 @@
 <footer id="footerMobile" class="centrado">
     <div>
         <a id="footer-m-home" href="" aria-label="Inici"><img id="footer-img-home" width="40" height="40"></a>
-        <a id="footer-m-community" href="" aria-label="Comunitat"><img id="footer-img-community" width="40" height="40"></a>
+        <a id="footer-m-community" href="" aria-label="Comunitat"><img id="footer-img-community" width="40"
+                height="40"></a>
         <a id="footer-m-qr" href="" aria-label="Escanejar QR"><img id="footer-img-qr" width="40" height="40"></a>
         <a id="footer-m-markers" href="" aria-label="Marcadors"><img id="footer-img-markers" width="40" height="40"></a>
-        <a id="footer-m-profile" href="" aria-label="Perfil Usuari"><img id="footer-img-user" width="40" height="40"></a>
+        <a id="footer-m-profile" href="" aria-label="Perfil Usuari"><img id="footer-img-user" width="40"
+                height="40"></a>
     </div>
 </footer>
 
 
 <footer id="footerDesktop" class="centrado">
-    <span class="izquierda" id="version"></span><!--OK--><!--dinamico-->
+    <span class="izquierda" id="version"></span>
+    <!--OK-->
+    <!--dinamico-->
     <div class="central">
         <span id="escuela-footer"></span>
     </div>
@@ -31,4 +35,4 @@
             echo '<script src="mantenimiento/scripts/main.js"></script>';
         }
     ?>
-</footer> 
+</footer>

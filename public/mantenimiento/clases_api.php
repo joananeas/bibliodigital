@@ -434,11 +434,17 @@ class API_Usuarios
     }
 
 
-    public function getReservas($userId)
+    public function getReservesFromUser($userId)
     {
         $conn = peticionSQL();
         $reservas = [];
-        if ($stmt = mysqli_prepare($conn, "SELECT * FROM dib_reserves WHERE usuari_id = ?")) {
+
+        $sql = "SELECT DISTINCT `reserva`, dib_cataleg.TITOL AS llibre, `data_inici`, `data_fi`, dib_reserves.`estat`, `prolongada`, `motiu_prolongacio` 
+                FROM dib_reserves 
+                JOIN dib_exemplars ON dib_reserves.exemplar_id = dib_exemplars.IDENTIFICADOR 
+                JOIN dib_cataleg ON dib_exemplars.IDENTIFICADOR = dib_cataleg.NUMERO WHERE usuari_id = ?";
+
+        if ($stmt = mysqli_prepare($conn, $sql)) {
             mysqli_stmt_bind_param($stmt, 'i', $userId);
             mysqli_stmt_execute($stmt);
             $result = mysqli_stmt_get_result($stmt);

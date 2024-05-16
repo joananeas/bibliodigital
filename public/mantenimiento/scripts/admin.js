@@ -6,32 +6,32 @@ getColores().then(data => {
     console.error('Error al obtener colores:', error);
 });
 
-document.getElementById('formColores').addEventListener('submit', function(e) {
+document.getElementById('formColores').addEventListener('submit', function (e) {
     e.preventDefault();
 
     let formData = new FormData();
     formData.append('colorPrincipal', document.getElementById("colorPrincipal").value);
     formData.append('colorSecundario', document.getElementById("colorSecundario").value);
     formData.append('colorTerciario', document.getElementById("colorTerciario").value);
-    formData.append('pttn', 'setColores'); 
+    formData.append('pttn', 'setColores');
 
     fetch('../mantenimiento/api.php', {
         method: 'POST',
         body: formData
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Respuesta de la red no fue ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        getColores();
-        console.log(data);
-    })
-    .catch(error => {
-        console.error('Error al hacer la petición:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Respuesta de la red no fue ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            getColores();
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error al hacer la petición:', error);
+        });
 });
 
 getBanner().then(data => {
@@ -71,7 +71,7 @@ navLinks.forEach(link => {
     });
 });
 
-document.getElementById('formBanner').addEventListener('submit', function(e) {
+document.getElementById('formBanner').addEventListener('submit', function (e) {
     e.preventDefault();
     let c = (document.getElementById("toggleSwitch").checked == true ? "1" : "0");
     let formData = new FormData();
@@ -84,19 +84,19 @@ document.getElementById('formBanner').addEventListener('submit', function(e) {
         method: 'POST',
         body: formData
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Respuesta de la red no fue ok');
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log(data);
-        getBanner();
-    })
-    .catch(error => {
-        console.error('Error al hacer la petición:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Respuesta de la red no fue ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log(data);
+            getBanner();
+        })
+        .catch(error => {
+            console.error('Error al hacer la petición:', error);
+        });
 });
 
 const getAllUsers = async () => {
@@ -109,7 +109,7 @@ const getAllUsers = async () => {
         body: formData
     });
     const data = await response.json();
-    
+
     let table = document.getElementById('userList');
 
     if (Array.isArray(data)) {
@@ -160,7 +160,7 @@ const formCreateUser = () => {
         form.style.opacity = "1";
         menuActivo = true;
     }
-    
+
     document.getElementById('close').addEventListener('click', () => {
         document.getElementById('formCreateUser').style.display = 'none';
         document.querySelector("main").style.display = "block";
@@ -279,18 +279,18 @@ const formCreateBook = () => {
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.response === 'OK') {
-            id.value = data.last;
-        } else {
-            alert('Error al trobar [last] llibre: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar la solicitud');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === 'OK') {
+                id.value = data.last;
+            } else {
+                alert('Error al trobar [last] llibre: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
 
     document.getElementById('vistaLibro').style.display = 'block';
     document.getElementById('buscadorLlibres').style.display = 'none';
@@ -311,9 +311,9 @@ const buscarLibroIndividual = async () => {
         body: formData
     });
     const data = await response.json();
-    
+
     tabla = document.getElementById('tablaLibros');
-    if(data.response === "OK") {
+    if (data.response === "OK") {
         let response = data.llibres;
         let desplegable = document.getElementById("buscadorLlibres");
         desplegable.innerHTML = "";
@@ -322,13 +322,13 @@ const buscarLibroIndividual = async () => {
 
         if (document.getElementById('crearLlibreSubmit').style.display === 'none') {
             inputs.forEach(input => {
-                input.addEventListener('input', function() {
+                input.addEventListener('input', function () {
                     botonModificar.style.display = 'block';
                 });
             });
         }
 
-        for(let i = 0; i < response.length; i++) {
+        for (let i = 0; i < response.length; i++) {
             let libro = response[i];
 
             let estadoLibro = document.createElement("span");
@@ -351,8 +351,8 @@ const buscarLibroIndividual = async () => {
 
             desplegable.appendChild(tituloLibro);
 
-            boton.addEventListener("click", async function() {
-                const libroId = libro.id; 
+            boton.addEventListener("click", async function () {
+                const libroId = libro.id;
                 await llenarDetallesLibro(libroId);
             });
 
@@ -360,13 +360,13 @@ const buscarLibroIndividual = async () => {
                 tituloLibro.style.borderBottom = "none";
             }
         }
-    
+
     }
 }
 
 
-document.getElementById('modificarLlibreSubmit').addEventListener('click', function(event) {
-    event.preventDefault(); 
+document.getElementById('modificarLlibreSubmit').addEventListener('click', function (event) {
+    event.preventDefault();
 
     const formData = new FormData(document.getElementById('crearLlibre'));
     formData.append('id', document.getElementById('identificador').value);
@@ -376,18 +376,18 @@ document.getElementById('modificarLlibreSubmit').addEventListener('click', funct
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.response === 'OK') {
-            alert('Libro modificado correctamente!');
-        } else {
-            alert('Error al modificar el libro: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar la solicitud');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === 'OK') {
+                alert('Libro modificado correctamente!');
+            } else {
+                alert('Error al modificar el libro: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
 });
 
 // const crearExemplars = async () => {
@@ -409,8 +409,8 @@ document.getElementById('modificarLlibreSubmit').addEventListener('click', funct
 //     }
 // }
 
-document.getElementById('crearLlibreSubmit').addEventListener('click', function(event) {
-    event.preventDefault(); 
+document.getElementById('crearLlibreSubmit').addEventListener('click', function (event) {
+    event.preventDefault();
 
     const formData = new FormData(document.getElementById('crearLlibre'));
     formData.append('pttn', 'crearLlibre');
@@ -419,21 +419,21 @@ document.getElementById('crearLlibreSubmit').addEventListener('click', function(
         method: 'POST',
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.response === 'OK') {
-            alert('Libro creado correctamente!');
-        } else {
-            alert('Error al crear el libro: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar la solicitud');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === 'OK') {
+                alert('Libro creado correctamente!');
+            } else {
+                alert('Error al crear el libro: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
 });
 
-document.getElementById("campoBuscarLibroIndividual").addEventListener('input', function() {
+document.getElementById("campoBuscarLibroIndividual").addEventListener('input', function () {
     if (this.value.trim() === "" || this.value.trim() === null || this.value.trim() === undefined) {
         document.getElementById("buscadorLlibres").style.display = "none";
         return;
@@ -448,43 +448,126 @@ const loadStatsUsers = () => {
     fetch('../mantenimiento/api.php?pttn=getUserStats', {
         method: 'GET'
     })
-    .then(response => response.json())
-    .then(data => {
-        stats = data.stats;
-        if (data.response === 'OK') {
-            document.getElementById('usuariosActivos').textContent = stats.actius;
-            document.getElementById('usuariosInactivos').textContent = stats.inactius;
-            document.getElementById('usuariosBaneados').textContent = stats.expulsats;
-            document.getElementById('usuariosEliminados').textContent = stats.expulsat_temp;
-            document.getElementById('usuariosTotales').textContent = stats.total;
-        } else {
-            alert('Error al obtener las estadísticas de usuarios: ' + data.message);
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar la solicitud');
-    });
+        .then(response => response.json())
+        .then(data => {
+            stats = data.stats;
+            if (data.response === 'OK') {
+                document.getElementById('usuariosActivos').textContent = stats.actius;
+                document.getElementById('usuariosInactivos').textContent = stats.inactius;
+                document.getElementById('usuariosBaneados').textContent = stats.expulsats;
+                document.getElementById('usuariosEliminados').textContent = stats.expulsat_temp;
+                document.getElementById('usuariosTotales').textContent = stats.total;
+            } else {
+                alert('Error al obtener las estadísticas de usuarios: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
 }
 
 const loadBookStats = () => {
     fetch('../mantenimiento/api.php?pttn=getBookStats', {
         method: 'GET'
     })
-    .then(response => response.json())
-    .then(data => {
-        stats = data.stats;
-        if (data.response === 'OK') {
-            document.getElementById('librosTotal').textContent = stats.total;
-            document.getElementById('librosExemplars').textContent = stats.totalExemplars;
-        } else {
-            alert('Error al obtener las estadísticas de libros: ' + data.message);
-        }
+        .then(response => response.json())
+        .then(data => {
+            stats = data.stats;
+            if (data.response === 'OK') {
+                document.getElementById('librosTotal').textContent = stats.total;
+                document.getElementById('librosExemplars').textContent = stats.totalExemplars;
+            } else {
+                alert('Error al obtener las estadísticas de libros: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
+}
+
+
+const loadPrestecs = () => {
+    const formData = new FormData();
+    formData.append('pttn', 'viewAllPrestecs');
+
+    fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
     })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Error al procesar la solicitud');
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === 'OK') {
+                const table = document.getElementById('prestecsList');
+                data.message.forEach(prestec => {
+                    const row = table.insertRow();
+                    row.insertCell(0).textContent = prestec.id_prestec;
+                    row.insertCell(1).textContent = prestec.llibre;
+                    row.insertCell(2).textContent = prestec.usuari;
+                    row.insertCell(3).textContent = prestec.data_inici;
+                    row.insertCell(4).textContent = prestec.data_devolucio;
+                    row.insertCell(5).textContent = prestec.data_real_tornada;
+                    row.insertCell(6).textContent = prestec.estat;
+                    row.insertCell(7).textContent = prestec.comentaris;
+                    const accionsCell = row.insertCell(8);
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Editar';
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Eliminar';
+                    accionsCell.appendChild(editButton);
+                    accionsCell.appendChild(deleteButton);
+                });
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
+};
+
+const loadReserves = () => {
+    const formData = new FormData();
+    formData.append('pttn', 'viewAllReserves');
+
+    fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === 'OK') {
+                const table = document.getElementById('reservesList');
+                data.message.forEach(reserva => {
+                    const row = table.insertRow();
+
+                    row.insertCell(0).textContent = reserva.reserva;
+                    row.insertCell(1).textContent = reserva.llibre;
+                    row.insertCell(2).textContent = reserva.usuari;
+                    row.insertCell(3).textContent = reserva.data_inici;
+                    row.insertCell(4).textContent = reserva.data_fi;
+                    row.insertCell(5).textContent = reserva.estat;
+                    row.insertCell(6).textContent = (reserva.prolongada === '1') ? 'Sí' : 'No';
+                    row.insertCell(7).textContent = reserva.motiu_prolongacio;
+
+                    const accionsCell = row.insertCell(8);
+                    const editButton = document.createElement('button');
+                    editButton.textContent = 'Editar';
+                    const deleteButton = document.createElement('button');
+                    deleteButton.textContent = 'Eliminar';
+                    accionsCell.appendChild(editButton);
+                    accionsCell.appendChild(deleteButton);
+                });
+            } else {
+                alert('Error: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
 }
 
 showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.
@@ -493,3 +576,5 @@ getBanner();
 getAllUsers();
 loadStatsUsers();
 loadBookStats();
+loadPrestecs();
+loadReserves();
