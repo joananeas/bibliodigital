@@ -32,7 +32,22 @@ const loadQR = () => {
         .catch(error => {
             console.log("[ERROR (API_Request)] ", error);
         });
-}
+
+    fetch("./mantenimiento/api.php?pttn=getFavicon")
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === "OK") {
+                console.log(data);
+                let imgInQr = document.getElementById('qr-image');
+                let url = "./media/sistema/favicon/" + data.favicon
+                console.log(url);
+                imgInQr.src = url;
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
+};
 
 let l = getLibro(); // No se por que, no funcionaba una funcion DOMContentLoaded, asi que lo he puesto aqui.
 

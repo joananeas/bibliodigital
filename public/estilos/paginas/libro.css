@@ -3,12 +3,14 @@
     flex-wrap: nowrap;
 }
 
-.aside-image, .aside-text {
+.aside-image,
+.aside-text {
     float: left;
-    box-sizing: border-box; /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
+    box-sizing: border-box;
+    /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
 }
 
-.aside-text{
+.aside-text {
     margin-left: 10px;
 }
 
@@ -20,15 +22,17 @@
 }
 
 article {
-    flex: 1 0 100%; /* Esto significa que el artículo tendrá un ancho base del 100%, pero puede crecer para llenar el espacio disponible si es necesario */
-    box-sizing: border-box; /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
+    flex: 1 0 100%;
+    /* Esto significa que el artículo tendrá un ancho base del 100%, pero puede crecer para llenar el espacio disponible si es necesario */
+    box-sizing: border-box;
+    /* Esto asegura que el padding y el borde del elemento se incluyan en su ancho total */
 }
 
-.vistaLibro{
+.vistaLibro {
     margin-top: 20px;
 }
 
-.min-qr{
+.min-qr {
     float: right;
     margin-right: 10px;
     width: 30px;
@@ -36,13 +40,13 @@ article {
     transition: 0.3s ease-in-out;
 }
 
-.min-qr:hover{
+.min-qr:hover {
     cursor: pointer;
     scale: 1.2;
     transition: 0.3s ease-in-out;
 }
 
-.qr{
+.qr {
     display: flex;
     padding: 0;
     margin: 0;
@@ -50,24 +54,24 @@ article {
     align-items: center;
 }
 
-.compartir-qr{
+.compartir-qr {
     max-width: 100%;
     margin-top: 10px;
 }
 
-.compartir-qr img{
+.compartir-qr img {
     cursor: pointer;
     width: 35px;
     height: 35px;
     margin-left: 5px;
 }
 
-.toast{
+.toast {
     text-align: center;
     justify-content: center;
     font-size: small;
     position: fixed;
-    margin-top:10px;
+    margin-top: 10px;
     padding-top: 5px;
     padding-bottom: 5px;
     z-index: 4;
@@ -87,7 +91,8 @@ article {
     margin-bottom: 10px;
 }
 
-.calendar th, .calendar td {
+.calendar th,
+.calendar td {
     border-radius: 4px;
     width: 40px;
     height: 40px;
@@ -113,10 +118,37 @@ article {
     transition: background-color 0.3s ease;
 }
 
-.calendar-cell:hover, .highlight {
-    background-color: yellow; /* Color cuando se hace hover o se ilumina */
+.calendar-cell:hover,
+.highlight {
+    background-color: yellow;
+    /* Color cuando se hace hover o se ilumina */
 }
 
 .disabled-day {
-    background-color: #9C0D38; /* Color para días deshabilitados (pasados o fines de semana) */
+    background-color: #9C0D38;
+    /* Color para días deshabilitados (pasados o fines de semana) */
+}
+
+#qrcode-container {
+    margin: 0 auto;
+    position: relative;
+    width: 128px;
+    height: 128px;
+}
+
+#qrcode {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#qr-image {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 32px;
+    /* Adjust size as needed */
+    height: 32px;
+    /* Adjust size as needed */
 }

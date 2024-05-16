@@ -158,6 +158,18 @@
                     </form>
                 </div>
             </section>
+            <section class="frame" style="margin-top:20px;">
+                <p class="fuenteH1">Generar QR's</p>
+                <form id="formGenerarQR">
+                    <p>Amb aquesta eina es pot generar 1 QR per llibre o múltiples.
+                        Per a definir múltiples llibres, separar els identificadors amb una coma, serà inici i final.
+                        Ex: 1,10 -> generaria QR's per els llibres 1 fins al 10.</p>
+                    <label for="qr">Identificador:</label>
+                    <input type="text" id="qr" name="qr" placeholder="Identificador">
+                    <button type="button" class="botonUniversal" onclick="generarQR()">Generar QR</button>
+                </form>
+                <div id="qrcodes" style="display: none;"></div>
+            </section>
         </div>
 
         <!-- Panel de reservas -->
@@ -306,6 +318,9 @@
             </form>
         </section>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.3.1/jspdf.umd.min.js"></script>
     <!-- Footer DINAMICO -->
     <?php require_once "../dynamo/footer-dinamico.php"; ?>
 </body>

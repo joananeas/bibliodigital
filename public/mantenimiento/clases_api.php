@@ -82,6 +82,20 @@ class API_Globales
             "message" => "colors-changed"
         ]);
     }
+
+    public function getFavicon(){
+        $conn = peticionSQL();
+        $sql = "SELECT `FAVICON` FROM `dib_config`";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_assoc();
+            echo json_encode(['response' => 'OK', 'favicon' => $row['FAVICON']]);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => 'No favicon found']);
+        }
+        $conn->close();
+    }
+    
 }
 
 class API_Banner

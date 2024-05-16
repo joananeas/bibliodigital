@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.9'; # - 🐛 Passar a finalitzades reserves ja passats els 7d.
+const VERSION =  'v1.7.0'; # - 🌟 QR code generation yayyy.
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -321,6 +321,22 @@ switch ($peticion) {
         
     case 'getUserCreationDate':
         echo $apiUsuarios->getUserCreationDate();
+        break;
+        
+    case 'getFavicon':
+        echo $apiGlobales->getFavicon();
+        break;
+
+    case 'getCDU':
+        $id_llibre = $_GET['id'];
+        $resp = getCDU($id_llibre);
+        echo $resp;
+        break;
+    
+    case 'getAutor':
+        $id_llibre = $_GET['id'];
+        $resp = getAutor($id_llibre);
+        echo $resp;
         break;
         
     default:

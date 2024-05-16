@@ -29,7 +29,7 @@
             </div>
 
         </section>
-        <script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     </main>
     <div class="popup" style="display:none;" id="popupQR">
@@ -37,7 +37,10 @@
             <section class="frame">
                 <a id="closeQR" class="close">&times;</a>
                 <p class="fuenteH1" style="text-align:center;">Escaneja el QR del Llibre</p>
-                <div id="qrcode" class="qr"></div>
+                <div id="qrcode-container" class="qr">
+                    <div id="qrcode" class="qr"></div>
+                    <img id="qr-image" class="qr" src="" alt="imatge centre qr" width="20" height="20">
+                </div>
                 <p class="fuenteH1" style="text-align:center;">Compartir</p>
                 <div class="compartir-qr">
                     <a id="share-copy"><img src="./media/icons/copy-link.png"></a>

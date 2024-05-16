@@ -498,10 +498,10 @@ const loadPrestecs = () => {
     })
         .then(response => response.json())
         .then(data => {
-            if (data.response === 'OK') {
-                const table = document.getElementById('prestecsList');
+            const table = document.getElementById('prestecsList');
+            const row = table.insertRow();
+            if (data.response === 'OK' && data.message.length > 0) {
                 data.message.forEach(prestec => {
-                    const row = table.insertRow();
                     row.insertCell(0).textContent = prestec.id_prestec;
                     row.insertCell(1).textContent = prestec.llibre;
                     row.insertCell(2).textContent = prestec.usuari;
@@ -519,7 +519,9 @@ const loadPrestecs = () => {
                     accionsCell.appendChild(deleteButton);
                 });
             } else {
-                alert('Error: ' + data.message);
+                const row = table.insertRow();
+                row.innerHTML = '<td colspan="9">No hi han préstecs</td>';
+                //alert('Error: ' + data.message);
             }
         })
         .catch(error => {
@@ -538,11 +540,10 @@ const loadReserves = () => {
     })
         .then(response => response.json())
         .then(data => {
-            if (data.response === 'OK') {
-                const table = document.getElementById('reservesList');
+            const table = document.getElementById('reservesList');
+            const row = table.insertRow();
+            if (data.response === 'OK' && data.message.length > 0) {
                 data.message.forEach(reserva => {
-                    const row = table.insertRow();
-
                     row.insertCell(0).textContent = reserva.reserva;
                     row.insertCell(1).textContent = reserva.llibre;
                     row.insertCell(2).textContent = reserva.usuari;
@@ -561,13 +562,121 @@ const loadReserves = () => {
                     accionsCell.appendChild(deleteButton);
                 });
             } else {
-                alert('Error: ' + data.message);
+                const row = table.insertRow();
+                row.innerHTML = '<td colspan="9">No hi han reserves</td>';
+                //alert('Error: ' + data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
             alert('Error al procesar la solicitud');
         });
+}
+
+const getAutor = async (idLlibre) => {
+    try {
+        const response = await fetch('../mantenimiento/api.php?pttn=getAutor&id=' + idLlibre, {
+            method: 'GET'
+        });
+        const data = await response.json();
+        if (data.response === 'OK') {
+            if (data.autor === null) {
+                return 'Autor no trobat';
+            }
+            return data.autor;
+        } else {
+            throw new Error('Error al obtener el autor del libro: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    }
+}
+
+const getCDU = async (idLlibre) => {
+    try {
+        const response = await fetch('../mantenimiento/api.php?pttn=getCDU&id=' + idLlibre, {
+            method: 'GET'
+        });
+        const data = await response.json();
+        if (data.response === 'OK') {
+            if (data.cdu === null) {
+                return 'CDU no trobat';
+            }
+            return data.cdu;
+        } else {
+            throw new Error('Error al obtener la CDU del libro: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud');
+    }
+}
+
+async function generarQR() {
+    const input = document.getElementById('qr').value;
+    let start = 0;
+    let end = 0;
+
+    if (!input.includes(',') && input !== '0') {
+        alert('Rang invàlid!');
+        return;
+    } else if (input === '0') {
+        start = 1;
+        const response = await fetch('../mantenimiento/api.php?pttn=getBookStats');
+        const data = await response.json();
+        end = data.stats.total;
+    } else {
+        const range = input.split(',');
+        start = parseInt(range[0], 10);
+        end = parseInt(range[1], 10);
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    let x = 10;
+    let y = 10;
+    let pageHeight = doc.internal.pageSize.height;
+
+    for (let i = start; i <= end; i++) {
+        const qrElement = document.createElement('div');
+        qrElement.classList.add('qr-container');
+        document.getElementById('qrcodes').appendChild(qrElement);
+
+        let txtQR = window.location.origin + '/libro.php?libro=' + i;
+        new QRCode(qrElement, {
+            text: txtQR,
+            width: 64,
+            height: 64,
+            correctLevel: QRCode.CorrectLevel.H
+        });
+        await new Promise(resolve => setTimeout(resolve, 100));
+        const qrImage = qrElement.querySelector('img').src;
+        doc.addImage(qrImage, 'PNG', x, y, 40, 40);
+        doc.setFontSize(10);
+
+        let autor = await getAutor(i);
+        let cdu = await getCDU(i);
+
+        if (autor.length >= 40) {
+            autor = autor.substring(0, 37);
+            autor = autor + '...';
+        }
+
+        doc.text(`Autor: ${autor}`, x, y + 45, { maxWidth: 40 }, { align: 'center' });
+        doc.text(`CDU: ${cdu}`, x, y + 58, { maxWidth: 40 }, { align: 'center' });
+
+        x += 50;
+        if (x > 160) {
+            x = 10;
+            y += 60;
+        }
+        if (y + 60 > pageHeight) {
+            doc.addPage();
+            y = 10;
+        }
+    }
+    doc.save('qrcodes.pdf');
 }
 
 showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.

@@ -520,3 +520,37 @@ function viewAllReserves(){
 
     $conn->close();
 }
+
+function getAutor($id_llibre){
+    $conn = peticionSQL();
+    $sql = "SELECT AUTOR FROM dib_cataleg WHERE NUMERO = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_llibre);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'autor' => $row['AUTOR']]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontraron detalles para el libro']);
+    }
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}
+
+function getCDU($id_llibre){
+    $conn = peticionSQL();
+    $sql = "SELECT CDU FROM dib_cataleg WHERE NUMERO = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_llibre);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'cdu' => $row['CDU']]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontraron detalles para el libro']);
+    }
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}
