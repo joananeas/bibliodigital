@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.6.8'; # - ✨ Prestecs with exemplars :))
+const VERSION =  'v1.6.9'; # - 🐛 Passar a finalitzades reserves ja passats els 7d.
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));

@@ -198,6 +198,9 @@ END;
 CREATE EVENT IF NOT EXISTS eliminar_reservas_expirades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO
     DELETE FROM dib_reserves WHERE DATE_ADD(fecha_columna, INTERVAL 30 DAY) < CURRENT_DATE;
 
+CREATE EVENT IF NOT EXISTS canviar_estat_reserves_finalitzades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO
+    UPDATE dib_reserves SET estat = 'finalitzada', motiu_prolongacio = CURRENT_DATE WHERE data_fi < CURRENT_DATE;
+
 CREATE EVENT IF NOT EXISTS eliminar_notificacions_expirades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO
     DELETE FROM dib_notificacions WHERE DATE_ADD(fecha_columna, INTERVAL 30 DAY) < CURRENT_DATE;
 COMMIT;

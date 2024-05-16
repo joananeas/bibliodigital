@@ -15,23 +15,23 @@ const loadQR = () => {
         method: "POST",
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if(data.response === "ok") {
-            console.log(data);
-            let qr = new QRCode(document.getElementById('qrcode'), {
-                text: window.location.href,
-                width: 128,
-                height: 128,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-        }
-    })
-    .catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === "ok") {
+                console.log(data);
+                let qr = new QRCode(document.getElementById('qrcode'), {
+                    text: window.location.href,
+                    width: 128,
+                    height: 128,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
 }
 
 let l = getLibro(); // No se por que, no funcionaba una funcion DOMContentLoaded, asi que lo he puesto aqui.
@@ -44,24 +44,24 @@ const getStars = () => {
         method: "POST",
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if(data.response === "ok") {
-            console.log(data);
-            let qr = new QRCode(document.getElementById('qrcode'), {
-                text: window.location.href,
-                width: 128,
-                height: 128,
-                colorDark : "#000000",
-                colorLight : "#ffffff",
-                correctLevel : QRCode.CorrectLevel.H
-            });
-        }
-    })
-    .catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
-    });
-} 
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === "ok") {
+                console.log(data);
+                let qr = new QRCode(document.getElementById('qrcode'), {
+                    text: window.location.href,
+                    width: 128,
+                    height: 128,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
+}
 
 if (!l) {
     window.location.href = "./index.php";
@@ -76,34 +76,34 @@ else {
         method: "POST",
         body: formData
     })
-    .then(response => response.json())
-    .then(data => {
-        if(data.response === "OK") {
-            console.log(data);
-            data.llibres.forEach(libro => {
-                document.getElementById('tituloLibro').innerHTML = libro.nom;
-                if (libro.estrellas == 0 || libro.estrellas == null || libro.estrellas == undefined) {
-                    document.getElementById('estrellas').innerHTML = "Sense puntuació";
-                }
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === "OK") {
+                console.log(data);
+                data.llibres.forEach(libro => {
+                    document.getElementById('tituloLibro').innerHTML = libro.nom;
+                    if (libro.estrellas == 0 || libro.estrellas == null || libro.estrellas == undefined) {
+                        document.getElementById('estrellas').innerHTML = "Sense puntuació";
+                    }
 
-                let estrelles = getStars();
-                if (estrelles == 0 || estrelles == null || estrelles == undefined) {
-                    document.getElementById('estrellas').innerHTML = "Sense puntuació";
-                }
-                else {
-                    document.getElementById('estrellas').innerHTML = estrelles;
-                }
-                
-                document.getElementById('libroImagen').src = "https://aplicacions.ensenyament.gencat.cat" + libro.url;
-                document.getElementById('nivell').innerHTML = libro.nivell;
-                document.getElementById('resumLibro').innerHTML = libro.resum;
-                document.getElementById('autorLibro').innerHTML = libro.autor;
-            });
-        }
-    })
-    .catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
-    });
+                    let estrelles = getStars();
+                    if (estrelles == 0 || estrelles == null || estrelles == undefined) {
+                        document.getElementById('estrellas').innerHTML = "Sense puntuació";
+                    }
+                    else {
+                        document.getElementById('estrellas').innerHTML = estrelles;
+                    }
+
+                    document.getElementById('libroImagen').src = "https://aplicacions.ensenyament.gencat.cat" + libro.url;
+                    document.getElementById('nivell').innerHTML = libro.nivell;
+                    document.getElementById('resumLibro').innerHTML = libro.resum;
+                    document.getElementById('autorLibro').innerHTML = libro.autor;
+                });
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
 }
 
 const toast = document.getElementById('toast');
@@ -123,9 +123,9 @@ document.getElementById('share-copy').addEventListener('click', () => {
 
 
 
-document.getElementById('reservar').addEventListener('click', function() {
+document.getElementById('reservar').addEventListener('click', function () {
     viewPopUp('popupReserva', 'closeReserva');
-    const monthNames = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny", 
+    const monthNames = ["Gener", "Febrer", "Març", "Abril", "Maig", "Juny",
         "Juliol", "Agost", "Setembre", "Octubre", "Novembre", "Desembre"];
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
@@ -158,18 +158,18 @@ document.getElementById('reservar').addEventListener('click', function() {
             method: "POST",
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            if(data.response === "OK") {
-                return data.reserves;
-            }
-            else if (data.response === "ERROR") {
-                return null;
-            }
-        })
-        .catch(error => {
-            console.log("[ERROR (API_Request)] ", error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                if (data.response === "OK") {
+                    return data.reserves;
+                }
+                else if (data.response === "ERROR") {
+                    return null;
+                }
+            })
+            .catch(error => {
+                console.log("[ERROR (API_Request)] ", error);
+            });
     }
 
     function padToTwoDigits(value) {
@@ -187,21 +187,21 @@ document.getElementById('reservar').addEventListener('click', function() {
             formData.append('id', l);
             let formattedDate = `${year}-${month}-${day}`;
             formData.append('fecha', formattedDate);
-            
+
             fetch("./mantenimiento/api.php", {
                 method: "POST",
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if(data.response === "OK") {
-                    console.log(data);
-                    holder.innerHTML = "Reserva completada!";
-                }
-            })
-            .catch(error => {
-                console.log("[ERROR (API_Request)] ", error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.response === "OK") {
+                        console.log(data);
+                        holder.innerHTML = "Reserva completada!";
+                    }
+                })
+                .catch(error => {
+                    console.log("[ERROR (API_Request)] ", error);
+                });
         });
     }
 
@@ -231,7 +231,7 @@ document.getElementById('reservar').addEventListener('click', function() {
                     //     cell.style.backgroundColor = "#53DD6C";
                     // }
 
-                    if (date < currentDay && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear()){
+                    if (date < currentDay && currentMonth === new Date().getMonth() && currentYear === new Date().getFullYear()) {
                         cell.style.backgroundColor = "#9C0D38";
                     }
 
@@ -239,8 +239,13 @@ document.getElementById('reservar').addEventListener('click', function() {
                     cell.addEventListener('click', () => {
                         console.log(cell.textContent);
                         cell.style.backgroundColor = "yellow";
-                        highlightNextDays(cell.textContent, new Date().getMonth(), new Date().getFullYear());
+                        const currentDate = new Date();
+                        const currentMonth = Number(currentDate.getMonth()) + 1; // Sumar 1 al mes
+                        const currentYear = currentDate.getFullYear();
+                        highlightNextDays(cell.textContent, currentMonth, currentYear);
+                        console.log("Clicked on: " + cell.textContent + " " + currentMonth + " " + currentYear);
                     });
+
                     row.appendChild(cell);
                 }
             }
