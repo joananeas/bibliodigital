@@ -14,10 +14,10 @@
             <div class="tableContainer">
                 <table id="reservasTable" class="tableBody">
                     <tr>
-                        <th>Reserva</th>
+                        <th class="table-not-shown">Reserva</th>
                         <th>Exemplar</th>
-                        <th>Data Inici</th>
-                        <th>Data Fi</th>
+                        <th class="table-not-shown">Data Inici</th>
+                        <th class="table-not-shown">Data Fi</th>
                         <th>Estat</th>
                         <th>Demanar prèstec</th>
                     </tr>

@@ -574,6 +574,10 @@ footer {
 }
 
 @media screen and (max-width: 700px) {
+    #menu-nav {
+        position: static;
+    }
+
     header {
         margin-left: 0;
         margin-right: 0;
@@ -607,10 +611,6 @@ footer {
 
 @media screen and (max-width: 500px) {
     .menu-links {
-        display: none;
-    }
-
-    #logoutBoton {
         display: none;
     }
 

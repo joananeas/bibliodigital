@@ -19,6 +19,7 @@ const getAllUsers = async () => {
 
             let tdReserva = document.createElement('td');
             tdReserva.textContent = reserva.reserva;
+            tdReserva.classList.add('table-not-shown');
             //tdReserva.classList.add('table-row');
             tr.appendChild(tdReserva);
 
@@ -29,11 +30,13 @@ const getAllUsers = async () => {
 
             let tdDataInici = document.createElement('td');
             tdDataInici.textContent = reserva.data_inici;
+            tdDataInici.classList.add('table-not-shown-min');
             //tdDataInici.classList.add('table-row');
             tr.appendChild(tdDataInici);
 
             let tdDataFi = document.createElement('td');
             tdDataFi.textContent = reserva.data_fi;
+            tdDataFi.classList.add('table-not-shown');
             //tdDataFi.classList.add('table-row');
             tr.appendChild(tdDataFi);
 

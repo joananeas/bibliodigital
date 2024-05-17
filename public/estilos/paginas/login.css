@@ -1,7 +1,10 @@
 :root {
-    --color-principal: #4A68A0; /* Valor predeterminado */
-    --color-secundario: #F5F5F5; /* Valor predeterminado */
-    --color-terciario: #333333; /* Valor predeterminado */
+    --color-principal: #4A68A0;
+    /* Valor predeterminado */
+    --color-secundario: #F5F5F5;
+    /* Valor predeterminado */
+    --color-terciario: #333333;
+    /* Valor predeterminado */
 }
 
 body {
@@ -10,37 +13,45 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: var(--color-principal); /* Morado */
+    background-color: var(--color-principal);
+    /* Morado */
 }
-.login{
+
+.login {
     text-align: center;
     padding: 40px;
     padding-left: 60px;
     padding-right: 60px;
-    color: var(--color-terciario); /* Negro */
-    background-color: var(--color-secundario); /* Gris */
+    color: var(--color-terciario);
+    /* Negro */
+    background-color: var(--color-secundario);
+    /* Gris */
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     padding-bottom: 50px;
 }
-h1{
+
+h1 {
     margin-top: 10px;
     font-family: 'Staatliches', sans-serif;
     margin-bottom: 15px;
 }
-label{
+
+label {
     font-weight: 600;
-    float:left;
+    float: left;
     margin-bottom: 5px;
 }
-input{
+
+input {
     margin-bottom: 5px;
     max-width: 100%;
-    float:left;
+    float: left;
 }
+
 input:focus {
-    outline: none; 
-    border: 2px solid var(--color-principal); 
+    outline: none;
+    border: 2px solid var(--color-principal);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
@@ -48,13 +59,13 @@ input:focus {
     width: 80%;
 } */
 
-#showHideHolder{
+#showHideHolder {
     float: left;
     margin-top: 1px;
     margin-left: 5px;
 }
 
-.submit{
+.submit {
     font-family: 'Staatliches', sans-serif;
     text-align: center;
     float: none;
@@ -70,30 +81,57 @@ input:focus {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     transition: 0.3s;
 }
-.submit:hover{
+
+.submit:hover {
     padding-left: 12px;
     padding-right: 12px;
     transition: 0.3s;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
-.submit:focus{
+
+.submit:focus {
     font-family: 'Staatliches', sans-serif;
 }
 
-footer{
-    border:none;
+footer {
+    border: none;
 }
-.copyright{
+
+.copyright {
     text-align: center;
     color: white;
     font-family: 'Staatliches', sans-serif;
 }
+
 @media (max-width: 768px) {
-    .izquierda{
+    .izquierda {
         display: none;
     }
-    .central{
+
+    .central {
         text-align: left;
+    }
+}
+
+@media (max-width: 600px) {
+    main {
+        transform: scale(1.4);
+    }
+}
+
+@media (max-width: 500px) {
+    .login {
+        padding: 40px;
+    }
+}
+
+@media (max-width: 420px) {
+    main {
+        transform: scale(1.2);
+    }
+
+    .login {
+        padding: 30px;
     }
 }
 

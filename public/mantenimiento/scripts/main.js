@@ -127,7 +127,7 @@ const menuMobile = () => {
         { id: "footer-m-home", href: "./", src: "./media/icons/home.png", id_img: "footer-img-home" },
         { id: "footer-m-community", href: "./comunitat.php", src: "./media/icons/heart.png", id_img: "footer-img-community" },
         { id: "footer-m-qr", href: "./qr.php", src: "./media/icons/qr-code-white.png", id_img: "footer-img-qr" },
-        { id: "footer-m-markers", href: "./marcadors.php", src: "./media/icons/markers.png", id_img: "footer-img-markers" },
+        { id: "footer-m-markers", href: "./reservas.php", src: "./media/icons/markers.png", id_img: "footer-img-markers" },
         { id: "footer-m-profile", href: "./cuenta.php", src: "./media/icons/user.png", id_img: "footer-img-user" }
     ];
 
@@ -135,7 +135,7 @@ const menuMobile = () => {
         { id: "footer-m-home", href: "../", src: "../media/icons/home.png", id_img: "footer-img-home" },
         { id: "footer-m-community", href: "../comunitat.php", src: "../media/icons/heart.png", id_img: "footer-img-community" },
         { id: "footer-m-qr", href: "../qr.php", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr" },
-        { id: "footer-m-markers", href: "../marcadors.php", src: "../media/icons/markers.png", id_img: "footer-img-markers" },
+        { id: "footer-m-markers", href: "../reservas.php", src: "../media/icons/markers.png", id_img: "footer-img-markers" },
         { id: "footer-m-profile", href: "../cuenta.php", src: "../media/icons/user.png", id_img: "footer-img-user" },
     ];
 
@@ -163,7 +163,7 @@ const menuHeader = () => {
         { id: "iniciNav", href: "./index.php" },
         { id: "llibresNav", href: "./llibres.php" },
         { id: "prestecsNav", href: "./prestecs.php" },
-        { id: "gestioReservesNav", href: "./perfil.php" },
+        { id: "gestioReservesNav", href: "./reservas.php" },
         { id: "enquestesNav", href: "./perfil.php" },
         { id: "gestioCompteNav", href: "./perfil.php" },
         { id: "adminNav", href: "./admin" },
@@ -175,7 +175,7 @@ const menuHeader = () => {
         { id: "iniciNav", href: "../index.php" },
         { id: "llibresNav", href: "../llibres.php" },
         { id: "prestecsNav", href: "../prestecs.php" },
-        { id: "gestioReservesNav", href: "../perfil.php" },
+        { id: "gestioReservesNav", href: "../reservas.php" },
         { id: "enquestesNav", href: "../perfil.php" },
         { id: "gestioCompteNav", href: "../perfil.php" },
         { id: "adminNav", href: "#" },

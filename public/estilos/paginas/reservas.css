@@ -42,3 +42,34 @@ article {
 .btn {
     margin: 0;
 }
+
+@media (max-width: 767px) {
+    .frame {
+        margin-left: 0px;
+        margin-right: 0px;
+    }
+
+    .table-not-shown {
+        display: none;
+    }
+
+    .tableContainer {
+        min-width: 100%;
+        overflow-x: auto;
+        overflow: scroll;
+        margin: 0;
+        padding: 0;
+        /* Esto permitirá el desplazamiento solo cuando sea necesario */
+    }
+
+    .tableBody {
+        width: 100%;
+        /* otras reglas de estilo para tu tabla */
+    }
+}
+
+@media (max-width: 500px) {
+    .table-not-shown-min {
+        display: none;
+    }
+}
