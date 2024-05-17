@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS dib_prestecs (
   data_inici DATE NOT NULL,
   data_devolucio DATE NOT NULL,
   data_real_tornada DATE,
-  estat ENUM('prestat', 'retornat', 'retardat', 'pendent') NOT NULL,
+  estat VARCHAR(50) NOT NULL,
   comentaris TEXT,
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
 );

@@ -201,18 +201,23 @@
                     Préstecs
                 </p>
                 <div class="tableContainer">
-                    <table id="prestecsList" class="tableBody">
-                        <tr>
-                            <th>ID</th>
-                            <th>Llibre</th>
-                            <th>Usuari</th>
-                            <th>Data Inici</th>
-                            <th>Data Fi</th>
-                            <th>Data Devolució</th>
-                            <th>Estat</th>
-                            <th>Comentaris</th>
-                            <th>Accions</th>
-                        </tr>
+                    <table class="tableBody">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Llibre</th>
+                                <th>Usuari</th>
+                                <th>Data Inici</th>
+                                <th>Data Fi</th>
+                                <th>Data Devolució</th>
+                                <th>Estat</th>
+                                <th>Comentaris</th>
+                                <th>Accions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="prestecsList">
+                            <!-- Los préstamos se añadirán aquí -->
+                        </tbody>
                     </table>
                 </div>
             </section>

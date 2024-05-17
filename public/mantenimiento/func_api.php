@@ -554,3 +554,65 @@ function getCDU($id_llibre){
     mysqli_stmt_close($stmt);
     $conn->close();
 }
+
+function autoritzarPrestec($id_prestec){
+    $conn = peticionSQL();
+    $sql = "UPDATE dib_prestecs SET estat = 'Autoritzat' WHERE id_prestec = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_prestec);
+    if (mysqli_stmt_execute($stmt)) {
+        return json_encode(['response' => 'OK']);
+    } else {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo autorizar el préstamo']);
+    }
+}
+
+function denegarPrestec($id_prestec){
+    $conn = peticionSQL();
+    $sql = "UPDATE dib_prestecs SET estat = 'Denegat' WHERE id_prestec = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_prestec);
+    if (mysqli_stmt_execute($stmt)) {
+        return json_encode(['response' => 'OK']);
+    } else {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo denegar el préstamo']);
+    }
+}
+
+function retornarPrestec($id_prestec){
+    $conn = peticionSQL();
+    $sql = "UPDATE dib_prestecs SET estat = 'Tornat' WHERE id_prestec = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_prestec);
+    if (mysqli_stmt_execute($stmt)) {
+        $sql_get_exemplar = "SELECT exemplar_id FROM dib_prestecs WHERE id_prestec = ?";
+        $stmt_get_exemplar = mysqli_prepare($conn, $sql_get_exemplar);
+        mysqli_stmt_bind_param($stmt_get_exemplar, "i", $id_prestec);
+        mysqli_stmt_execute($stmt_get_exemplar);
+        mysqli_stmt_bind_result($stmt_get_exemplar, $exemplar_id);
+        mysqli_stmt_fetch($stmt_get_exemplar);
+        mysqli_stmt_close($stmt_get_exemplar);
+
+        $sql_update_exemplar = "UPDATE dib_exemplars SET ESTAT = 'Disponible' WHERE IDENTIFICADOR = ?";
+        $stmt_update_exemplar = mysqli_prepare($conn, $sql_update_exemplar);
+        mysqli_stmt_bind_param($stmt_update_exemplar, "i", $exemplar_id);
+        mysqli_stmt_execute($stmt_update_exemplar);
+        mysqli_stmt_close($stmt_update_exemplar);
+
+        return json_encode(['response' => 'OK']);
+    } else {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo retornar el préstamo']);
+    }
+}
+
+function eliminarPrestec($id_prestec){
+    $conn = peticionSQL();
+    $sql = "DELETE FROM dib_prestecs WHERE id_prestec = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_prestec);
+    if (mysqli_stmt_execute($stmt)) {
+        return json_encode(['response' => 'OK']);
+    } else {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo eliminar el préstamo']);
+    }
+}

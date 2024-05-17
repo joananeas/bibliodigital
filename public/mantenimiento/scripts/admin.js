@@ -498,10 +498,12 @@ const loadPrestecs = () => {
     })
         .then(response => response.json())
         .then(data => {
-            const table = document.getElementById('prestecsList');
-            const row = table.insertRow();
+            const tbody = document.getElementById('prestecsList');
+            tbody.innerHTML = '';
+
             if (data.response === 'OK' && data.message.length > 0) {
                 data.message.forEach(prestec => {
+                    const row = tbody.insertRow();
                     row.insertCell(0).textContent = prestec.id_prestec;
                     row.insertCell(1).textContent = prestec.llibre;
                     row.insertCell(2).textContent = prestec.usuari;
@@ -511,17 +513,72 @@ const loadPrestecs = () => {
                     row.insertCell(6).textContent = prestec.estat;
                     row.insertCell(7).textContent = prestec.comentaris;
                     const accionsCell = row.insertCell(8);
-                    const editButton = document.createElement('button');
-                    editButton.textContent = 'Editar';
-                    const deleteButton = document.createElement('button');
-                    deleteButton.textContent = 'Eliminar';
-                    accionsCell.appendChild(editButton);
-                    accionsCell.appendChild(deleteButton);
+
+                    const select = document.createElement('select');
+                    const optionDefault = document.createElement('option');
+                    optionDefault.textContent = 'Accions';
+                    select.appendChild(optionDefault);
+
+                    if (prestec.estat === 'pendent' || prestec.estat === 'Pendent') {
+                        const option1 = document.createElement('option');
+                        option1.textContent = 'Autoritzar';
+                        select.appendChild(option1);
+                        const option2 = document.createElement('option');
+                        option2.textContent = 'Denegar';
+                        select.appendChild(option2);
+                    } else {
+                        const option3 = document.createElement('option');
+                        option3.textContent = 'Marcar com a retornat';
+                        select.appendChild(option3);
+                    }
+
+                    const option4 = document.createElement('option');
+                    option4.textContent = 'Eliminar';
+                    select.appendChild(option4);
+
+                    select.addEventListener('change', async () => {
+                        const formData = new FormData();
+                        formData.append('id_prestec', prestec.id_prestec);
+                        switch (select.value) {
+                            case 'Autoritzar':
+                                formData.append('pttn', 'autoritzarPrestec');
+                                break;
+                            case 'Denegar':
+                                formData.append('pttn', 'denegarPrestec');
+                                break;
+                            case 'Marcar com a retornat':
+                                formData.append('pttn', 'marcarRetornat');
+                                break;
+                            case 'Eliminar':
+                                formData.append('pttn', 'eliminarPrestec');
+                                break;
+                            default:
+                                return;
+                        }
+
+                        fetch('../mantenimiento/api.php', {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.response === 'OK') {
+                                    loadPrestecs();
+                                } else {
+                                    alert('Error: ' + data.message);
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                alert('Error al procesar la solicitud');
+                            });
+                    });
+
+                    accionsCell.appendChild(select);
                 });
             } else {
-                const row = table.insertRow();
+                const row = tbody.insertRow();
                 row.innerHTML = '<td colspan="9">No hi han préstecs</td>';
-                //alert('Error: ' + data.message);
             }
         })
         .catch(error => {
@@ -541,9 +598,9 @@ const loadReserves = () => {
         .then(response => response.json())
         .then(data => {
             const table = document.getElementById('reservesList');
-            const row = table.insertRow();
             if (data.response === 'OK' && data.message.length > 0) {
                 data.message.forEach(reserva => {
+                    const row = table.insertRow();
                     row.insertCell(0).textContent = reserva.reserva;
                     row.insertCell(1).textContent = reserva.llibre;
                     row.insertCell(2).textContent = reserva.usuari;

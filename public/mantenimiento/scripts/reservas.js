@@ -59,9 +59,10 @@ const getAllUsers = async () => {
                 });
                 const data = await response.json();
                 console.log(data);
-                if (data.status === 'OK') {
-                    alert('Préstec realitzat correctament');
-                    location.reload();
+                if (data.response === 'OK') {
+                    //alert('Préstec realitzat correctament');
+                    //location.reload();
+                    tdEstat.textContent = 'Demanat';
                 } else {
                     alert('Error: ' + data.message);
                 }

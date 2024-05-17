@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.0'; # - 🌟 QR code generation yayyy.
+const VERSION =  'v1.7.1'; # - 🐛Update estat llibres al retornar
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -339,6 +339,30 @@ switch ($peticion) {
         echo $resp;
         break;
         
+    case 'autoritzarPrestec':
+        $id_prestec = $_POST['id_prestec'];
+        $resp = autoritzarPrestec($id_prestec);
+        echo $resp;
+        break;    
+    
+    case 'denegarPrestec':
+        $id_prestec = $_POST['id_prestec'];
+        $resp = denegarPrestec($id_prestec);
+        echo $resp;
+        break;
+    
+    case 'marcarRetornat':
+        $id_prestec = $_POST['id_prestec'];
+        $resp = retornarPrestec($id_prestec);
+        echo $resp;
+        break;
+    
+    case 'eliminarPrestec':
+        $id_prestec = $_POST['id_prestec'];
+        $resp = eliminarPrestec($id_prestec);
+        echo $resp;
+        break;
+
     default:
         echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
         header('Location: ../error.php?error=404');
