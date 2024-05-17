@@ -574,6 +574,11 @@ footer {
 }
 
 @media screen and (max-width: 700px) {
+    header {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
     .centrado a {
         margin: 0 5%;
         display: inline-block;
@@ -609,7 +614,14 @@ footer {
         display: none;
     }
 
-    .logout {
+    /* .logout {
         display: none;
+    } */
+}
+
+@media screen and (max-width: 450px) {
+    .centrado a {
+        margin: 0 4%;
+        display: inline-block;
     }
 }

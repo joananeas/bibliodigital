@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.1'; # - 🐛Update estat llibres al retornar
+const VERSION =  'v1.7.2'; # - 🐛 UI improvements
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));

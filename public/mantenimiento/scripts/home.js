@@ -2,7 +2,7 @@
 // document.getElementById("buscador").addEventListener("focusout", function() {
 //     document.getElementById("buscadorLlibres").style.display = "none";
 // });
-document.getElementById("inputCercaLlibres").addEventListener("focus", function() {
+document.getElementById("inputCercaLlibres").addEventListener("focus", function () {
     document.getElementById("buscadorLlibres").style.display = "block";
 });
 
@@ -29,7 +29,7 @@ const viewQR = () => {
         form.style.opacity = "1";
         menuActivo = true;
     }
-    
+
     document.getElementById('close').addEventListener('click', () => {
         document.getElementById('popupQR').style.display = 'none';
         document.querySelector("main").style.display = "block";
@@ -38,20 +38,20 @@ const viewQR = () => {
 };
 
 
-document.getElementById('qrCerca').addEventListener("click", function(event) {
+document.getElementById('qrCerca').addEventListener("click", function (event) {
     event.preventDefault();
     const video = document.getElementById('videoElement');
     viewQR();
 
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-    .then(function(stream) {
-        video.srcObject = stream;
-        popupQR.style.display = 'block';
-        video.play().catch(error => console.error("Error al iniciar la reproducción del video", error));
-        scanQRCode();
-    }).catch(function(error) {
-        console.error("Cannot access camera", error);
-    });
+        .then(function (stream) {
+            video.srcObject = stream;
+            popupQR.style.display = 'block';
+            video.play().catch(error => console.error("Error al iniciar la reproducción del video", error));
+            scanQRCode();
+        }).catch(function (error) {
+            console.error("Cannot access camera", error);
+        });
 });
 
 const scanQRCode = () => {
@@ -81,7 +81,7 @@ const scanQRCode = () => {
     tick();
 }
 
-document.getElementById("inputCercaLlibres").addEventListener("input", function() {
+document.getElementById("inputCercaLlibres").addEventListener("input", function () {
     let formData = new FormData();
     formData.append('pttn', 'cercaLlibresLite');
     formData.append('llibre', this.value);
@@ -90,54 +90,47 @@ document.getElementById("inputCercaLlibres").addEventListener("input", function(
             method: "POST",
             body: formData
         })
-        .then(response => response.json())
-        .then(data => {
-            // console.log("[RESPONSE: Cerca] ", data);
-            if(data.response === "OK") {
-                let response = data.llibres;
-                let desplegable = document.getElementById("buscadorLlibres");
-                desplegable.innerHTML = "";
-                for(let i = 0; i < response.length; i++) {
-                    let libro = response[i];
+            .then(response => response.json())
+            .then(data => {
+                // console.log("[RESPONSE: Cerca] ", data);
+                if (data.response === "OK") {
+                    let response = data.llibres;
+                    let desplegable = document.getElementById("buscadorLlibres");
+                    desplegable.innerHTML = "";
+                    for (let i = 0; i < response.length; i++) {
+                        let libro = response[i];
 
-                    let estadoLibro = document.createElement("span");
-                    let tituloLibro = document.createElement("li");
+                        let estadoLibro = document.createElement("span");
+                        let tituloLibro = document.createElement("li");
 
-                    estadoLibro.className = "estadoLlibro";
-                    if (libro.estadoActual === "Disponible") estadoLibro.style.color = "green", estadoLibro.innerHTML = "Disponible";
-                    else estadoLibro.style.color = "red", estadoLibro.innerHTML = "No disponible";
+                        estadoLibro.className = "estadoLlibro";
+                        if (libro.estadoActual === "Disponible") estadoLibro.style.color = "green", estadoLibro.innerHTML = "Disponible";
+                        else estadoLibro.style.color = "red", estadoLibro.innerHTML = "No disponible";
 
-                    tituloLibro.className = "llibre";
-                    tituloLibro.appendChild(estadoLibro);
-                    tituloLibro.appendChild(document.createTextNode(libro.nom));
+                        tituloLibro.className = "llibre";
+                        tituloLibro.appendChild(estadoLibro);
+                        tituloLibro.appendChild(document.createTextNode(libro.nom));
 
-                    // Agregar botón al final del elemento tituloLibro
-                    let a = document.createElement("a");
-                    a.href = `./libro.php?libro=${libro.id}`;
-                    a.innerHTML = "Clic aquí per a més informació";
-                    a.style.marginLeft = "25px";
-                    a.style.color = "grey";
-                    tituloLibro.appendChild(a);
+                        // Agregar botón al final del elemento tituloLibro
+                        let boton = document.createElement("button");
+                        boton.innerHTML = "Veure més";
+                        boton.className = "botonUniversal";
+                        boton.style.margin = "0px";
+                        boton.style.float = "right";
+                        tituloLibro.appendChild(boton);
 
-                    let boton = document.createElement("button");
-                    boton.innerHTML = "Reservar";
-                    boton.className = "botonUniversal";
-                    boton.style.margin = "0px";
-                    boton.style.float = "right";
-                    tituloLibro.appendChild(boton);
+                        desplegable.appendChild(tituloLibro);
+                        boton.addEventListener("click", function () {
+                            console.log("Reservar: ", libro.nom);
+                            window.location.href = `./libro.php?libro=${libro.id}`;
+                        });
 
-                    desplegable.appendChild(tituloLibro);
-                    boton.addEventListener("click", function() {
-                        console.log("Reservar: ", libro.nom);
-                        window.location.href = `./reservas.php?libro=${libro.nom}`;
-                    });
-
-                    if (i === response.length - 1) {
-                        tituloLibro.style.borderBottom = "none";
+                        if (i === response.length - 1) {
+                            tituloLibro.style.borderBottom = "none";
+                        }
                     }
                 }
-            }
-        })
+            })
             .catch(error => {
                 console.log("[ERROR (API_Request)] ", error);
             });
@@ -145,7 +138,7 @@ document.getElementById("inputCercaLlibres").addEventListener("input", function(
 });
 
 const cBack = document.getElementById("c-anterior");
-const cNext = document.getElementById("c-siguiente"); 
+const cNext = document.getElementById("c-siguiente");
 const cPhoto = document.getElementById("c-foto");
 let tmpData;
 
@@ -156,21 +149,21 @@ const getFotos = () => {
         method: "POST",
         body: formData
     }).then(response => response.json())
-    .then(data => {
-        console.log("[RESPONSE: Cerca] ", data);
-        tmpData = data.num_libros
-        const puntosCarroussel = document.getElementById("puntos-carroussel");
-        for(let i = 0; i < data.num_libros; i++){
-            let li = document.createElement("li");
-            li.id = "c-dot-" + i;
-            if (i === 0) li.className = "activo";
-            puntosCarroussel.appendChild(li);
-        }
-        console.log(data) 
-    })
-    .catch(error => {
-        console.log("[ERROR (API_Request)] ", error);
-    });
+        .then(data => {
+            console.log("[RESPONSE: Cerca] ", data);
+            tmpData = data.num_libros
+            const puntosCarroussel = document.getElementById("puntos-carroussel");
+            for (let i = 0; i < data.num_libros; i++) {
+                let li = document.createElement("li");
+                li.id = "c-dot-" + i;
+                if (i === 0) li.className = "activo";
+                puntosCarroussel.appendChild(li);
+            }
+            console.log(data)
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
 };
 
 document.addEventListener("DOMContentLoaded", getFotos());
@@ -182,16 +175,16 @@ const updateActiveDot = (newActiveIndex) => {
     if (newActiveDot) newActiveDot.classList.add("activo");
 };
 
-const r = () =>{
+const r = () => {
     let src = cPhoto.src;
     let partes = src.split('-');
     let srcNumericoConExtension = partes.slice(1).join('-');
     let partesPuntos = srcNumericoConExtension.split('.');
     let srcNumericoSinExtension = partesPuntos.slice(0, -1).join('.');
     srcNumericoSinExtension = parseInt(srcNumericoSinExtension);
-    if ((srcNumericoSinExtension < tmpData+1) && (srcNumericoSinExtension > 1)) srcNumericoSinExtension--;
+    if ((srcNumericoSinExtension < tmpData + 1) && (srcNumericoSinExtension > 1)) srcNumericoSinExtension--;
     else srcNumericoSinExtension = tmpData;
-    
+
     console.log("num: ", tmpData, " actual: ", srcNumericoSinExtension);
     let newActiveIndex = srcNumericoSinExtension - 1;
     updateActiveDot(newActiveIndex);
@@ -200,7 +193,7 @@ const r = () =>{
     cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
 }
 
-cBack.addEventListener("click", function() {
+cBack.addEventListener("click", function () {
     r()
 });
 
@@ -222,7 +215,7 @@ const l = () => {
     cPhoto.src = partes[0] + "-" + srcNumericoSinExtension + "." + partesPuntos[1];
 }
 
-cNext.addEventListener("click", function() {
+cNext.addEventListener("click", function () {
     l()
 });
 
@@ -231,17 +224,17 @@ cNext.addEventListener("click", function() {
 
 let touchstartX = 0
 let touchendX = 0
-    
+
 function checkDirection() {
-  if (touchendX < touchstartX) l()
-  if (touchendX > touchstartX) r()
+    if (touchendX < touchstartX) l()
+    if (touchendX > touchstartX) r()
 }
 
 cPhoto.addEventListener('touchstart', e => {
-  touchstartX = e.changedTouches[0].screenX
+    touchstartX = e.changedTouches[0].screenX
 })
 
 cPhoto.addEventListener('touchend', e => {
-  touchendX = e.changedTouches[0].screenX
-  checkDirection()
+    touchendX = e.changedTouches[0].screenX
+    checkDirection()
 })

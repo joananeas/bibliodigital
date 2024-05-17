@@ -152,3 +152,21 @@ article {
     height: 32px;
     /* Adjust size as needed */
 }
+
+@media screen and (max-width: 600px) {
+    .frame {
+        margin-left: 0px;
+        margin-right: 0px;
+        overflow-x: auto;
+        margin-bottom: 50px;
+    }
+
+    .container {
+        flex-direction: column;
+    }
+
+    #libroImagen {
+        width: 100%;
+        height: auto;
+    }
+}
