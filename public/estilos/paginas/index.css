@@ -351,3 +351,26 @@ section {
     text-align: center;
     width: 100%;
 }
+
+.categoriesListPopup {
+    height: 700px;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
+.categoriesListPopup::-webkit-scrollbar {
+    width: 10px;
+}
+
+.categoriesListPopup span {
+    margin: 5px;
+    border-radius: 4px;
+}
+
+.categoriesListPopup span:hover {
+    cursor: pointer;
+    padding: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+}

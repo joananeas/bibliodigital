@@ -25,7 +25,7 @@
         <section class="frame categoriesFrame">
             <div class="header-section">
                 <span style="float: left;" class="fuenteH1">Vols provar alguna cosa nova?</span>
-                <a href="#"><i>Clic per a veure tots.</i></a>
+                <a href="#" id="veurePopUpCategories"><i>Clic per a veure tots.</i></a>
             </div>
             <article>
                 <div class="categorias" id="categoriesContainer">
@@ -69,7 +69,6 @@
                     <div class="lectometreRankingUser">
                         <img src="media/icons/user.jpg" alt="1r" width="50" height="50">
                         <p class="fuenteTexto">Joan, 33 llibres</p>
-
                     </div>
                 </div>
             </article>
@@ -81,19 +80,29 @@
     <div class="popup" style="display:none;" id="popupQR">
         <div class="popup-content">
             <section class="frame">
-                <a id="close">&times;</a>
+                <a id="closeQR" class="close">&times;</a>
                 <p class="fuenteH1" style="text-align:center;">Escaneja un QR vàlid</p>
                 <div class="qr">
                     <video id="videoElement" playsInline autoplay style="display:none;"></video>
                     <canvas id="canvasElement" style="display:none;"></canvas>
                 </div>
             </section>
-            <section id="toast-frame" class="frame toast" style="display:none;">
-                <p id="toast">Copiat al portapapers</p>
-            </section>
         </div>
     </div>
 
+    <div class="popup" style="display:none;" id="popupCategories">
+        <div class="popup-content">
+            <section class="frame">
+                <a id="closeCategories" class="close">&times;</a>
+                <p class="fuenteH1" style="text-align:center;">Selecciona una categoria per a començar a buscar.</p>
+                <p class="fuenteTexto" style="text-align:center;">També pots buscar-la aquí: <input
+                        id="cercadorCategories" type="text" placeholder="Cercar categoria"></p>
+                <div id="categoriesListPopup" class="categoriesListPopup">
+                    <!-- Aquí se generan de forma automática-->
+                </div>
+            </section>
+        </div>
+    </div>
     <!-- Footer DINAMICO -->
     <?php require_once "dynamo/footer-dinamico.php"; ?>
 </body>

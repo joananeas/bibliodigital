@@ -20,11 +20,11 @@
                 </aside>
                 <aside class="aside-text">
                     <p><span class="fuenteH1">👤Autor:</span>&nbsp;<span id="autorLibro"></span></p>
-                    <p><span class="fuenteH1">🧩Categoria:</span>&nbsp;</p>
-                    <p><span class="fuenteH1">🎓Nivell:</span>&nbsp;<span id="nivell"></span></p>
-                    <p><span class="fuenteH1">💬Resum:</span>&nbsp;<span id="resumLibro"></span></p>
-                    <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;<span id="estrellas"></span></p>
-                    <button id="reservar" class="botonUniversal">Reservar</button>
+                    <p><span class="fuenteH1">🧩Categoria:</span>&nbsp;<span id="categoria"></span< /p>
+                            <p><span class="fuenteH1">🎓Nivell:</span>&nbsp;<span id="nivell"></span></p>
+                            <p><span class="fuenteH1">💬Resum:</span>&nbsp;<span id="resumLibro"></span></p>
+                            <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;<span id="estrellas"></span></p>
+                            <button id="reservar" class="botonUniversal">Reservar</button>
                 </aside>
             </div>
 

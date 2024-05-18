@@ -30,7 +30,7 @@ const viewQR = () => {
         menuActivo = true;
     }
 
-    document.getElementById('close').addEventListener('click', () => {
+    document.getElementById('closeQR').addEventListener('click', () => {
         document.getElementById('popupQR').style.display = 'none';
         document.querySelector("main").style.display = "block";
         document.querySelector("main").style.opacity = "1";
@@ -249,14 +249,23 @@ const generateRandomSpans = (categoriesList, categoriesDiv) => {
         span.textContent = randomCategory;
         span.classList.add("categoria");
         span.classList.add("botonUniversal");
+
+        span.addEventListener("click", () => {
+            viewPopUp('popupCategories', 'closeCategories', 'close');
+            document.getElementById("inputCercaLlibres").value = "c:" + randomCategory; // Indica que busca una categoria
+            window.location.href = "#inputCercaLlibres";
+            document.getElementById("inputCercaLlibres").focus();
+            document.getElementById("inputCercaLlibres").dispatchEvent(new Event('input'));
+        });
         categoriesDiv.appendChild(span);
     }
 };
 
+let categoriesList = [];
 const fillCategories = async () => {
     let response = await getCategories();
     const categoriesDiv = document.getElementById("categoriesContainer");
-    let categoriesList = [];
+    const categoriesDivPopUp = document.getElementById("categoriesListPopup");
 
     if (response) {
         const categories = response.message;
@@ -270,8 +279,25 @@ const fillCategories = async () => {
     }
 
     generateRandomSpans(categoriesList, categoriesDiv);
+    generateRandomSpans(categoriesList, categoriesDivPopUp);
 };
 
+const cercarCategories = () => {
+    const input = document.getElementById("cercadorCategories");
+    const value = input.value.toLowerCase();
+    const spans = document.querySelectorAll(".categoria");
+
+    spans.forEach(span => {
+        const categoria = span.textContent.toLowerCase();
+        if (categoria.includes(value)) {
+            span.style.display = "block";
+        } else {
+            span.style.display = "none";
+        }
+    });
+};
 
 document.addEventListener("DOMContentLoaded", getFotos());
 document.addEventListener("DOMContentLoaded", fillCategories());
+document.getElementById("veurePopUpCategories").addEventListener("click", () => viewPopUp('popupCategories', 'closeCategories'), console.log("PopUp Cat"));
+document.getElementById("cercadorCategories").addEventListener("input", cercarCategories);

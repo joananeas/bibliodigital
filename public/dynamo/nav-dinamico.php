@@ -69,7 +69,7 @@
 </div>
 
 <script>
-const viewPopUp = (formulari, close) => {
+const viewPopUp = (formulari, close, action = null) => {
     console.log("[POPUP]", formulari);
     let form = document.getElementById(formulari);
     if (menuActivo) {
@@ -83,12 +83,16 @@ const viewPopUp = (formulari, close) => {
         form.style.opacity = "1";
         menuActivo = true;
     }
-
-    document.getElementById(close).addEventListener('click', () => {
-        document.getElementById(formulari).style.display = 'none';
+    const closePopUp = () => {
+        form.style.display = "none";
         document.querySelector("main").style.display = "block";
         document.querySelector("main").style.opacity = "1";
-    });
+    };
+    document.getElementById(close).addEventListener("click", () => closePopUp());
+    if (action === "close") {
+        console.log("[POPUP] Closed by action.");
+        closePopUp();
+    }
 };
 </script>
 

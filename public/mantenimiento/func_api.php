@@ -23,15 +23,33 @@ function peticionSQL()
 }
 
 function cercaLlibresLite($conn, $llibre)
-{
-    $sql = "SELECT DISTINCT dib_cataleg.TITOL 
+{   
+    $sql = ""; # Innit before if check
+
+    # Esto comprueba si se está buscando una categoría o un libro
+    $llibre = strtolower($llibre);
+    $llibre = mysqli_real_escape_string($conn, $llibre);
+    if (str_contains($llibre, "c:")) {
+        $llibre = str_replace("c:", "", $llibre); # Previene usar "c:" en la consulta (se buguea)
+        $sql = "SELECT DISTINCT dib_cataleg.TITOL 
             AS nom, dib_exemplars.ESTAT 
-            as estadoActual, dib_cataleg.NUMERO 
-            as id 
+            AS estadoActual, dib_cataleg.NUMERO 
+            AS id 
+            FROM `dib_cataleg` INNER JOIN `dib_exemplars` 
+            ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
+            WHERE `MATERIA` LIKE '%$llibre%'";
+    }
+    
+    else {
+        $sql = "SELECT DISTINCT dib_cataleg.TITOL 
+            AS nom, dib_exemplars.ESTAT 
+            AS estadoActual, dib_cataleg.NUMERO 
+            AS id 
             FROM `dib_cataleg` INNER JOIN `dib_exemplars` 
             ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
             WHERE `TITOL` LIKE '%$llibre%' 
             OR AUTOR LIKE '%$llibre%'";
+    }
 
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) {
@@ -52,7 +70,7 @@ function cercaLlibresLite($conn, $llibre)
         }
         echo json_encode(['response' => 'OK', 'llibres' => $rows]);
     } else {
-        echo json_encode(['response' => 'ERROR']);
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontraron libros']);
     }
 }
 
@@ -112,6 +130,7 @@ function cercaLlibresFull($conn, $llibre)
     $sql = "SELECT DISTINCT dib_cataleg.TITOL AS nom,
                 dib_exemplars.ESTAT as estadoActual,
                 dib_cataleg.URL as 'url',
+                dib_cataleg.MATERIA as 'categoria',
                 dib_cataleg.NIVELL as 'nivell',
                 dib_cataleg.RESUM as 'resum',
                 dib_cataleg.AUTOR as 'autor' 

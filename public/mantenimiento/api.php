@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.4'; # - ✨ Categories anim., lectòmetre (structure only)
+const VERSION =  'v1.7.5'; # - ✨ Categories Search & more.
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));

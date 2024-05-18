@@ -208,8 +208,7 @@ document.getElementById("submitFormCreateUser").addEventListener('click', () => 
 const llenarDetallesLibro = async (libroId) => {
     const formData = new FormData();
     formData.append('llibre', libroId);
-    formData.append('pttn', 'cercaLlibresAll'); // Asegúrate de que el backend pueda manejar esta petición
-
+    formData.append('pttn', 'cercaLlibresAll');
     const response = await fetch('../mantenimiento/api.php', {
         method: 'POST',
         body: formData

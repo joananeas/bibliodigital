@@ -110,6 +110,7 @@ else {
                     }
 
                     document.getElementById('libroImagen').src = "https://aplicacions.ensenyament.gencat.cat" + libro.url;
+                    document.getElementById('categoria').innerHTML = libro.categoria;
                     document.getElementById('nivell').innerHTML = libro.nivell;
                     document.getElementById('resumLibro').innerHTML = libro.resum;
                     document.getElementById('autorLibro').innerHTML = libro.autor;
