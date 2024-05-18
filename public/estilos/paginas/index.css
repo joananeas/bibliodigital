@@ -183,10 +183,10 @@ section {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    background-color: #f5f5f5;
+    background-color: var(--color-secundario);
     font-size: medium;
-    color: #4A68A0;
-    border: 2.5px solid #4A68A0;
+    color: var(--color-principal);
+    border: 2.5px solid var(--color-principal);
     box-shadow: 0 0 10px rgba(255, 255, 255, 1);
     cursor: pointer;
     border-radius: 14px;
@@ -199,8 +199,8 @@ section {
 
 .c-boton:hover {
     transition: 0.3s ease-in-out;
-    background-color: #4A68A0;
-    border: 2.5px solid #f5f5f5;
+    background-color: var(--color-principal);
+    border: 2.5px solid var(--color-secundario);
     color: white;
 }
 

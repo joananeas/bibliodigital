@@ -1,17 +1,30 @@
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET GLOBAL time_zone = '+01:00';
+-- Configurar el fus horari global
+SET GLOBAL time_zone = 'Europe/Madrid';
+
+-- Configurar el fus horari per a la sessió actual
+SET time_zone = 'Europe/Madrid';
+
+-- Permetre events
 SET GLOBAL event_scheduler = ON;
+
+-- Configurar el nivell d'aïllament de les transaccions
 SET GLOBAL TRANSACTION ISOLATION LEVEL READ COMMITTED;
 SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;
 
 START TRANSACTION;
 SET foreign_key_checks = 0;
-DROP TABLE IF EXISTS `dib_prestecs`, `dib_reserves`, `dib_expulsions`, `dib_exemplars`, `dib_cataleg`, `dib_config`, `dib_usuaris`, `dib_notificacions`, `dib_logs_errores`, `dib_estrelles`, `dib_valoracions`;
+DROP TABLE IF EXISTS `dib_prestecs`, `dib_reserves`, `dib_expulsions`,
+                     `dib_exemplars`, `dib_cataleg`, `dib_config`,
+                     `dib_usuaris`, `dib_notificacions`, `dib_logs_errores`,
+                     `dib_estrelles`, `dib_valoracions`, `dib_missatges`,
+                     `dib_xats`, `dib_usuaris_xats`;
 SET foreign_key_checks = 1;
 COMMIT;
 
 -- Creación de tablas
 START TRANSACTION;
+
 CREATE TABLE IF NOT EXISTS dib_usuaris (
   usuari INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
@@ -22,6 +35,29 @@ CREATE TABLE IF NOT EXISTS dib_usuaris (
   experiencia INT DEFAULT 0,
   nivell INT DEFAULT 1,
   INDEX (email)
+);
+
+-- Taula de xats, no particulars, sinó de grups
+CREATE TABLE IF NOT EXISTS dib_xats (
+  id_xat INT AUTO_INCREMENT PRIMARY KEY,
+  nom_xat VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS dib_usuaris_xats (
+  id_xat INT NOT NULL,
+  usuari_id INT NOT NULL,
+  FOREIGN KEY (id_xat) REFERENCES dib_xats(id_xat),
+  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
+);
+
+CREATE TABLE IF NOT EXISTS dib_missatges (
+  id_missatge INT AUTO_INCREMENT PRIMARY KEY,
+  xat_id INT NOT NULL,
+  usuari_id INT NOT NULL,
+  data_enviament TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  missatge TEXT NOT NULL,
+  FOREIGN KEY (xat_id) REFERENCES dib_xats(id_xat),
+  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
 );
 
 CREATE TABLE dib_cataleg (
@@ -203,4 +239,8 @@ CREATE EVENT IF NOT EXISTS canviar_estat_reserves_finalitzades ON SCHEDULE EVERY
 
 CREATE EVENT IF NOT EXISTS eliminar_notificacions_expirades ON SCHEDULE EVERY 1 DAY STARTS CURRENT_TIMESTAMP DO
     DELETE FROM dib_notificacions WHERE DATE_ADD(fecha_columna, INTERVAL 30 DAY) < CURRENT_DATE;
+  
+CREATE EVENT IF NOT EXISTS esborrar_missatges_antics ON SCHEDULE EVERY 1 DAY DO
+  DELETE FROM dib_missatges  WHERE data_enviament < NOW() - INTERVAL 30 DAY;
+
 COMMIT;

@@ -736,6 +736,106 @@ async function generarQR() {
     doc.save('qrcodes.pdf');
 }
 
+
+async function crearChat() {
+    const form = document.getElementById('formCreateChat');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        formData.append('pttn', 'crearChat');
+        formData.append('nom_xat', document.getElementById('nom_xat').value);
+
+        try {
+            const response = await fetch('../mantenimiento/api.php', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+
+            if (result.response === 'OK') {
+                alert('Xat creat amb èxit');
+            } else {
+                alert('Error: ' + result.message);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Hi ha hagut un error en crear el xat.');
+        }
+    });
+};
+
+async function getChats() {
+    const formData = new FormData();
+    formData.append('pttn', 'getChats');
+
+    try {
+        const response = await fetch('../mantenimiento/api.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const data = await response.json();
+        if (data.response === 'OK') {
+            const chats = data.message;
+            const chatList = document.getElementById('chatList');
+            chatList.innerHTML = `
+                <tr>
+                    <th>ID</th>
+                    <th>Nom del xat</th>
+                    <th>Total Usuaris</th>
+                    <th>Accions</th>
+                </tr>
+            `;
+
+            chats.forEach(chat => {
+                const row = document.createElement('tr');
+
+                const idCell = document.createElement('td');
+                idCell.textContent = chat.id_xat;
+                row.appendChild(idCell);
+
+                const nameCell = document.createElement('td');
+                nameCell.textContent = chat.nom_xat;
+                row.appendChild(nameCell);
+
+                const usersCell = document.createElement('td');
+                usersCell.textContent = chat.total_usuaris || 0; // Assuming total_usuaris is a field in the response
+                row.appendChild(usersCell);
+
+                const actionsCell = document.createElement('td');
+                const viewButton = document.createElement('button');
+                viewButton.textContent = 'View';
+                viewButton.addEventListener('click', () => {
+                    document.getElementById('chatId').value = chat.id_xat;
+                    document.getElementById('chatName').value = chat.nom_xat;
+                });
+                actionsCell.appendChild(viewButton);
+                row.appendChild(actionsCell);
+
+                chatList.appendChild(row);
+            });
+        } else {
+            alert('Error al obtener los chats: ' + data.message);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Error al procesar la solicitud (getChats)');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    getChats();
+});
+
+
+
 showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.
 getColores(); // Suponiendo que estas funciones necesitan ser llamadas al cargar.
 getBanner();
@@ -744,3 +844,4 @@ loadStatsUsers();
 loadBookStats();
 loadPrestecs();
 loadReserves();
+getChats();

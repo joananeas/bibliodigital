@@ -8,20 +8,23 @@ else {
     urlForFetch = "./mantenimiento/api.php";
 }
 
-const getID = () => {
-    fetch(urlForFetch, {
-        method: "POST",
-        body: new FormData().append('pttn', 'getID')
-    })
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
-            return data;
-        })
-        .catch(error => {
-            console.error('Error al hacer la petición:', error);
+const getID = async () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getID');
+
+    try {
+        const response = await fetch(urlForFetch, {
+            method: "POST",
+            body: formData
         });
+        const data = await response.json();
+        console.log(data);
+        return data;
+    } catch (error) {
+        console.error('Error al hacer la petición:', error);
+    }
 }
+
 
 function getNotificaciones() {
     let formData = new FormData();
@@ -328,6 +331,7 @@ const scriptsReservas = ["reservas.js"];
 const scriptsInstall = ["install.js"];
 const scriptsError = ["error.js"];
 const scriptsAdmin = ["admin.js"];
+const scriptsXats = ["xats.js"];
 
 const cargarScripts = (scripts) => {
     for (let i = 0; i < scripts.length; i++) {
@@ -376,6 +380,11 @@ switch (true) {
     case url.includes("admin/index"):
         cargarScripts(scriptsAdmin);
         console.log("admin");
+        break;
+
+    case url.includes("xats"):
+        cargarScripts(scriptsXats);
+        console.log("xats");
         break;
 
     default:

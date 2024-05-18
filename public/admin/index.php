@@ -21,6 +21,7 @@
                 <li><a id="admin-users" href="#" class="nav-link" data-target="admin-users-panel">Usuaris</a></li>
                 <li><a id="admin-styles" href="#" class="nav-link" data-target="admin-styles-panel">Estètica</a></li>
                 <li><a id="admin-stats" href="#" class="nav-link" data-target="admin-stats-panel">Estadístiques</a></li>
+                <li><a id="admin-chats" href="#" class="nav-link" data-target="admin-chats-panel">Xats</a></li>
             </ul>
         </section>
         <br>
@@ -295,6 +296,34 @@
                 <p class="fuenteH1">Estadístiques 📚</p>
                 <p>Total Llibres: <span id="librosTotal">0</span></p>
                 <p>Total Exemplars: <span id="librosExemplars">0</span></p>
+            </section>
+        </div>
+
+        <!-- Panell de xats -->
+        <div id="admin-chats-panel" class="admin-panel">
+            <section class="frame">
+                <p class="fuenteH1">
+                    Crear un nou xat
+                </p>
+                <form id="formCreateChat">
+                    <label for="nom_xat">Nom del xat:</label>
+                    <input type="text" id="nom_xat" name="nom_xat">
+                    <button type="submit" class="botonUniversal" onclick=crearChat()>Crear xat</button>
+                </form>
+            </section>
+            <br>
+            <section class="frame">
+                <p class="fuenteH1">Xats</p>
+                <div class="tableContainer">
+                    <table id="chatList" class="tableBody">
+                        <tr>
+                            <th>ID</th>
+                            <th>Nom del xat</th>
+                            <th>Total Usuaris</th>
+                            <th>Accions</th>
+                        </tr>
+                    </table>
+                </div>
             </section>
         </div>
     </main>

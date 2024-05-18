@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.2'; # - 🐛 UI improvements
+const VERSION =  'v1.7.3'; # - ✨ Chats working! 💬
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -73,7 +73,7 @@ switch ($peticion) {
         break;
 
     case 'getID':
-        echo $apiUsuarios->getID();
+        echo json_encode($apiUsuarios->getID());
         break;
 
     case 'getRol':
@@ -363,6 +363,36 @@ switch ($peticion) {
         echo $resp;
         break;
 
+    case 'crearChat':
+        $nom_xat = $_POST['nom_xat'];
+        $resp = crearChat($nom_xat);
+        echo $resp;
+        break;
+    
+    case 'getChats':
+        $resp = getChats();
+        echo $resp;
+        break;
+
+    case 'getMessages':
+        $id_xat = $_POST['id_xat'];
+        $resp = getMessages($id_xat);
+        echo $resp;
+        break;
+    
+    case 'sendMessage':
+        if (isset($_POST['id_xat']) && isset($_POST['missatge'])) {
+            $id_xat = $_POST['id_xat'];
+            $missatge = $_POST['missatge'];
+            $id_usuari = $apiUsuarios->getID();
+            
+            $resp = sendMessage($id_xat, $id_usuari, $missatge);
+            echo $resp;
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => 'Faltan parámetros necesarios']);
+        }
+        break;
+        
     default:
         echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
         header('Location: ../error.php?error=404');

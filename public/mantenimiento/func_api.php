@@ -616,3 +616,70 @@ function eliminarPrestec($id_prestec){
         return json_encode(['response' => 'ERROR', 'message' => 'No se pudo eliminar el préstamo']);
     }
 }
+
+
+function crearChat($nom){
+    $conn = peticionSQL();
+    $sql = "INSERT INTO dib_xats (id_xat, nom_xat) VALUES (NULL, ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "s", $nom);
+    if (mysqli_stmt_execute($stmt)) {
+        return json_encode(['response' => 'OK']);
+    } else {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo crear el chat']);
+    }
+}
+
+function getChats(){
+    $conn = peticionSQL();
+    $sql = "SELECT * FROM dib_xats";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $chats = array();
+        while($row = $result->fetch_assoc()) {
+            $chats[] = $row;
+        }
+        echo json_encode(array('response' => 'OK', 'message' => $chats));
+    } else {
+        echo json_encode(array('response' => 'ERROR', 'message' => 'No records found'));
+    }
+    $conn->close();
+}
+
+function getMessages($id_chat){
+    $conn = peticionSQL();
+    $sql = "SELECT * FROM dib_missatges WHERE xat_id = ? ORDER BY `data_enviament` ASC";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_chat);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $missatges = array();
+        while($row = $result->fetch_assoc()) {
+            $missatges[] = $row;
+        }
+        echo json_encode(array('response' => 'OK', 'message' => $missatges));
+    } else {
+        echo json_encode(array('response' => 'ERROR', 'message' => 'No records found'));
+    }
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}
+
+function sendMessage($id_chat, $id_usuari, $missatge){
+    $conn = peticionSQL();
+    $sql = "INSERT INTO `dib_missatges`(`id_missatge`, `xat_id`, `usuari_id`, `data_enviament`, `missatge`) 
+            VALUES (NULL, ?, ?, NOW(), ?)";
+    $stmt = mysqli_prepare($conn, $sql);
+    
+    if (!$stmt) {
+        return json_encode(['response' => 'ERROR', 'message' => 'Error en la preparación de la consulta: ' . mysqli_error($conn)]);
+    }
+    
+    mysqli_stmt_bind_param($stmt, "iis", $id_chat, $id_usuari, $missatge);
+    if (mysqli_stmt_execute($stmt)) {
+        return json_encode(['response' => 'OK']);
+    } else {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo enviar el mensaje: ' . mysqli_stmt_error($stmt)]);
+    }
+}
