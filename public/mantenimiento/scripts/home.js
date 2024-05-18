@@ -166,8 +166,6 @@ const getFotos = () => {
         });
 };
 
-document.addEventListener("DOMContentLoaded", getFotos());
-
 const updateActiveDot = (newActiveIndex) => {
     const dots = document.querySelectorAll("#puntos-carroussel li");
     dots.forEach(dot => dot.classList.remove("activo"));
@@ -238,3 +236,42 @@ cPhoto.addEventListener('touchend', e => {
     touchendX = e.changedTouches[0].screenX
     checkDirection()
 })
+
+
+// Categories
+const generateRandomSpans = (categoriesList, categoriesDiv) => {
+    const categoriesLength = categoriesList.length;
+    for (let i = 0; i < categoriesLength; i++) {
+        const randomIndex = Math.floor(Math.random() * categoriesList.length);
+        const randomCategory = categoriesList[randomIndex];
+
+        const span = document.createElement("span");
+        span.textContent = randomCategory;
+        span.classList.add("categoria");
+        span.classList.add("botonUniversal");
+        categoriesDiv.appendChild(span);
+    }
+};
+
+const fillCategories = async () => {
+    let response = await getCategories();
+    const categoriesDiv = document.getElementById("categoriesContainer");
+    let categoriesList = [];
+
+    if (response) {
+        const categories = response.message;
+
+        for (let i = 0; i < categories.length; i++) {
+            let category = categories[i].MATERIA;
+
+            if (category === '') continue;
+            categoriesList.push(category);
+        }
+    }
+
+    generateRandomSpans(categoriesList, categoriesDiv);
+};
+
+
+document.addEventListener("DOMContentLoaded", getFotos());
+document.addEventListener("DOMContentLoaded", fillCategories());

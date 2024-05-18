@@ -288,3 +288,66 @@ section {
         margin-right: 5px;
     }
 }
+
+.categoriesFrame article {
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.categorias {
+    display: flex;
+    position: relative;
+    white-space: nowrap;
+    animation: scroll 30s linear infinite;
+}
+
+.categorias span {
+    display: inline-block;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 4px;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0%);
+    }
+
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+.lectometre {
+    display: flex;
+    flex-direction: row;
+    /* Esto hará que los elementos hijos se alineen horizontalmente */
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    flex-wrap: wrap;
+    /* Esto permitirá que los elementos se envuelvan a la siguiente línea si no hay suficiente espacio */
+}
+
+.lectometreRankingUser {
+    margin: 10px;
+
+    /* Esto agregará un poco de espacio entre cada div .lectometreRankingUser */
+}
+
+.lectometreRankingUser p {
+    display: block;
+    text-align: center;
+    width: 100%;
+}
+
+.lectometre img {
+    border-radius: 50%;
+    border: 1px solid #333;
+}
+
+.lectometre p {
+    display: block;
+    text-align: center;
+    width: 100%;
+}

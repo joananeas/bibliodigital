@@ -683,3 +683,19 @@ function sendMessage($id_chat, $id_usuari, $missatge){
         return json_encode(['response' => 'ERROR', 'message' => 'No se pudo enviar el mensaje: ' . mysqli_stmt_error($stmt)]);
     }
 }
+
+function getCategories(){
+    $conn = peticionSQL();
+    $sql = "SELECT DISTINCT `MATERIA` FROM dib_cataleg";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $categories = array();
+        while($row = $result->fetch_assoc()) {
+            $categories[] = $row;
+        }
+        echo json_encode(array('response' => 'OK', 'message' => $categories));
+    } else {
+        echo json_encode(array('response' => 'ERROR', 'message' => 'No records found'));
+    }
+    $conn->close();
+}

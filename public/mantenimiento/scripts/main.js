@@ -25,6 +25,23 @@ const getID = async () => {
     }
 }
 
+const getCategories = async () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getCategories');
+
+    try {
+        const response = await fetch(urlForFetch, {
+            method: "POST",
+            body: formData
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error al hacer la petición:', error);
+    }
+}
+
+//getCategories();
 
 function getNotificaciones() {
     let formData = new FormData();

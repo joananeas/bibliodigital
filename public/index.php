@@ -21,38 +21,58 @@
                 <!-- Aquí se generan de forma automática-->
             </ul>
         </section>
-        <section class="frame">
+
+        <section class="frame categoriesFrame">
             <div class="header-section">
-                <span style="float: left;">Cerca per:</span>
+                <span style="float: left;" class="fuenteH1">Vols provar alguna cosa nova?</span>
                 <a href="#"><i>Clic per a veure tots.</i></a>
             </div>
-            <div class="categorias">
-                <button>Categoría 1</button>
-                <button>Categoría 2</button>
-                <button>Categoría 3</button>
-            </div>
-
-            <div class="topicos">
-                <button>Tópico 1</button>
-                <button>Tópico 2</button>
-                <button>Tópico 3</button>
-                <button>Tópico con un nombre largo</button>
-                <button>Otro Tópico</button>
-            </div>
+            <article>
+                <div class="categorias" id="categoriesContainer">
+                </div>
+            </article>
         </section>
 
 
+
         <section class="frame">
             <div class="header-section">
-                <span s="float: left;">Enquestes</span>
+                <span style="float: left;" class="fuenteH1">Lectòmetre 🔥</span>
             </div>
-            <ul>
-                <li>Opció 1</li>
-                <li>Opció 1</li>
-                <li>Opció 1</li>
-                <li>Opció 1</li>
-                <li>Opció 1</li>
-            </ul>
+            <article>
+                <div class="lectometre" id="lectometreContainerPodium">
+                    <img src="media/icons/user.jpg" alt="1r" width="100" height="100">
+                    <p class="fuenteH1">Primer 🥇</p>
+                    <p class="fuenteTexto">Joan, 33 llibres</p>
+                </div>
+                <div class="lectometre Ranking" id="lectometreContainerRanking">
+                    <!-- Top 5 lectors -->
+                    <p class="fuenteH1">Top 5</p>
+                    <div class="lectometreRankingUser">
+                        <img src="media/icons/user.jpg" alt="1r" width="50" height="50">
+                        <p class="fuenteTexto">Joan, 33 llibres</p>
+
+                    </div>
+                    <div class="lectometreRankingUser">
+                        <img src="media/icons/user.jpg" alt="1r" width="50" height="50">
+                        <p class="fuenteTexto">Joan, 33 llibres</p>
+                    </div>
+                    <div class="lectometreRankingUser">
+                        <img src="media/icons/user.jpg" alt="1r" width="50" height="50">
+                        <p class="fuenteTexto">Joan, 33 llibres</p>
+
+                    </div>
+                    <div class="lectometreRankingUser">
+                        <img src="media/icons/user.jpg" alt="1r" width="50" height="50">
+                        <p class="fuenteTexto">Joan, 33 llibres</p>
+                    </div>
+                    <div class="lectometreRankingUser">
+                        <img src="media/icons/user.jpg" alt="1r" width="50" height="50">
+                        <p class="fuenteTexto">Joan, 33 llibres</p>
+
+                    </div>
+                </div>
+            </article>
         </section>
         <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
 

@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.3'; # - ✨ Chats working! 💬
+const VERSION =  'v1.7.4'; # - ✨ Categories anim., lectòmetre (structure only)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -391,6 +391,12 @@ switch ($peticion) {
         } else {
             echo json_encode(['response' => 'ERROR', 'message' => 'Faltan parámetros necesarios']);
         }
+        break;
+        
+    
+    case 'getCategories':
+        $resp = getCategories();
+        echo $resp;
         break;
         
     default:
