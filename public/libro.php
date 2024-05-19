@@ -23,12 +23,41 @@
                     <p><span class="fuenteH1">🧩Categoria:</span>&nbsp;<span id="categoria"></span< /p>
                             <p><span class="fuenteH1">🎓Nivell:</span>&nbsp;<span id="nivell"></span></p>
                             <p><span class="fuenteH1">💬Resum:</span>&nbsp;<span id="resumLibro"></span></p>
-                            <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;<span id="estrellas"></span></p>
-                            <button id="reservar" class="botonUniversal">Reservar</button>
+                            <p><span class="fuenteH1">⭐Estrelles:</span>&nbsp;
+                            <div class="estrellas">
+                                <img src="./media/icons/star-grey.png" width="20" height="20" id="starIcon"
+                                    class="star">
+                                <img src="./media/icons/star-grey.png" width="20" height="20" id="starIcon"
+                                    class="star">
+                                <img src="./media/icons/star-grey.png" width="20" height="20" id="starIcon"
+                                    class="star">
+                                <img src="./media/icons/star-grey.png" width="20" height="20" id="starIcon"
+                                    class="star">
+                                <img src="./media/icons/star-grey.png" width="20" height="20" id="starIcon"
+                                    class="star">
+                            </div>
+                            <span id="starsToast"></span>
+                    </p>
+                    <button id="reservar" class="botonUniversal">Reservar</button>
                 </aside>
             </div>
 
         </section>
+
+        <section class="frame vistaLibro">
+            <h3 class="fuenteH1">Comentaris</h3>
+            <div class="comentarContainer">
+                <textarea id="comentario" class="comentarioSelf fuenteTexto"
+                    placeholder="Escriu el teu comentari"></textarea>
+                <p id="comentarioToast" style="display:none;"></p>
+                <button id="enviar-comentario" class="botonUniversal">Enviar</button>
+            </div>
+
+            <div id="comentarios" class="comentarios">
+                <!-- Los comentarios se llenarán con JS -->
+            </div>
+        </section>
+
         <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
     </main>

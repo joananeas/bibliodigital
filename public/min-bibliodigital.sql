@@ -17,7 +17,7 @@ SET foreign_key_checks = 0;
 DROP TABLE IF EXISTS `dib_prestecs`, `dib_reserves`, `dib_expulsions`,
                      `dib_exemplars`, `dib_cataleg`, `dib_config`,
                      `dib_usuaris`, `dib_notificacions`, `dib_logs_errores`,
-                     `dib_estrelles`, `dib_valoracions`, `dib_missatges`,
+                     `dib_estrelles`, `dib_comentaris`, `dib_missatges`,
                      `dib_xats`, `dib_usuaris_xats`, `dib_reserves_estats`,
                      `dib_prestecs_estats`, `dib_notificacions_estats`;
 SET foreign_key_checks = 1;
@@ -157,7 +157,7 @@ CREATE TABLE IF NOT EXISTS dib_estrelles (
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-CREATE TABLE IF NOT EXISTS dib_valoracions (
+CREATE TABLE IF NOT EXISTS dib_comentaris (
   id_comentari INT AUTO_INCREMENT PRIMARY KEY,
   usuari_id INT NOT NULL,
   exemplar_id INT NOT NULL,

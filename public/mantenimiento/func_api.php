@@ -149,7 +149,7 @@ function cercaLlibresFull($conn, $llibre){
     }
 }
 
-function getStars($conn, $llibre){
+function getStars($conn, $llibre) {
     $sql = "SELECT AVG(puntuacio) as estrelles FROM dib_estrelles WHERE exemplar_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $llibre);
@@ -157,7 +157,7 @@ function getStars($conn, $llibre){
     $result = mysqli_stmt_get_result($stmt);
     if (mysqli_num_rows($result) > 0) {
         $row = mysqli_fetch_assoc($result);
-        echo json_encode(['response' => 'OK', 'estrelles' => $row['estrelles']]);
+        echo json_encode(['response' => 'OK', 'estrelles' => round($row['estrelles'])]);
     } else {
         echo json_encode(['response' => 'no-data']);
     }
@@ -762,6 +762,100 @@ function getDisponibilitatLlibrePerReserves($id_llibre) {
         echo json_encode(array('response' => 'E', 'message' => 'Execute failed: ' . mysqli_stmt_error($stmt)));
     }
 
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}
+
+function puntuar($user_id, $id_llibre, $puntuacio){
+    $conn = peticionSQL();
+    
+    // Primero, verifica si el usuario ya ha puntuado
+    $sql = "SELECT * FROM `dib_estrelles` WHERE `usuari_id` = ? AND `exemplar_id` = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "ii", $user_id, $id_llibre);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    $message = '';
+    if (mysqli_num_rows($result) > 0) {
+        // Si el usuario ya ha puntuado, actualiza la puntuación existente
+        $sql = "UPDATE `dib_estrelles` SET `puntuacio` = ?, `data_puntuacio` = curdate() WHERE `usuari_id` = ? AND `exemplar_id` = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "iii", $puntuacio, $user_id, $id_llibre);
+        $message = "updated";
+    } else {
+        // Si el usuario no ha puntuado, inserta una nueva puntuación
+        $sql = "INSERT INTO `dib_estrelles`(`id_estrella`, `usuari_id`, `puntuacio`, `exemplar_id`, `data_puntuacio`) VALUES (NULL, ?, ?, ?, curdate())";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "iii", $user_id, $puntuacio, $id_llibre);
+        $message = "inserted";
+    }
+
+    // Ejecuta la consulta preparada
+    if (mysqli_stmt_execute($stmt)) {
+        echo json_encode(['response' => 'OK', 'message' => $message]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar o actualizar la puntuación en la base de datos']);
+    }
+}
+
+function sendComment($user_id, $id_llibre, $comentari){
+    $conn = peticionSQL();
+
+    // Comprobar si ya existe un comentario del usuario para el libro
+    $checkSql = "SELECT COUNT(*) AS count FROM dib_comentaris WHERE usuari_id = ? AND exemplar_id = ?";
+    $checkStmt = mysqli_prepare($conn, $checkSql);
+    mysqli_stmt_bind_param($checkStmt, "ii", $user_id, $id_llibre);
+    mysqli_stmt_execute($checkStmt);
+    mysqli_stmt_bind_result($checkStmt, $count);
+    mysqli_stmt_fetch($checkStmt);
+    mysqli_stmt_close($checkStmt);
+
+    if ($count > 0) {
+        // Actualizar el comentario existente
+        $updateSql = "UPDATE dib_comentaris SET comentari = ?, data_comentari = curdate() WHERE usuari_id = ? AND exemplar_id = ?";
+        $updateStmt = mysqli_prepare($conn, $updateSql);
+        mysqli_stmt_bind_param($updateStmt, "sii", $comentari, $user_id, $id_llibre);
+        if (mysqli_stmt_execute($updateStmt)) {
+            echo json_encode(['response' => 'OK']);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar el comentario en la base de datos']);
+        }
+        mysqli_stmt_close($updateStmt);
+    } else {
+        // Insertar un nuevo comentario
+        $insertSql = "INSERT INTO dib_comentaris (id_comentari, usuari_id, exemplar_id, data_comentari, comentari) 
+                      VALUES (NULL, ?, ?, curdate(), ?)";
+        $insertStmt = mysqli_prepare($conn, $insertSql);
+        mysqli_stmt_bind_param($insertStmt, "iis", $user_id, $id_llibre, $comentari);
+        if (mysqli_stmt_execute($insertStmt)) {
+            echo json_encode(['response' => 'OK']);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar el comentario en la base de datos']);
+        }
+        mysqli_stmt_close($insertStmt);
+    }
+}
+
+function getComments($id_llibre){
+    $conn = peticionSQL();
+    $sql = "SELECT dc.comentari, dc.data_comentari, du.email AS usuari
+            FROM dib_comentaris dc
+            JOIN dib_usuaris du ON dc.usuari_id = du.usuari
+            WHERE dc.exemplar_id = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_llibre);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $comentaris = array();
+        while($row = $result->fetch_assoc()) {
+            $comentaris[] = $row;
+        }
+        echo json_encode(array('response' => 'OK', 'message' => $comentaris));
+    } else {
+        echo json_encode(array('response' => 'ERROR', 'message' => 'No records found'));
+    }
     mysqli_stmt_close($stmt);
     $conn->close();
 }

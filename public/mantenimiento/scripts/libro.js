@@ -51,38 +51,46 @@ const loadQR = () => {
 
 let l = getLibro(); // No se por que, no funcionaba una funcion DOMContentLoaded, asi que lo he puesto aqui.
 
+let currentStars = 0; // Variable para almacenar el número de estrellas actuales
+
 const getStars = () => {
     let formData = new FormData();
     formData.append('pttn', 'getStars');
     formData.append('llibre', l);
-    fetch("./mantenimiento/api.php", {
+    return fetch("./mantenimiento/api.php", {
         method: "POST",
         body: formData
     })
         .then(response => response.json())
         .then(data => {
-            if (data.response === "ok") {
+            if (data.response === "OK") {
                 console.log(data);
-                let qr = new QRCode(document.getElementById('qrcode'), {
-                    text: window.location.href,
-                    width: 128,
-                    height: 128,
-                    colorDark: "#000000",
-                    colorLight: "#ffffff",
-                    correctLevel: QRCode.CorrectLevel.H
-                });
+                currentStars = Math.round(data.estrelles); // Redondear las estrellas para asegurar un número entero
+                updateStarsDisplay();
+            } else {
+                return 0; // En caso de que no haya datos, devuelve 0 estrellas.
             }
         })
         .catch(error => {
             console.log("[ERROR (API_Request)] ", error);
+            return 0;
         });
 }
 
+const updateStarsDisplay = () => {
+    document.querySelectorAll('.star').forEach((star, index) => {
+        if (index < currentStars) {
+            star.src = './media/icons/star-yellow.png';
+        } else {
+            star.src = './media/icons/star-grey.png';
+        }
+    });
+};
+
+
 if (!l) {
     window.location.href = "./index.php";
-}
-
-else {
+} else {
     loadQR();
     let formData = new FormData();
     formData.append('pttn', 'cercaLlibresFull');
@@ -97,18 +105,8 @@ else {
                 console.log(data);
                 data.llibres.forEach(libro => {
                     document.getElementById('tituloLibro').innerHTML = libro.nom;
-                    if (libro.estrellas == 0 || libro.estrellas == null || libro.estrellas == undefined) {
-                        document.getElementById('estrellas').innerHTML = "Sense puntuació";
-                    }
 
-                    let estrelles = getStars();
-                    if (estrelles == 0 || estrelles == null || estrelles == undefined) {
-                        document.getElementById('estrellas').innerHTML = "Sense puntuació";
-                    }
-                    else {
-                        document.getElementById('estrellas').innerHTML = estrelles;
-                    }
-
+                    getStars();
                     document.getElementById('libroImagen').src = "https://aplicacions.ensenyament.gencat.cat" + libro.url;
                     document.getElementById('categoria').innerHTML = libro.categoria;
                     document.getElementById('nivell').innerHTML = libro.nivell;
@@ -359,3 +357,140 @@ document.getElementById('reservar').addEventListener('click', async function () 
 
     fillCalendar();
 });
+
+// Cambiar la imagen al hacer hover
+document.querySelectorAll('.star').forEach((star, index, stars) => {
+    star.addEventListener('mouseover', () => {
+        for (let i = 0; i <= index; i++) {
+            stars[i].src = './media/icons/star-yellow.png'; // URL de la imagen cuando se pasa el ratón por encima
+        }
+    });
+
+    star.addEventListener('mouseout', () => {
+        updateStarsDisplay(); // Restaurar las estrellas al estado actual
+    });
+
+    star.addEventListener('click', () => {
+        let formData = new FormData();
+        formData.append('pttn', 'puntuar');
+        formData.append('id_llibre', l);
+        formData.append('puntuacio', index + 1);
+        fetch("./mantenimiento/api.php", {
+            method: "POST",
+            body: formData
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.response === "OK") {
+                    console.log(data);
+                    currentStars = index + 1; // Actualizar el número de estrellas actuales
+                    if (data.message === "updated") {
+                        document.getElementById('starsToast').textContent = 'Has actualitzat la puntuació a ' + currentStars + ' estrelles.';
+                    }
+                    else {
+                        document.getElementById('starsToast').textContent = 'Has puntuat amb ' + currentStars + ' estrelles.';
+                    }
+                    updateStarsDisplay(); // Actualizar las estrellas en el display
+                }
+            })
+            .catch(error => {
+                console.log("[ERROR (API_Request)] ", error);
+            });
+    });
+});
+
+
+const sendComment = () => {
+    let comment = document.getElementById('comentario').value;
+    if (comment === "") {
+        alert("No pots enviar un comentari buit.");
+        return;
+    }
+
+    let formData = new FormData();
+    formData.append('pttn', 'sendComment');
+    formData.append('id_llibre', l);
+    formData.append('comentari', comment);
+    fetch("./mantenimiento/api.php", {
+        method: "POST",
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === "OK") {
+                console.log(data);
+                document.getElementById('comentario').value = "";
+                document.getElementById('comentarioToast').textContent = 'Comentari enviat correctament.';
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
+}
+
+const loadComments = () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getComments');
+    formData.append('id_llibre', l);
+    fetch("./mantenimiento/api.php", {
+        method: "POST",
+        body: formData
+    })
+        .then(response => response.json())
+        .then(data => {
+            if (data.response === "OK") {
+                console.log(data);
+                let comments = data.message;
+                let commentList = document.getElementById('comentarios');
+                commentList.innerHTML = "";
+                comments.forEach((comment, index) => {
+                    let commentElement = document.createElement('div');
+                    let commentHeader = document.createElement('div');
+                    let commentHeaderAutor = document.createElement('div');
+                    let commentHeaderImg = document.createElement('img');
+                    let commentHeaderInfo = document.createElement('div');
+                    let commentHeaderName = document.createElement('p');
+                    let commentHeaderDate = document.createElement('time');
+                    let commentBody = document.createElement('div');
+                    let commentNumber = document.createElement('div');
+
+                    commentElement.classList.add('comentario');
+                    commentHeader.classList.add('comentario-header');
+                    commentHeaderAutor.classList.add('comentario-autor');
+                    commentHeaderInfo.classList.add('comentario-autor-info');
+                    commentHeaderImg.src = './media/icons/user.png';
+                    commentHeaderImg.classList.add('profileComment');
+                    commentBody.classList.add('comentario-body');
+                    commentNumber.classList.add('comentario-number');
+
+                    commentBody.textContent = comment.comentari;
+                    commentHeaderName.textContent = comment.usuari;
+                    commentHeaderName.classList.add('comentario-autor-nombre');
+                    commentHeaderDate.textContent = comment.data_comentari;
+                    commentNumber.textContent = "#" + (index + 1);
+
+                    commentHeaderInfo.appendChild(commentHeaderName);
+                    commentHeaderInfo.appendChild(commentHeaderDate);
+
+                    commentHeaderAutor.appendChild(commentHeaderImg);
+                    commentHeaderAutor.appendChild(commentHeaderInfo);
+
+                    commentHeader.appendChild(commentHeaderAutor);
+                    commentHeader.appendChild(commentNumber);
+
+                    commentElement.appendChild(commentHeader);
+                    commentElement.appendChild(commentBody);
+                    commentList.appendChild(commentElement);
+                });
+            }
+        })
+        .catch(error => {
+            console.log("[ERROR (API_Request)] ", error);
+        });
+}
+
+// First time loading page
+loadComments();
+
+document.getElementById('enviar-comentario').addEventListener('click', sendComment);
+//setInterval(loadComments, 5000); // Actualizar los comentarios cada 5 segundos

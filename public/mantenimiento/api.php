@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.6'; # - 🐛 Préstecs i reserves (revisar calendari)
+const VERSION =  'v1.7.7'; # - ✨ Comentaris i valoracions :)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -392,7 +392,27 @@ switch ($peticion) {
         $resp = getDisponibilitatLlibrePerReserves($id_llibre);
         echo $resp;
         break;
-        
+    
+    case 'puntuar':
+        $id_llibre = $_POST['id_llibre'];
+        $puntuacio = $_POST['puntuacio'];
+        $resp = puntuar($apiUsuarios->getID(), $id_llibre, $puntuacio);
+        echo $resp;
+        break;
+
+    case 'sendComment':
+        $id_llibre = $_POST['id_llibre'];
+        $comentari = $_POST['comentari'];
+        $resp = sendComment($apiUsuarios->getID(), $id_llibre, $comentari);
+        echo $resp;
+        break;
+
+    case 'getComments':
+        $id_llibre = $_POST['id_llibre'];
+        $resp = getComments($id_llibre);
+        echo $resp;
+        break;
+            
     default:
         echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
         header('Location: ../error.php?error=404');

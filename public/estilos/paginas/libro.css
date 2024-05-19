@@ -153,6 +153,78 @@ article {
     /* Adjust size as needed */
 }
 
+.star {
+    -webkit-filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 black);
+    filter: drop-shadow(1px 1px 0 black) drop-shadow(-1px -1px 0 black);
+}
+
+.comentarContainer {
+    margin-right: 5px;
+}
+
+.comentarioSelf {
+    width: 100%;
+    min-height: 100px;
+    resize: none;
+}
+
+.profileComment {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #333333;
+    margin-right: 10px;
+    /* Añadir espacio entre la imagen y el nombre */
+}
+
+.comentario-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    /* Alinea verticalmente el contenido del encabezado al inicio */
+}
+
+.comentario-autor {
+    display: flex;
+    align-items: center;
+}
+
+.comentario-autor-info {
+    display: flex;
+    flex-direction: column;
+    /* Coloca el nombre y la fecha en columna */
+}
+
+.comentario-autor-nombre {
+    margin: 0;
+}
+
+.comentario-number {
+    float: right;
+    margin-left: auto;
+    font-weight: 700;
+    /* Asegura que el número del comentario esté a la derecha */
+}
+
+.comentario {
+    margin-top: 20px;
+    width: 90%;
+    border: 1px solid #333333;
+    border-radius: 4px;
+    padding: 20px;
+    display: block;
+    word-wrap: break-word;
+}
+
+.comentario-body {
+    margin-top: 10px;
+}
+
+.comentario-header time {
+    font-size: 0.9em;
+    color: #777;
+}
+
 @media screen and (max-width: 600px) {
     .frame {
         margin-left: 0px;
