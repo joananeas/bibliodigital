@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.5'; # - ✨ Categories Search & more.
+const VERSION =  'v1.7.6'; # - 🐛 Préstecs i reserves (revisar calendari)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -140,14 +140,6 @@ switch ($peticion) {
         cercaLlibresAll($conn, $llibre);
         break;
 
-    case 'reservarLibro':
-        $conn = peticionSQL();
-        $titulo = $_POST["titulo"];
-        $fechaInicio = $_POST["fechaInicio"];
-        $fechaFin = $_POST["fechaFin"];
-        reservarLibro($conn, $titulo, $fechaInicio, $fechaFin);
-        break;
-
     case 'modificarLlibre':
         $conn = peticionSQL();
         $conn->set_charset("utf8mb4");
@@ -155,8 +147,6 @@ switch ($peticion) {
 
         $exemplars = $_POST["exemplars"];
 
-        $cataleg = $_POST["cataleg"];
-        $biblioteca = $_POST["biblioteca"];
         $titol = $_POST["titol"];
         $isbn = $_POST["isbn"];
         $cdu = $_POST["cdu"];
@@ -166,7 +156,7 @@ switch ($peticion) {
         $lloc = $_POST["lloc"];
         $colleccio = $_POST["colleccio"];
         $pais = $_POST["pais"];
-        $data = $_POST["data"];
+        $data = $_POST["dataLlibre"];
         $llengua = $_POST["llengua"];
         $materia = $_POST["materia"];
         $descriptor = $_POST["descriptor"];
@@ -186,7 +176,7 @@ switch ($peticion) {
 
         $OGexemplars = cercaExemplars($conn, $id);
 
-        echo modificarLlibre($id, $exemplars, $OGexemplars, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+        echo modificarLlibre($id, $exemplars, $OGexemplars, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
         break;
 
     case 'getLastLlibre':
@@ -195,8 +185,6 @@ switch ($peticion) {
         break;
 
     case 'crearLlibre':
-        $cataleg = $_POST["cataleg"];
-        $biblioteca = $_POST["biblioteca"];
         $id = $_POST["identificador"];
         $exemplars = $_POST["exemplars"];
         $titol = $_POST["titol"];
@@ -208,7 +196,7 @@ switch ($peticion) {
         $lloc = $_POST["lloc"];
         $colleccio = $_POST["colleccio"];
         $pais = $_POST["pais"];
-        $data = $_POST["data"];
+        $data = $_POST["dataLlibre"];
         $llengua = $_POST["llengua"];
         $materia = $_POST["materia"];
         $descriptor = $_POST["descriptor"];
@@ -226,7 +214,7 @@ switch ($peticion) {
         $rec = $_POST["rec"];
         $estat = $_POST["estat"];
 
-        echo crearLlibre($cataleg, $biblioteca, $id, $exemplars, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
+        echo crearLlibre($id, $exemplars, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat);
         break;
 
     case 'authUsuario':
@@ -396,6 +384,12 @@ switch ($peticion) {
     
     case 'getCategories':
         $resp = getCategories();
+        echo $resp;
+        break;
+        
+    case 'getDisponibilitatLlibrePerReserves':
+        $id_llibre = $_POST['id_llibre'];
+        $resp = getDisponibilitatLlibrePerReserves($id_llibre);
         echo $resp;
         break;
         

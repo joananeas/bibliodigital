@@ -1,4 +1,4 @@
-console.log("[LOAD] main.js");
+//console.log("[LOAD] main.js");
 let urlForFetch = window.location.href;
 
 if (urlForFetch.includes("install") || urlForFetch.includes("admin")) {
@@ -18,7 +18,7 @@ const getID = async () => {
             body: formData
         });
         const data = await response.json();
-        console.log(data);
+        //console.log(data);
         return data;
     } catch (error) {
         console.error('Error al hacer la petición:', error);
@@ -109,7 +109,7 @@ const clearNotifications = () => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log(data);
+            //console.log(data);
         })
         .catch(error => {
             console.error("[ERROR (API_Request)] ", error);
@@ -120,7 +120,7 @@ getNotificaciones();
 
 const comprobarConexionBBDD = async () => {
     if (window.location.href.includes("install") || window.location.href.includes("error")) return;
-    console.log("[CONEXION_BBDD] Comprobando conexión con la base de datos...");
+    //console.log("[CONEXION_BBDD] Comprobando conexión con la base de datos...");
     let formData = new FormData();
     formData.append('pttn', 'checkDB');
     try {
@@ -132,12 +132,12 @@ const comprobarConexionBBDD = async () => {
             throw new Error('Respuesta no válida');
         }
         const data = await response.json();
-        console.log("[CONEXION_BBDD] ", data);
+        //console.log("[CONEXION_BBDD] ", data);
         if (data.response !== "ok") {
             window.location.href = "./error.php?error=0001&msg=" + data;
         }
     } catch (error) {
-        console.log("[ERROR (API_Request)] ", error);
+        //console.log("[ERROR (API_Request)] ", error);
         window.location.href = "./error.php?error=0001";
     }
 }
@@ -203,7 +203,7 @@ const menuHeader = () => {
     ];
 
     if (window.location.href.includes("admin")) {
-        console.log("admin");
+        //console.log("admin");
         linksAdmin.forEach(link => {
             let a = document.getElementById(link.id);
             if (a !== null) a.href = link.href;
@@ -211,7 +211,7 @@ const menuHeader = () => {
 
     }
     else {
-        console.log("normal");
+        //console.log("normal");
         linksNormal.forEach(link => {
             let a = document.getElementById(link.id);
             if (a !== null) a.href = link.href;
@@ -267,7 +267,7 @@ const loadGlobals = () => {
     })
         .then(response => response.json())
         .then(data => {
-            console.log("[RESPONSE] ", data);
+            //console.log("[RESPONSE] ", data);
 
             let tituloFavicon = document.getElementById("tituloTab");
             let tituloH1 = document.getElementById("titulo");
@@ -293,7 +293,7 @@ const loadGlobals = () => {
             menuMobile();
         })
         .catch(error => {
-            console.log("[ERROR (API_Request)] ", error);
+            //console.log("[ERROR (API_Request)] ", error);
         });
 }
 
@@ -314,7 +314,7 @@ const getRol = () => {
 
             return data.username;
         }).catch(error => {
-            console.log("[ERROR (API_Request)] ", error);
+            //console.log("[ERROR (API_Request)] ", error);
         });
 }
 
@@ -328,7 +328,7 @@ const getUserDataCreation = () => {
         .then(response => response.json())
         .then(data => {
             if (data.response === "ok") {
-                console.log("[DATE] " + data);
+                //console.log("[DATE] " + data);
                 document.getElementById("data-usuari").textContent = data.api;
                 return data.api;
             }

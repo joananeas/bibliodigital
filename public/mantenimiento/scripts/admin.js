@@ -227,10 +227,11 @@ const llenarDetallesLibro = async (libroId) => {
         const detalles = data.detallesLibro;
         l.style.display = 'block';
         b.style.display = 'none';
+
         document.getElementById('identificador').value = detalles.NUMERO || '';
         document.getElementById('exemplars').value = detalles.num_exemplars || '';
-        document.getElementById('cataleg').value = detalles.ID_CATÀLEG || '';
-        document.getElementById('biblioteca').value = detalles.ID_BIBLIOTECA || '';
+        // document.getElementById('cataleg').value = detalles.ID_CATALEG || '';
+        // document.getElementById('biblioteca').value = detalles.ID_BIBLIOTECA || '';
         document.getElementById('titol').value = detalles.TITOL || '';
         document.getElementById('isbn').value = detalles.ISBN || '';
         document.getElementById('cdu').value = detalles.CDU || '';
@@ -240,7 +241,9 @@ const llenarDetallesLibro = async (libroId) => {
         document.getElementById('lloc').value = detalles.LLOC || '';
         document.getElementById('colleccio').value = detalles.COLLECCIO || '';
         document.getElementById('pais').value = detalles.PAIS || '';
-        document.getElementById('data').value = detalles.DATA ? detalles.DATA.split(' ')[0] : ''; // Asumiendo que la fecha viene en formato datetime
+
+        // Es un integer (año solamente)
+        document.getElementById('dataLlibre').value = detalles.DATA || ''; // Asumiendo que la fecha viene en formato datetime
         document.getElementById('llengua').value = detalles.LLENGUA || '';
         document.getElementById('materia').value = detalles.MATERIA || '';
         document.getElementById('descriptor').value = detalles.DESCRIPTOR || '';
@@ -297,6 +300,9 @@ const formCreateBook = () => {
 
     document.querySelectorAll('#vistaLibro input, #vistaLibro textarea').forEach(input => {
         input.value = ''; // Vaciar todos los campos
+        if (input.id === 'exemplars') {
+            input.value = 1;
+        }
     });
 };
 
@@ -518,7 +524,7 @@ const loadPrestecs = () => {
                     optionDefault.textContent = 'Accions';
                     select.appendChild(optionDefault);
 
-                    if (prestec.estat === 'pendent' || prestec.estat === 'Pendent') {
+                    if (prestec.estat === 1 || prestec.estat === '1') {
                         const option1 = document.createElement('option');
                         option1.textContent = 'Autoritzar';
                         select.appendChild(option1);
@@ -538,6 +544,7 @@ const loadPrestecs = () => {
                     select.addEventListener('change', async () => {
                         const formData = new FormData();
                         formData.append('id_prestec', prestec.id_prestec);
+
                         switch (select.value) {
                             case 'Autoritzar':
                                 formData.append('pttn', 'autoritzarPrestec');

@@ -18,7 +18,8 @@ DROP TABLE IF EXISTS `dib_prestecs`, `dib_reserves`, `dib_expulsions`,
                      `dib_exemplars`, `dib_cataleg`, `dib_config`,
                      `dib_usuaris`, `dib_notificacions`, `dib_logs_errores`,
                      `dib_estrelles`, `dib_valoracions`, `dib_missatges`,
-                     `dib_xats`, `dib_usuaris_xats`;
+                     `dib_xats`, `dib_usuaris_xats`, `dib_reserves_estats`,
+                     `dib_prestecs_estats`, `dib_notificacions_estats`;
 SET foreign_key_checks = 1;
 COMMIT;
 
@@ -28,27 +29,29 @@ START TRANSACTION;
 CREATE TABLE IF NOT EXISTS dib_usuaris (
   usuari INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
+  nickname VARCHAR(255) NULL,
   passwd VARCHAR(255) NOT NULL,
-  rol ENUM('guest', 'user', 'bibliotecari', 'admin') NOT NULL,
+  rol ENUM('guest', 'user', 'moderador', 'bibliotecari', 'admin') NOT NULL,
   estat ENUM('actiu', 'inactiu', 'expulsat', 'expulsat-temp') NOT NULL,
   data_registre DATE DEFAULT CURRENT_DATE,
+  pfp VARCHAR(255) DEFAULT 'default.png',
   experiencia INT DEFAULT 0,
   nivell INT DEFAULT 1,
   INDEX (email)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- Taula de xats, no particulars, sinó de grups
 CREATE TABLE IF NOT EXISTS dib_xats (
   id_xat INT AUTO_INCREMENT PRIMARY KEY,
   nom_xat VARCHAR(255) NOT NULL
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_usuaris_xats (
   id_xat INT NOT NULL,
   usuari_id INT NOT NULL,
   FOREIGN KEY (id_xat) REFERENCES dib_xats(id_xat),
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_missatges (
   id_missatge INT AUTO_INCREMENT PRIMARY KEY,
@@ -58,10 +61,10 @@ CREATE TABLE IF NOT EXISTS dib_missatges (
   missatge TEXT NOT NULL,
   FOREIGN KEY (xat_id) REFERENCES dib_xats(id_xat),
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE dib_cataleg (
-  ID_CATÀLEG INT,
+  ID_CATALEG INT,
   ID_BIBLIOTECA INT,
   NUMERO INT PRIMARY KEY,
   ISBN VARCHAR(20),
@@ -71,8 +74,8 @@ CREATE TABLE dib_cataleg (
   AUTOR VARCHAR(100),
   EDITORIAL VARCHAR(100),
   LLOC VARCHAR(100),
-  COL·LECCIÓ VARCHAR(100),
-  PAÍS VARCHAR(50),
+  COLLECCIO VARCHAR(100),
+  PAIS VARCHAR(50),
   DATA FLOAT (7),
   LLENGUA VARCHAR(50),
   MATERIA VARCHAR(100),
@@ -80,17 +83,17 @@ CREATE TABLE dib_cataleg (
   NIVELL VARCHAR(50),
   RESUM TEXT,
   URL TEXT,
-  ADREÇA VARCHAR(255),
-  DIMENSIÓ VARCHAR(50),
-  VOLÚM VARCHAR(50),
-  PÀGINES INT,
+  ADRECA VARCHAR(255),
+  DIMENSIO VARCHAR(50),
+  VOLUM VARCHAR(50),
+  PAGINES INT,
   PROC VARCHAR(50),
   CARC VARCHAR(50),
   CAMP_LLIURE VARCHAR(100),
   NPRES INT,
   REC VARCHAR(50),
   ESTAT VARCHAR(50)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE dib_exemplars (
   IDENTIFICADOR INT,
@@ -98,7 +101,25 @@ CREATE TABLE dib_exemplars (
   SIGNATURA_EXEMPLAR VARCHAR(255),
   SITUACIO VARCHAR(50),
   ESTAT VARCHAR(50)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Estats reserves:
+CREATE TABLE IF NOT EXISTS dib_reserves_estats (
+  id_estat INT AUTO_INCREMENT PRIMARY KEY,
+  estat VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Estats prestecs:
+CREATE TABLE IF NOT EXISTS dib_prestecs_estats (
+  id_estat INT AUTO_INCREMENT PRIMARY KEY,
+  estat VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- Estats notificacions:
+CREATE TABLE IF NOT EXISTS dib_notificacions_estats (
+  id_estat INT AUTO_INCREMENT PRIMARY KEY,
+  estat VARCHAR(50) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_reserves (
   reserva INT AUTO_INCREMENT PRIMARY KEY,
@@ -106,11 +127,12 @@ CREATE TABLE IF NOT EXISTS dib_reserves (
   usuari_id INT NOT NULL,
   data_inici DATE,
   data_fi DATE DEFAULT DATE_ADD(CURRENT_DATE, INTERVAL 7 DAY),
-  estat ENUM('finalitzada', 'en-curs', 'pendent') NOT NULL,
+  estat INT DEFAULT 1,
   prolongada BOOLEAN,
   motiu_prolongacio TEXT NULL,
-  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari),
+  FOREIGN KEY (estat) REFERENCES dib_reserves_estats(id_estat)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_prestecs (
   id_prestec INT AUTO_INCREMENT PRIMARY KEY,
@@ -120,10 +142,11 @@ CREATE TABLE IF NOT EXISTS dib_prestecs (
   data_inici DATE NOT NULL,
   data_devolucio DATE NOT NULL,
   data_real_tornada DATE,
-  estat VARCHAR(50) NOT NULL,
+  estat INT DEFAULT 1,
   comentaris TEXT,
-  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari),
+  FOREIGN KEY (estat) REFERENCES dib_prestecs_estats(id_estat)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_estrelles (
   id_estrella INT AUTO_INCREMENT PRIMARY KEY,
@@ -132,7 +155,7 @@ CREATE TABLE IF NOT EXISTS dib_estrelles (
   exemplar_id INT NOT NULL,
   data_puntuacio DATE NULL,
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_valoracions (
   id_comentari INT AUTO_INCREMENT PRIMARY KEY,
@@ -141,7 +164,7 @@ CREATE TABLE IF NOT EXISTS dib_valoracions (
   data_comentari DATE NULL,
   comentari TEXT NOT NULL,
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_expulsions (
   id_expulsion INT AUTO_INCREMENT PRIMARY KEY,
@@ -151,7 +174,7 @@ CREATE TABLE IF NOT EXISTS dib_expulsions (
   data_reincorporacio DATE,
   estat ENUM('expulsat', 'expulsat-temp', 'reincorporat') NOT NULL,
   FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_config (
   CONFIG_ID INT AUTO_INCREMENT PRIMARY KEY,
@@ -164,7 +187,7 @@ CREATE TABLE IF NOT EXISTS dib_config (
   COLOR_TERCIARIO CHAR(7),
   BANNER_STATE BOOLEAN,
   BANNER_TEXT TEXT
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_notificacions (
   id_notificacio INT AUTO_INCREMENT PRIMARY KEY,
@@ -173,17 +196,18 @@ CREATE TABLE IF NOT EXISTS dib_notificacions (
   missatge TEXT NOT NULL,
   data_creada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   data_llegida TIMESTAMP NULL,
-  estat ENUM('pendent', 'llegida', 'descartada') DEFAULT 'pendent',
+  estat INT DEFAULT 1,
   tipus VARCHAR(50),
-  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari)
-);
+  FOREIGN KEY (usuari_id) REFERENCES dib_usuaris(usuari),
+  FOREIGN KEY (estat) REFERENCES dib_notificacions_estats(id_estat)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 CREATE TABLE IF NOT EXISTS dib_logs_errores (
   id_error INT AUTO_INCREMENT PRIMARY KEY,
   fecha_error TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   descripcion_error TEXT,
   contexto_error VARCHAR(255)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 COMMIT;
 
@@ -196,6 +220,11 @@ CREATE INDEX idx_notificacions_data ON dib_notificacions(data_creada);
 
 COMMIT;
 
+-- Insert de estados:
+START TRANSACTION;
+INSERT INTO dib_reserves_estats (estat) VALUES ('pendent'), ('confirmada'), ('finalitzada'), ('cancel·lada');
+INSERT INTO dib_prestecs_estats (estat) VALUES ('pendent'), ('confirmat'), ('finalitzat'), ('cancel·lat');
+INSERT INTO dib_notificacions_estats (estat) VALUES ('pendent'), ('enviada'), ('llegida');
 
 -- Triggers y eventos
 START TRANSACTION;

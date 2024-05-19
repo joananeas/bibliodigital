@@ -58,7 +58,7 @@
         <div class="popup-content">
             <section class="frame">
                 <a id="closeReserva" class="close">&times;</a>
-                <p class="fuenteH1" style="text-align:center;">Reservar ahsou</p>
+                <p class="fuenteH1" style="text-align:center;">Reservar</p>
                 <div id="calendar-container">
                     <div id="calendar-header">
                         <button id="prev-month" class="botonUniversal">&laquo;</button>

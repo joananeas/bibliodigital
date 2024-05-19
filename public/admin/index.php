@@ -54,12 +54,12 @@
                         <input type="number" id="exemplars" name="exemplars" class="primerInput">
                         <br>
 
-                        <label for="titol">Catàleg:</label>
+                        <!-- <label for="titol">Catàleg:</label>
                         <input type="text" id="cataleg" name="cataleg" class="primerInput">
 
                         <label for="isbn">Biblioteca:</label>
                         <input type="text" id="biblioteca" name="biblioteca">
-                        <br>
+                        <br> -->
 
                         <label for="titol">Títol:</label>
                         <input type="text" id="titol" name="titol" class="primerInput">
@@ -92,8 +92,8 @@
                         <label for="pais">País:</label>
                         <input type="text" id="pais" name="pais" class="primerInput">
 
-                        <label for="data">Data:</label>
-                        <input type="date" id="data" name="data">
+                        <label for="dataLlibre">Data:</label>
+                        <input type="number" id="dataLlibre" name="dataLlibre">
                         <br>
 
                         <label for="llengua">Llengua:</label>

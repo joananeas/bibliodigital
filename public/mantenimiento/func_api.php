@@ -22,33 +22,37 @@ function peticionSQL()
     return $conn;
 }
 
-function cercaLlibresLite($conn, $llibre)
-{   
+function cercaLlibresLite($conn, $llibre){   
     $sql = ""; # Innit before if check
 
     # Esto comprueba si se está buscando una categoría o un libro
     $llibre = strtolower($llibre);
     $llibre = mysqli_real_escape_string($conn, $llibre);
+
     if (str_contains($llibre, "c:")) {
         $llibre = str_replace("c:", "", $llibre); # Previene usar "c:" en la consulta (se buguea)
-        $sql = "SELECT DISTINCT dib_cataleg.TITOL 
-            AS nom, dib_exemplars.ESTAT 
-            AS estadoActual, dib_cataleg.NUMERO 
-            AS id 
-            FROM `dib_cataleg` INNER JOIN `dib_exemplars` 
-            ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
-            WHERE `MATERIA` LIKE '%$llibre%'";
-    }
-    
-    else {
-        $sql = "SELECT DISTINCT dib_cataleg.TITOL 
-            AS nom, dib_exemplars.ESTAT 
-            AS estadoActual, dib_cataleg.NUMERO 
-            AS id 
-            FROM `dib_cataleg` INNER JOIN `dib_exemplars` 
-            ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
-            WHERE `TITOL` LIKE '%$llibre%' 
-            OR AUTOR LIKE '%$llibre%'";
+        $sql = "SELECT DISTINCT dib_cataleg.TITOL AS nom, 
+                dib_cataleg.NUMERO AS id,
+                (CASE 
+                    WHEN EXISTS (SELECT 1 FROM dib_exemplars de WHERE de.IDENTIFICADOR = dib_cataleg.NUMERO AND de.ESTAT = 'Disponible') 
+                    THEN 'Disponible'
+                    ELSE 'Prestat' 
+                END) AS estadoActual
+                FROM dib_cataleg
+                INNER JOIN dib_exemplars ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
+                WHERE dib_cataleg.MATERIA LIKE '%$llibre%'";
+    } else {
+        $sql = "SELECT DISTINCT dib_cataleg.TITOL AS nom, 
+                dib_cataleg.NUMERO AS id,
+                (CASE 
+                    WHEN EXISTS (SELECT 1 FROM dib_exemplars de WHERE de.IDENTIFICADOR = dib_cataleg.NUMERO AND de.ESTAT = 'Disponible') 
+                    THEN 'Disponible'
+                    ELSE 'Prestat' 
+                END) AS estadoActual
+                FROM dib_cataleg
+                INNER JOIN dib_exemplars ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR 
+                WHERE dib_cataleg.TITOL LIKE '%$llibre%' 
+                OR dib_cataleg.AUTOR LIKE '%$llibre%'";
     }
 
     $result = mysqli_query($conn, $sql);
@@ -60,8 +64,7 @@ function cercaLlibresLite($conn, $llibre)
             # Si datos están sucios
             if  (str_contains($row['estadoActual'], "Disponible")) {
                 $row['estadoActual'] = "Disponible";
-            }
-            else {
+            } else {
                 $row['estadoActual'] = "Prestat";
             }
             $rows[] = $row;
@@ -74,8 +77,7 @@ function cercaLlibresLite($conn, $llibre)
     }
 }
 
-function cercaExemplars($conn, $llibre)
-{
+function cercaExemplars($conn, $llibre){
     $sql = "SELECT COUNT(dib_exemplars.IDENTIFICADOR) AS num_exemplars
             FROM `dib_exemplars`
             WHERE dib_exemplars.IDENTIFICADOR = ?";
@@ -87,8 +89,7 @@ function cercaExemplars($conn, $llibre)
     return mysqli_fetch_assoc($result)['num_exemplars'];
 }
 
-function cercaLlibresAll($conn, $libroId)
-{
+function cercaLlibresAll($conn, $libroId){
     $conn->set_charset("utf8mb4");
     $sql = "SELECT DISTINCT
                 dib_cataleg.*,
@@ -96,7 +97,7 @@ function cercaLlibresAll($conn, $libroId)
             FROM `dib_cataleg`
             LEFT JOIN `dib_exemplars` ON dib_cataleg.NUMERO = dib_exemplars.IDENTIFICADOR
             WHERE dib_cataleg.`NUMERO` = ?
-            GROUP BY dib_cataleg.NUMERO;";
+            GROUP BY dib_cataleg.NUMERO";
 
     $stmt = mysqli_prepare($conn, $sql);
 
@@ -124,9 +125,7 @@ function cercaLlibresAll($conn, $libroId)
     mysqli_stmt_close($stmt);
 }
 
-
-function cercaLlibresFull($conn, $llibre)
-{
+function cercaLlibresFull($conn, $llibre){
     $sql = "SELECT DISTINCT dib_cataleg.TITOL AS nom,
                 dib_exemplars.ESTAT as estadoActual,
                 dib_cataleg.URL as 'url',
@@ -150,8 +149,7 @@ function cercaLlibresFull($conn, $llibre)
     }
 }
 
-function getStars($conn, $llibre)
-{
+function getStars($conn, $llibre){
     $sql = "SELECT AVG(puntuacio) as estrelles FROM dib_estrelles WHERE exemplar_id = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $llibre);
@@ -165,28 +163,7 @@ function getStars($conn, $llibre)
     }
 }
 
-function reservarLibro($conn, $titulo, $fechaInicio, $fechaFin)
-{
-    // Primero, verifica si el libro existe en la base de datos
-    $sql = "SELECT * FROM llibres WHERE nom = '$titulo'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        // Si el libro existe, inserta la reserva en la base de datos
-        $sql = "INSERT INTO `reserves` (`reserva`, `nomLlibre`, `dataInici`, `dataFi`) VALUES (NULL, ?, ?, ?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "sss", $titulo, $fechaInicio, $fechaFin);
-        if (mysqli_stmt_execute($stmt)) {
-            echo json_encode(['response' => 'OK']);
-        } else {
-            echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo insertar la reserva en la base de datos']);
-        }
-    } else {
-        echo json_encode(['response' => 'ERROR', 'message' => 'El libro no existe']);
-    }
-}
-
-function getReserves($conn, $id)
-{
+function getReserves($conn, $id){
     $sql = "SELECT `reserva`, dib_cataleg.TITOL AS llibre, `usuari_id`, `data_inici`, `data_fi`, dib_reserves.`estat`, `prolongada`, `motiu_prolongacio` 
             FROM dib_reserves 
             JOIN dib_exemplars ON dib_reserves.exemplar_id = dib_exemplars.IDENTIFICADOR 
@@ -206,8 +183,7 @@ function getReserves($conn, $id)
     }
 }
 
-function reservar($conn, $exemplar_id, $usuari_id, $data_inici, $estat = 'pendent', $prolongada = false, $motiu_prolongacio = '')
-{
+function reservar($conn, $exemplar_id, $usuari_id, $data_inici, $estat = 1, $prolongada = false, $motiu_prolongacio = ''){
     $data_fi = date('Y-m-d', strtotime($data_inici . ' + 7 days'));
 
     $sql = "INSERT INTO `dib_reserves` (`reserva`, `exemplar_id`, `usuari_id`, `data_inici`, `data_fi`, `estat`, `prolongada`, `motiu_prolongacio`) 
@@ -225,25 +201,16 @@ function reservar($conn, $exemplar_id, $usuari_id, $data_inici, $estat = 'penden
     }
 }
 
-
-function modificarLlibre($id, $exemplars, $OGexemplars, $cataleg, $biblioteca, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat)
-{
+function modificarLlibre($id, $exemplars, $OGexemplars, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat) {
     $conn = peticionSQL();
     $conn->set_charset("utf8mb4");
-    $sql = "UPDATE `dib_cataleg` SET `ID_CATÀLEG`=?, `ID_BIBLIOTECA`=?, `ISBN`=?, 
-            `CDU`=?, `FORMAT`=?, `TITOL`=?, `AUTOR`=?, `EDITORIAL`=?, `LLOC`=?,
-            `COL·LECCIÓ`=?, `PAÍS`=?, `DATA`=?, `LLENGUA`=?, `MATERIA`=?, `DESCRIPTOR`=?, 
-            `NIVELL`=?, `RESUM`=?, `URL`=?, `ADREÇA`=?, `DIMENSIÓ`=?, `VOLÚM`=?, 
-            `PÀGINES`=?, `PROC`=?, `CARC`=?, `CAMP_LLIURE`=?, `NPRES`=?, `REC`=?, 
-            `ESTAT`=? WHERE `NUMERO` = ?";
+
+    $sql = "UPDATE `dib_cataleg` SET `ISBN`=?, `CDU`=?, `FORMAT`=?, `TITOL`=?, `AUTOR`=?, `EDITORIAL`=?, `LLOC`=?, `COLLECCIO`=?, `PAIS`=?, `DATA`=?, `LLENGUA`=?, `MATERIA`=?, `DESCRIPTOR`=?, `NIVELL`=?, `RESUM`=?, `URL`=?, `ADRECA`=?, `DIMENSIO`=?, `VOLUM`=?, `PAGINES`=?, `PROC`=?, `CARC`=?, `CAMP_LLIURE`=?, `NPRES`=?, `REC`=?, `ESTAT`=? WHERE `NUMERO` = ?";
 
     $stmt = mysqli_prepare($conn, $sql);
 
     $params = [
-        $cataleg, $biblioteca, $isbn, $cdu, $format, $titol, $autor, $editorial,
-        $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell,
-        $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc,
-        $camp_lliure, $npres, $rec, $estat, $id
+        $isbn, $cdu, $format, $titol, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat, $id
     ];
 
     for ($i = 0; $i < count($params); $i++) {
@@ -254,29 +221,25 @@ function modificarLlibre($id, $exemplars, $OGexemplars, $cataleg, $biblioteca, $
         return json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
     }
 
-    mysqli_stmt_bind_param(
-        $stmt,
-        'iisssssssssisssssssssisssissi', # 30 parámetros
-        ...$params
-    );
+    mysqli_stmt_bind_param($stmt, 'sssssssssisssssssssisssissi', ...$params);
 
     if (mysqli_stmt_execute($stmt)) {
         if ($exemplars > $OGexemplars) {
             $diff = $exemplars - $OGexemplars;
             for ($i = 0; $i < $diff; $i++) {
-                $sqlInsert = "INSERT INTO `dib_exemplars` (`NUMERO_EXEMPLAR`, `SIGNATURA_EXEMPLAR`, `SITUACIO`, `ESTAT`) VALUES (?, ?, ?, ?)";
+                $sqlInsert = "INSERT INTO `dib_exemplars` (`IDENTIFICADOR`, `NUMERO_EXEMPLAR`, `SIGNATURA_EXEMPLAR`, `SITUACIO`, `ESTAT`) VALUES (?, ?, ?, ?, ?)";
                 $stmtInsert = mysqli_prepare($conn, $sqlInsert);
 
                 if (!$stmtInsert) {
                     return json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
                 }
 
-                $numero_exemplar = $id;
-                $signatura_exemplar = $cdu . " " . str_split($autor, 3)[0];
+                $numero_exemplar = $OGexemplars + $i + 1;
+                $signatura_exemplar = $cdu . " " . substr($autor, 0, 3);
                 $situacio = 'Préstec';
-                $estat = 'Disponible';
+                $estat_exemplar = 'Disponible';
 
-                mysqli_stmt_bind_param($stmtInsert, 'isss', $numero_exemplar, $signatura_exemplar, $situacio, $estat);
+                mysqli_stmt_bind_param($stmtInsert, 'iisss', $id, $numero_exemplar, $signatura_exemplar, $situacio, $estat_exemplar);
 
                 if (!mysqli_stmt_execute($stmtInsert)) {
                     $error = mysqli_stmt_error($stmtInsert);
@@ -285,12 +248,15 @@ function modificarLlibre($id, $exemplars, $OGexemplars, $cataleg, $biblioteca, $
             }
         } elseif ($exemplars < $OGexemplars) {
             $diff = $OGexemplars - $exemplars;
-            $sqlDelete = "DELETE FROM `dib_exemplars` WHERE `IDENTIFICADOR` = ? ORDER BY `NUMERO_EXEMPLAR` DESC LIMIT ?; ";
+            $sqlDelete = "DELETE FROM `dib_exemplars` WHERE `IDENTIFICADOR` = ? ORDER BY `NUMERO_EXEMPLAR` DESC LIMIT ?";
             $stmtDelete = mysqli_prepare($conn, $sqlDelete);
+
             if (!$stmtDelete) {
                 return json_encode(['response' => 'ERROR', 'message' => 'Error al preparar la consulta: ' . mysqli_error($conn)]);
             }
+
             mysqli_stmt_bind_param($stmtDelete, 'ii', $id, $diff);
+
             if (!mysqli_stmt_execute($stmtDelete)) {
                 $error = mysqli_stmt_error($stmtDelete);
                 return json_encode(['response' => 'ERROR', 'message' => 'Error al eliminar la consulta: ' . $error]);
@@ -304,8 +270,7 @@ function modificarLlibre($id, $exemplars, $OGexemplars, $cataleg, $biblioteca, $
     }
 }
 
-function getLastLlibre()
-{
+function getLastLlibre(){
     $conn = peticionSQL();
     $sql = "SELECT MAX(NUMERO) as last FROM dib_cataleg";
     $result = mysqli_query($conn, $sql);
@@ -318,46 +283,15 @@ function getLastLlibre()
     }
 }
 
-function crearLlibre(
-    $cataleg,
-    $biblioteca,
-    $id,
-    $exemplars,
-    $titol,
-    $isbn,
-    $cdu,
-    $format,
-    $autor,
-    $editorial,
-    $lloc,
-    $colleccio,
-    $pais,
-    $data,
-    $llengua,
-    $materia,
-    $descriptor,
-    $nivell,
-    $resum,
-    $url,
-    $adreca,
-    $dimensio,
-    $volum,
-    $pagines,
-    $proc,
-    $carc,
-    $camp_lliure,
-    $npres,
-    $rec,
-    $estat
-) {
+function crearLlibre($id, $exemplars, $titol, $isbn, $cdu, $format, $autor, $editorial, $lloc, $colleccio, $pais, $data, $llengua, $materia, $descriptor, $nivell, $resum, $url, $adreca, $dimensio, $volum, $pagines, $proc, $carc, $camp_lliure, $npres, $rec, $estat) {
     $conn = peticionSQL();
     $conn->set_charset("utf8mb4");
 
-    $sql = "INSERT INTO `dib_cataleg` (`ID_CATÀLEG`, `ID_BIBLIOTECA`, `NUMERO`, `ISBN`, `CDU`, 
-            `FORMAT`, `TITOL`, `AUTOR`, `EDITORIAL`, `LLOC`, `COL·LECCIÓ`, `PAÍS`, `DATA`, `LLENGUA`, 
-            `MATERIA`, `DESCRIPTOR`, `NIVELL`, `RESUM`, `URL`, `ADREÇA`, `DIMENSIÓ`, `VOLÚM`, `PÀGINES`, 
+    $sql = "INSERT INTO `dib_cataleg` (`ID_CATALEG`, `ID_BIBLIOTECA`, `NUMERO`, `ISBN`, `CDU`, 
+            `FORMAT`, `TITOL`, `AUTOR`, `EDITORIAL`, `LLOC`, `COLLECCIO`, `PAIS`, `DATA`, `LLENGUA`, 
+            `MATERIA`, `DESCRIPTOR`, `NIVELL`, `RESUM`, `URL`, `ADRECA`, `DIMENSIO`, `VOLUM`, `PAGINES`, 
             `PROC`, `CARC`, `CAMP_LLIURE`, `NPRES`, `REC`, `ESTAT`) 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+            VALUES (NULL, NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     $stmt = mysqli_prepare($conn, $sql);
     if (!$stmt) {
@@ -367,9 +301,7 @@ function crearLlibre(
 
     mysqli_stmt_bind_param(
         $stmt,
-        'iiisssssssssisssssssssisssiss',
-        $cataleg,
-        $biblioteca,
+        'isssssssssisssssssssisssiss',
         $id,
         $isbn,
         $cdu,
@@ -420,9 +352,7 @@ function crearLlibre(
     }
 }
 
-
-function valorarLlibre($idLlibre, $idUsuari, $estrelles, $comentari)
-{
+function valorarLlibre($idLlibre, $idUsuari, $estrelles, $comentari){
     $conn = peticionSQL();
     $sql = "INSERT INTO `dib_valoracions`(`id_comentari`, `usuari_id`, `exemplar_id`, `data_comentari`, `comentari`) 
     VALUES (NULL, ?, ?, ?, ?)";
@@ -466,7 +396,7 @@ function prestarExemplar($id_reserva) {
             $data_devolucio = date("Y-m-d", strtotime("+1 month"));
 
             $sql_prestec = "INSERT INTO dib_prestecs (id_prestec, exemplar_id, exemplar_num, usuari_id, data_inici, data_devolucio, data_real_tornada, estat, comentaris) 
-                            VALUES (NULL, ?, ?, ?, ?, ?, NULL, 'Pendent', 'Pendent del bibliotecari.')";
+                            VALUES (NULL, ?, ?, ?, ?, ?, NULL, 1, 'Pendent del bibliotecari.')";
             $stmt_prestec = mysqli_prepare($conn, $sql_prestec);
             mysqli_stmt_bind_param($stmt_prestec, "iiiss", $exemplar_id, $exemplar_num, $usuari_id, $data_inici, $data_devolucio);
             if (mysqli_stmt_execute($stmt_prestec)) {
@@ -490,8 +420,6 @@ function prestarExemplar($id_reserva) {
 
     $conn->close();
 }
-
-
 
 function viewAllPrestecs() {
     $conn = peticionSQL();
@@ -574,33 +502,115 @@ function getCDU($id_llibre){
     $conn->close();
 }
 
-function autoritzarPrestec($id_prestec){
+function autoritzarPrestec($id_prestec) {
     $conn = peticionSQL();
-    $sql = "UPDATE dib_prestecs SET estat = 'Autoritzat' WHERE id_prestec = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $id_prestec);
-    if (mysqli_stmt_execute($stmt)) {
-        return json_encode(['response' => 'OK']);
-    } else {
+
+    // Obtener los valores de exemplar_id y usuari_id del préstamo
+    $sqlSelect = "SELECT exemplar_id, usuari_id FROM dib_prestecs WHERE id_prestec = ?";
+    $stmtSelect = mysqli_prepare($conn, $sqlSelect);
+    mysqli_stmt_bind_param($stmtSelect, "i", $id_prestec);
+    mysqli_stmt_execute($stmtSelect);
+    mysqli_stmt_bind_result($stmtSelect, $exemplar_id, $usuari_id);
+    mysqli_stmt_fetch($stmtSelect);
+    mysqli_stmt_close($stmtSelect);
+
+    // Verificar si se obtuvieron los valores de exemplar_id y usuari_id
+    if (empty($exemplar_id) || empty($usuari_id)) {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo obtener los datos del préstamo']);
+    }
+
+    // Iniciar la transacción
+    mysqli_begin_transaction($conn);
+
+    // Actualizar el estado del préstamo
+    $sqlUpdatePrestec = "UPDATE dib_prestecs SET estat = 2, comentaris = 'Préstec confirmat' WHERE id_prestec = ?";
+    $stmtUpdatePrestec = mysqli_prepare($conn, $sqlUpdatePrestec);
+    mysqli_stmt_bind_param($stmtUpdatePrestec, "i", $id_prestec);
+
+    if (!mysqli_stmt_execute($stmtUpdatePrestec)) {
+        mysqli_rollback($conn);
         return json_encode(['response' => 'ERROR', 'message' => 'No se pudo autorizar el préstamo']);
     }
+
+    mysqli_stmt_close($stmtUpdatePrestec);
+
+    // Actualizar el estado de la reserva correspondiente
+    $sqlUpdateReserva = "UPDATE dib_reserves SET estat = 3 WHERE exemplar_id = ? AND usuari_id = ?";
+    $stmtUpdateReserva = mysqli_prepare($conn, $sqlUpdateReserva);
+    mysqli_stmt_bind_param($stmtUpdateReserva, "ii", $exemplar_id, $usuari_id);
+
+    if (!mysqli_stmt_execute($stmtUpdateReserva)) {
+        mysqli_rollback($conn);
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar la reserva']);
+    }
+
+    mysqli_stmt_close($stmtUpdateReserva);
+
+    // Confirmar la transacción
+    mysqli_commit($conn);
+
+    // Cerrar la conexión
+    mysqli_close($conn);
+
+    return json_encode(['response' => 'OK']);
 }
 
-function denegarPrestec($id_prestec){
+function denegarPrestec($id_prestec) {
     $conn = peticionSQL();
-    $sql = "UPDATE dib_prestecs SET estat = 'Denegat' WHERE id_prestec = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $id_prestec);
-    if (mysqli_stmt_execute($stmt)) {
-        return json_encode(['response' => 'OK']);
-    } else {
+
+    // Obtener los valores de exemplar_id y usuari_id del préstamo
+    $sqlSelect = "SELECT exemplar_id, usuari_id FROM dib_prestecs WHERE id_prestec = ?";
+    $stmtSelect = mysqli_prepare($conn, $sqlSelect);
+    mysqli_stmt_bind_param($stmtSelect, "i", $id_prestec);
+    mysqli_stmt_execute($stmtSelect);
+    mysqli_stmt_bind_result($stmtSelect, $exemplar_id, $usuari_id);
+    mysqli_stmt_fetch($stmtSelect);
+    mysqli_stmt_close($stmtSelect);
+
+    // Verificar si se obtuvieron los valores de exemplar_id y usuari_id
+    if (empty($exemplar_id) || empty($usuari_id)) {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo obtener los datos del préstamo']);
+    }
+
+    // Iniciar la transacción
+    mysqli_begin_transaction($conn);
+
+    // Actualizar el estado del préstamo
+    $sqlUpdatePrestec = "UPDATE dib_prestecs SET estat = 4, comentaris = 'Préstec Cancel·lat' WHERE id_prestec = ?";
+    $stmtUpdatePrestec = mysqli_prepare($conn, $sqlUpdatePrestec);
+    mysqli_stmt_bind_param($stmtUpdatePrestec, "i", $id_prestec);
+
+    if (!mysqli_stmt_execute($stmtUpdatePrestec)) {
+        mysqli_rollback($conn);
         return json_encode(['response' => 'ERROR', 'message' => 'No se pudo denegar el préstamo']);
     }
+
+    mysqli_stmt_close($stmtUpdatePrestec);
+
+    // Actualizar el estado de la reserva correspondiente
+    $sqlUpdateReserva = "UPDATE dib_reserves SET estat = 4 WHERE exemplar_id = ? AND usuari_id = ?";
+    $stmtUpdateReserva = mysqli_prepare($conn, $sqlUpdateReserva);
+    mysqli_stmt_bind_param($stmtUpdateReserva, "ii", $exemplar_id, $usuari_id);
+
+    if (!mysqli_stmt_execute($stmtUpdateReserva)) {
+        mysqli_rollback($conn);
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar la reserva']);
+    }
+
+    mysqli_stmt_close($stmtUpdateReserva);
+
+    // Confirmar la transacción
+    mysqli_commit($conn);
+
+    // Cerrar la conexión
+    mysqli_close($conn);
+
+    return json_encode(['response' => 'OK']);
 }
 
 function retornarPrestec($id_prestec){
     $conn = peticionSQL();
-    $sql = "UPDATE dib_prestecs SET estat = 'Tornat' WHERE id_prestec = ?";
+    $sql = "UPDATE dib_prestecs SET estat = 3, data_real_tornada = curdate(), comentaris = 'Préstec finalitzat, tornat per usuari.' WHERE id_prestec = ?";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $id_prestec);
     if (mysqli_stmt_execute($stmt)) {
@@ -612,9 +622,9 @@ function retornarPrestec($id_prestec){
         mysqli_stmt_fetch($stmt_get_exemplar);
         mysqli_stmt_close($stmt_get_exemplar);
 
-        $sql_update_exemplar = "UPDATE dib_exemplars SET ESTAT = 'Disponible' WHERE IDENTIFICADOR = ?";
+        $sql_update_exemplar = "UPDATE dib_exemplars SET ESTAT = 'Disponible' WHERE IDENTIFICADOR = ? AND NUMERO_EXEMPLAR = (SELECT exemplar_num FROM dib_prestecs WHERE id_prestec = ?)";
         $stmt_update_exemplar = mysqli_prepare($conn, $sql_update_exemplar);
-        mysqli_stmt_bind_param($stmt_update_exemplar, "i", $exemplar_id);
+        mysqli_stmt_bind_param($stmt_update_exemplar, "ii", $exemplar_id, $id_prestec);
         mysqli_stmt_execute($stmt_update_exemplar);
         mysqli_stmt_close($stmt_update_exemplar);
 
@@ -635,7 +645,6 @@ function eliminarPrestec($id_prestec){
         return json_encode(['response' => 'ERROR', 'message' => 'No se pudo eliminar el préstamo']);
     }
 }
-
 
 function crearChat($nom){
     $conn = peticionSQL();
@@ -716,5 +725,43 @@ function getCategories(){
     } else {
         echo json_encode(array('response' => 'ERROR', 'message' => 'No records found'));
     }
+    $conn->close();
+}
+
+# Función para obtener la disponibilidad de un libro antes de reservar (rellenar calendario)
+function getDisponibilitatLlibrePerReserves($id_llibre) {
+    $conn = peticionSQL();
+    $sql = "SELECT dr.estat AS estat_reserva
+            FROM dib_reserves dr
+            WHERE dr.exemplar_id = ?
+            AND dr.data_fi >= CURDATE()
+            AND (dr.estat = 1 OR dr.estat = 2)"; // 1 = Pendent, 2 = Confirmada
+
+    $stmt = mysqli_prepare($conn, $sql);
+    
+    if ($stmt === false) {
+        echo json_encode(array('response' => 'E', 'message' => 'Prepare failed: ' . mysqli_error($conn)));
+        return;
+    }
+
+    mysqli_stmt_bind_param($stmt, "i", $id_llibre);
+
+    if (mysqli_stmt_execute($stmt)) {
+        $reserves = array();
+        $result = mysqli_stmt_get_result($stmt); // Initialize the $result variable
+
+        if ($result) {
+            while($row = $result->fetch_assoc()) {
+                $reserves[] = $row;
+            }
+            echo json_encode(array('response' => 'OK', 'message' => $reserves));
+        } else {
+            echo json_encode(array('response' => 'E', 'message' => 'Error fetching result: ' . mysqli_error($conn)));
+        }
+    } else {
+        echo json_encode(array('response' => 'E', 'message' => 'Execute failed: ' . mysqli_stmt_error($stmt)));
+    }
+
+    mysqli_stmt_close($stmt);
     $conn->close();
 }
