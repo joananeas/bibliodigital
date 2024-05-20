@@ -773,6 +773,7 @@ async function crearChat() {
     });
 };
 
+
 async function getChats() {
     const formData = new FormData();
     formData.append('pttn', 'getChats');
@@ -789,6 +790,7 @@ async function getChats() {
 
         const data = await response.json();
         if (data.response === 'OK') {
+            if (data.message.length === 0) return;
             const chats = data.message;
             const chatList = document.getElementById('chatList');
             chatList.innerHTML = `
@@ -796,6 +798,8 @@ async function getChats() {
                     <th>ID</th>
                     <th>Nom del xat</th>
                     <th>Total Usuaris</th>
+                    <th>Imatge Xat</th>
+                    <th>Rol mínim</th>
                     <th>Accions</th>
                 </tr>
             `;
@@ -815,20 +819,51 @@ async function getChats() {
                 usersCell.textContent = chat.total_usuaris || 0; // Assuming total_usuaris is a field in the response
                 row.appendChild(usersCell);
 
+                const imgCell = document.createElement('td');
+                const img = document.createElement('img');
+                img.src = "../media/sistema/xats/" + chat.img_xat;
+                img.alt = chat.nom_xat;
+                img.width = 40;
+                img.height = 40;
+
+                imgCell.appendChild(img);
+                row.appendChild(imgCell);
+
+                const roleCell = document.createElement('td');
+                roleCell.textContent = chat.min_rol;
+                row.appendChild(roleCell);
+
                 const actionsCell = document.createElement('td');
-                const viewButton = document.createElement('button');
-                viewButton.textContent = 'View';
-                viewButton.addEventListener('click', () => {
-                    document.getElementById('chatId').value = chat.id_xat;
-                    document.getElementById('chatName').value = chat.nom_xat;
+                const editImgBtn = document.createElement('button');
+                editImgBtn.textContent = 'Editar Imatge';
+                editImgBtn.addEventListener('click', () => {
+                    const additionalParams = {
+                        id_xat: chat.id_xat
+                    };
+
+                    setUpPopUp('uploadImgXat', 'imatgeXat', 'Canvia la imatge del xat', additionalParams);
                 });
+
+                const viewButton = document.createElement('button');
+                viewButton.textContent = 'Veure';
+                viewButton.addEventListener('click', () => {
+                    window.location.href = `../xats.php?id=${chat.id_xat}`;
+                });
+
+                actionsCell.appendChild(editImgBtn);
                 actionsCell.appendChild(viewButton);
                 row.appendChild(actionsCell);
 
                 chatList.appendChild(row);
             });
         } else {
-            alert('Error al obtener los chats: ' + data.message);
+            const chatList = document.getElementById('chatList');
+            chatList.innerHTML = `
+                <tr>
+                    <td colspan="4">No hi han xats</td>
+                </tr>
+            `;
+            //alert('Error al obtener los chats: ' + data.message);
         }
     } catch (error) {
         console.error('Error:', error);

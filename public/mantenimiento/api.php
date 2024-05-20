@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.8'; # - ✨ Perfil.php :))
+const VERSION =  'v1.7.9'; # - ✨ Img and username on xats. Also img picker for xat profile.
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -428,7 +428,7 @@ switch ($peticion) {
     case 'updateProfile':
         $username = $_POST['username'];
         $email = $_POST['email'];
-        $password = $_POST['password'];
+        $password = $_POST['password'] ?? null;
         $description = $_POST['description'];
         
         $resp = updateProfile($apiUsuarios->getID(), $username, $email, $password, $description);
@@ -437,6 +437,26 @@ switch ($peticion) {
         
     case 'getProfileData':
         $resp = getProfileData($apiUsuarios->getID());
+        echo $resp;
+        break;
+    
+    case 'uploadImgXat':
+        $img = $_FILES['imatgeXat'];
+        $id_xat = $_POST['id_xat'];
+        
+        $resp = uploadImgXat($img, $id_xat);
+        echo $resp;
+        break;
+        
+    case 'getImgXat':
+        $id_xat = $_POST['id_xat'];
+        $resp = getImgXat($id_xat);
+        echo $resp;
+        break;
+    
+    case 'getXatName':
+        $id_xat = $_POST['id_xat'];
+        $resp = getXatName($id_xat);
         echo $resp;
         break;
         

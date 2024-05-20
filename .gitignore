@@ -25,12 +25,20 @@ public/media/sistema/favicon/*.jpeg
 !public/media/sistema/favicon/default.svg
 
 # No trackea las fotos de perfil
-public/media/usuarios/*.png
-public/media/usuarios/*.jpg
-public/media/usuarios/*.jpeg
+public/media/usuaris/*.png
+public/media/usuaris/*.jpg
+public/media/usuaris/*.jpeg
 
 # Excepciones
-!public/media/usuarios/default.png
-!public/media/usuarios/default.jpg
-!public/media/usuarios/default.jpeg
+!public/media/usuaris/default.png
+!public/media/usuaris/default.jpg
+!public/media/usuaris/default.jpeg
+
+# No trackea las fotos de los xats
+public/media/xats/*.png
+public/media/xats/*.jpg
+
+# Excepciones
+!public/media/xats/default.png
+!public/media/xats/default.jpg
 

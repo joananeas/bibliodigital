@@ -373,9 +373,9 @@ const scriptsLogin = ["login.js"];
 const scriptsReservas = ["reservas.js"];
 const scriptsInstall = ["install.js"];
 const scriptsError = ["error.js"];
-const scriptsAdmin = ["admin.js"];
+const scriptsAdmin = ["admin.js", "popups.js"];
 const scriptsXats = ["xats.js"];
-const scriptsPerfil = ["perfil.js"];
+const scriptsPerfil = ["perfil.js", "popups.js"];
 
 const cargarScripts = (scripts) => {
     for (const element of scripts) {

@@ -23,7 +23,7 @@
             </section>
             <section class="frame xatView">
                 <div class="xatViewHeader">
-                    <h3 class="fuenteTitulo" id="titolXat">Xat amb Joan</h3>
+                    <h3 class="fuenteTitulo" id="titolXat"></h3>
                 </div>
                 <article class="xatMain">
                     <div class="xatViewContainer" id="xatViewContainer">

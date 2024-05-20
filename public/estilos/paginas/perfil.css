@@ -49,38 +49,3 @@ aside img {
     height: 100px;
     resize: none;
 }
-
-#uploadMediaContent {
-    min-height: 100px;
-    border: 2px dashed #ccc;
-    border-radius: 10px;
-    padding: 20px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-#uploadMediaContent.dragover {
-    background-color: #f0f8ff;
-    border-color: #007bff;
-}
-
-#uploadMediaContent label {
-    margin: 0;
-    cursor: pointer;
-    color: #007bff;
-    text-decoration: underline;
-}
-
-#preview {
-    margin-top: 10px;
-}
-
-#preview img {
-    max-width: 400px;
-    max-height: 400px;
-    border-radius: 10px;
-}

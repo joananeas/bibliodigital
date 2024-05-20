@@ -44,8 +44,12 @@ CREATE TABLE IF NOT EXISTS dib_usuaris (
 -- Taula de xats, no particulars, sinó de grups
 CREATE TABLE IF NOT EXISTS dib_xats (
   id_xat INT AUTO_INCREMENT PRIMARY KEY,
-  nom_xat VARCHAR(255) NOT NULL
+  nom_xat VARCHAR(255) NOT NULL,
+  img_xat VARCHAR(255) DEFAULT 'default.png',
+  min_rol ENUM('guest', 'user', 'moderador', 'bibliotecari', 'admin') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO dib_xats (nom_xat, min_rol) VALUES ('Públic', 'user');
 
 CREATE TABLE IF NOT EXISTS dib_usuaris_xats (
   id_xat INT NOT NULL,

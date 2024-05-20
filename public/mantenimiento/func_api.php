@@ -18,7 +18,9 @@ function peticionSQL()
     $password = openssl_decrypt(DB_PASSWORD, 'aes-256-cbc', $key, 0, $iv);
     $db = openssl_decrypt(DB_NAME, 'aes-256-cbc', $key, 0, $iv);
     $conn = new mysqli($host, $user, $password, $db);
-
+    
+    # Encontrar esto fue un dolor de cabeza...
+    $conn->set_charset("utf8mb4");
     return $conn;
 }
 
@@ -676,7 +678,25 @@ function getChats(){
 
 function getMessages($id_chat){
     $conn = peticionSQL();
-    $sql = "SELECT * FROM dib_missatges WHERE xat_id = ? ORDER BY `data_enviament` ASC";
+    $sql = "SELECT 
+                dm.id_missatge, 
+                dm.xat_id, 
+                dm.usuari_id, 
+                dm.data_enviament, 
+                dm.missatge, 
+                du.pfp AS pfp,
+                du.email AS email,
+                du.nickname AS nickname
+            FROM 
+                dib_missatges dm
+            INNER JOIN 
+                dib_usuaris du 
+            ON 
+                dm.usuari_id = du.usuari
+            WHERE 
+                dm.xat_id = ?
+            ORDER BY 
+                dm.data_enviament ASC";
     $stmt = mysqli_prepare($conn, $sql);
     mysqli_stmt_bind_param($stmt, "i", $id_chat);
     mysqli_stmt_execute($stmt);
@@ -901,7 +921,7 @@ function uploadImgPFP($img, $user_id){
     // Subir la nueva imagen
     if (move_uploaded_file($img["tmp_name"], $target_file)) {
         // Si la imagen anterior no es "default.jpg", eliminarla
-        if ($old_img !== "default.jpg") {
+        if ($old_img !== "default.jpg" && $old_img !== "default.png") {
             $old_img_path = $target_dir . $old_img;
             if (file_exists($old_img_path)) {
                 unlink($old_img_path);
@@ -946,7 +966,7 @@ function updateProfile($user_id, $username, $email, $password, $description) {
     $conn = peticionSQL();
 
     // Verificar si la contraseña debe actualizarse
-    if (empty($password)) {
+    if (empty($password) || $password === null) {
         $sql = "UPDATE dib_usuaris SET nickname = ?, email = ?, descripcio = ? WHERE usuari = ?";
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $description, $user_id);
@@ -956,6 +976,10 @@ function updateProfile($user_id, $username, $email, $password, $description) {
         $stmt = mysqli_prepare($conn, $sql);
         mysqli_stmt_bind_param($stmt, "ssssi", $username, $email, $hashed_password, $description, $user_id);
     }
+
+    # Recargar la sesión
+    # (Sinó se buguea porque se queda con el mail anterior, tampoco podemos hacer logout)
+    $_SESSION['email'] = $email;
 
     if (mysqli_stmt_execute($stmt)) {
         echo json_encode(['response' => 'OK']);
@@ -979,6 +1003,105 @@ function getProfileData($user_id) {
         echo json_encode(['response' => 'OK', 'data' => $row]);
     } else {
         echo json_encode(['response' => 'ERROR', 'message' => 'No se encontraron detalles del perfil']);
+    }
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}
+
+function uploadImgXat($img, $id_xat) {
+    $conn = peticionSQL();
+
+    // Obtener el nombre de la imagen anterior
+    $sql_get_old_img = "SELECT img_xat FROM dib_xats WHERE id_xat = ?";
+    $stmt_get_old_img = mysqli_prepare($conn, $sql_get_old_img);
+    mysqli_stmt_bind_param($stmt_get_old_img, "i", $id_xat);
+    mysqli_stmt_execute($stmt_get_old_img);
+    mysqli_stmt_bind_result($stmt_get_old_img, $old_img);
+    mysqli_stmt_fetch($stmt_get_old_img);
+    mysqli_stmt_close($stmt_get_old_img);
+
+    // Ruta de destino
+    $target_dir = "../media/sistema/xats/";
+    $imageFileType = strtolower(pathinfo($img["name"], PATHINFO_EXTENSION));
+    $new_img_name = pathinfo($img["name"], PATHINFO_FILENAME) . "_$id_xat." . $imageFileType;
+    $target_file = $target_dir . $new_img_name;
+
+    // Comprobar si el archivo es una imagen real o falsa
+    $check = getimagesize($img["tmp_name"]);
+    if ($check === false) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'El archivo no es una imagen.']);
+        return;
+    }
+
+    // Verificar los tipos de archivo permitidos
+    $allowed_types = ['jpg', 'jpeg', 'png'];
+    if (!in_array($imageFileType, $allowed_types)) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'Solo se permiten archivos JPG, JPEG y PNG.']);
+        return;
+    }
+
+    // Verificar errores de subida
+    if ($img['error'] !== UPLOAD_ERR_OK) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'Error al subir el archivo.']);
+        return;
+    }
+
+    // Subir la nueva imagen
+    if (move_uploaded_file($img["tmp_name"], $target_file)) {
+        // Si la imagen anterior no es "default.jpg" o "default.png", eliminarla
+        if ($old_img !== "default.jpg" && $old_img !== "default.png") {
+            $old_img_path = $target_dir . $old_img;
+            if (file_exists($old_img_path)) {
+                unlink($old_img_path);
+            }
+        }
+
+        // Actualizar el nombre de la imagen en la base de datos
+        $sql_update_img = "UPDATE dib_xats SET img_xat = ? WHERE id_xat = ?";
+        $stmt_update_img = mysqli_prepare($conn, $sql_update_img);
+        mysqli_stmt_bind_param($stmt_update_img, "si", $new_img_name, $id_xat);
+        if (mysqli_stmt_execute($stmt_update_img)) {
+            echo json_encode(['response' => 'OK']);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar el nombre de la imagen en la base de datos']);
+        }
+        mysqli_stmt_close($stmt_update_img);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo subir la imagen']);
+    }
+
+    mysqli_close($conn);
+}
+
+function getImgXat($id_xat) {
+    $conn = peticionSQL();
+    $sql = "SELECT img_xat FROM dib_xats WHERE id_xat = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_xat);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'img_xat' => $row['img_xat']]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontró la imagen del chat']);
+    }
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}
+
+function getXatName($id_xat) {
+    $conn = peticionSQL();
+    $sql = "SELECT nom_xat FROM dib_xats WHERE id_xat = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $id_xat);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'nom_xat' => $row['nom_xat']]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontró el nombre del chat']);
     }
     mysqli_stmt_close($stmt);
     $conn->close();

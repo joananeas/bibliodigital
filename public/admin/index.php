@@ -320,6 +320,8 @@
                             <th>ID</th>
                             <th>Nom del xat</th>
                             <th>Total Usuaris</th>
+                            <th>Imatge Xat</th>
+                            <th>Rol mínim</th>
                             <th>Accions</th>
                         </tr>
                     </table>
