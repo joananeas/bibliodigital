@@ -1,10 +1,19 @@
 <!-- El popup estará disponible en cada página --->
-<!-- <section id="popup" class="popup">
+<div class="popup" style="display:none;" id="popupUploadMedia">
     <div class="popup-content">
-        <span class="close">&times;</span>
-        <p>Some text in the Modal..</p>
+        <section class="frame">
+            <a id="closeUploadMedia" class="close">&times;</a>
+            <p class="fuenteH1" style="text-align:center;" id="uploadMediaTitle"></p>
+            <p class="fuenteTexto" style="text-align:center;" id="uploadMediaSubtitle"></p>
+            <div id="uploadMediaContent">
+                <!-- Aquí se generan de forma automática-->
+            </div>
+            <div style="display:flex; align-items:center; justify-content:center;">
+                <button id="uploadMediaButton" class="botonUniversal">Pujar</button>
+            </div>
+        </section>
     </div>
-</section> -->
+</div>
 
 <footer id="footerMobile" class="centrado">
     <div>

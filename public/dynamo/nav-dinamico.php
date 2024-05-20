@@ -25,7 +25,8 @@
         <div class="dropdown">
             <span id="notification-number-pfp" class="badgeCounter_alt"
                 style="top: 0; right: 0; position: absolute; margin-right:-8px; margin-top:-3px;"></span>
-            <img id="" class="profileNav" src="./media/icons/user.jpg" alt="icono usuario" width="40px" height="40px">
+            <img id="pfpNav" class="profileNav" src="./media/icons/user.jpg" alt="icono usuario" width="40px"
+                height="40px">
             <section class="dropdown-content" id="notification-submenu">
                 <article class="infoProfileNav">
                     <p><strong>Rol: </strong><span id="info-usuari"></span></p>

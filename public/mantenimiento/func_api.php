@@ -859,3 +859,127 @@ function getComments($id_llibre){
     mysqli_stmt_close($stmt);
     $conn->close();
 }
+
+function uploadImgPFP($img, $user_id){
+    $conn = peticionSQL();
+
+    // Obtener el nombre de la imagen anterior
+    $sql_get_old_img = "SELECT pfp FROM dib_usuaris WHERE usuari = ?";
+    $stmt_get_old_img = mysqli_prepare($conn, $sql_get_old_img);
+    mysqli_stmt_bind_param($stmt_get_old_img, "i", $user_id);
+    mysqli_stmt_execute($stmt_get_old_img);
+    mysqli_stmt_bind_result($stmt_get_old_img, $old_img);
+    mysqli_stmt_fetch($stmt_get_old_img);
+    mysqli_stmt_close($stmt_get_old_img);
+
+    // Ruta de destino
+    $target_dir = "../media/sistema/usuaris/";
+    $imageFileType = strtolower(pathinfo($img["name"], PATHINFO_EXTENSION));
+    $new_img_name = pathinfo($img["name"], PATHINFO_FILENAME) . "_$user_id." . $imageFileType;
+    $target_file = $target_dir . $new_img_name;
+
+    // Comprobar si el archivo es una imagen real o falsa
+    $check = getimagesize($img["tmp_name"]);
+    if($check === false) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'El archivo no es una imagen.']);
+        return;
+    }
+
+    // Verificar los tipos de archivo permitidos
+    $allowed_types = ['jpg', 'jpeg', 'png'];
+    if (!in_array($imageFileType, $allowed_types)) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'Solo se permiten archivos JPG, JPEG y PNG.']);
+        return;
+    }
+
+    // Verificar errores de subida
+    if ($img['error'] !== UPLOAD_ERR_OK) {
+        echo json_encode(['response' => 'ERROR', 'message' => 'Error al subir el archivo.']);
+        return;
+    }
+
+    // Subir la nueva imagen
+    if (move_uploaded_file($img["tmp_name"], $target_file)) {
+        // Si la imagen anterior no es "default.jpg", eliminarla
+        if ($old_img !== "default.jpg") {
+            $old_img_path = $target_dir . $old_img;
+            if (file_exists($old_img_path)) {
+                unlink($old_img_path);
+            }
+        }
+
+        // Actualizar el nombre de la imagen en la base de datos
+        $sql_update_img = "UPDATE dib_usuaris SET pfp = ? WHERE usuari = ?";
+        $stmt_update_img = mysqli_prepare($conn, $sql_update_img);
+        mysqli_stmt_bind_param($stmt_update_img, "si", $new_img_name, $user_id);
+        if (mysqli_stmt_execute($stmt_update_img)) {
+            echo json_encode(['response' => 'OK']);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar el nombre de la imagen en la base de datos']);
+        }
+        mysqli_stmt_close($stmt_update_img);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo subir la imagen']);
+    }
+
+    mysqli_close($conn);
+}
+
+function getPFP($user_id){
+    $conn = peticionSQL();
+    $sql = "SELECT pfp FROM dib_usuaris WHERE usuari = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'pfp' => $row['pfp']]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontró la imagen de perfil']);
+    }
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}
+
+function updateProfile($user_id, $username, $email, $password, $description) {
+    $conn = peticionSQL();
+
+    // Verificar si la contraseña debe actualizarse
+    if (empty($password)) {
+        $sql = "UPDATE dib_usuaris SET nickname = ?, email = ?, descripcio = ? WHERE usuari = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "sssi", $username, $email, $description, $user_id);
+    } else {
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $sql = "UPDATE dib_usuaris SET nickname = ?, email = ?, passwd = ?, descripcio = ? WHERE usuari = ?";
+        $stmt = mysqli_prepare($conn, $sql);
+        mysqli_stmt_bind_param($stmt, "ssssi", $username, $email, $hashed_password, $description, $user_id);
+    }
+
+    if (mysqli_stmt_execute($stmt)) {
+        echo json_encode(['response' => 'OK']);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar el perfil en la base de datos']);
+    }
+
+    mysqli_stmt_close($stmt);
+    mysqli_close($conn);
+}
+
+function getProfileData($user_id) {
+    $conn = peticionSQL();
+    $sql = "SELECT nickname, email, descripcio FROM dib_usuaris WHERE usuari = ?";
+    $stmt = mysqli_prepare($conn, $sql);
+    mysqli_stmt_bind_param($stmt, "i", $user_id);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'data' => $row]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontraron detalles del perfil']);
+    }
+    mysqli_stmt_close($stmt);
+    $conn->close();
+}

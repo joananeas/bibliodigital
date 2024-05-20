@@ -16,3 +16,21 @@
 # Media
 public/media/sistema/favicon/*.png
 public/media/sistema/favicon/*.jpg
+public/media/sistema/favicon/*.jpeg
+
+# Excepciones
+!public/media/sistema/favicon/default.png
+!public/media/sistema/favicon/default.jpg
+!public/media/sistema/favicon/default.jpeg
+!public/media/sistema/favicon/default.svg
+
+# No trackea las fotos de perfil
+public/media/usuarios/*.png
+public/media/usuarios/*.jpg
+public/media/usuarios/*.jpeg
+
+# Excepciones
+!public/media/usuarios/default.png
+!public/media/usuarios/default.jpg
+!public/media/usuarios/default.jpeg
+

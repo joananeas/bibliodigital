@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.7'; # - ✨ Comentaris i valoracions :)
+const VERSION =  'v1.7.8'; # - ✨ Perfil.php :))
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -412,7 +412,34 @@ switch ($peticion) {
         $resp = getComments($id_llibre);
         echo $resp;
         break;
+    
+    case 'uploadImgPFP':
+        $img = $_FILES['imatgePFP'];
+    
+        $resp = uploadImgPFP($img, $apiUsuarios->getID());
+        echo $resp;
+        break;
+    
+    case 'getPFP':
+        $resp = getPFP($apiUsuarios->getID());
+        echo $resp;
+        break;
             
+    case 'updateProfile':
+        $username = $_POST['username'];
+        $email = $_POST['email'];
+        $password = $_POST['password'];
+        $description = $_POST['description'];
+        
+        $resp = updateProfile($apiUsuarios->getID(), $username, $email, $password, $description);
+        echo $resp;
+        break;
+        
+    case 'getProfileData':
+        $resp = getProfileData($apiUsuarios->getID());
+        echo $resp;
+        break;
+        
     default:
         echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
         header('Location: ../error.php?error=404');

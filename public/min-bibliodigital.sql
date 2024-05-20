@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS dib_usuaris (
   usuari INT AUTO_INCREMENT PRIMARY KEY,
   email VARCHAR(255) NOT NULL UNIQUE,
   nickname VARCHAR(255) NULL,
+  descripcio TEXT NULL,
   passwd VARCHAR(255) NOT NULL,
   rol ENUM('guest', 'user', 'moderador', 'bibliotecari', 'admin') NOT NULL,
   estat ENUM('actiu', 'inactiu', 'expulsat', 'expulsat-temp') NOT NULL,
@@ -229,7 +230,7 @@ INSERT INTO dib_notificacions_estats (estat) VALUES ('pendent'), ('enviada'), ('
 -- Triggers y eventos
 START TRANSACTION;
 
-CREATE TRIGGER trg_after_insert_reserva AFTER INSERT ON dib_reserves FOR EACH ROW
+CREATE OR REPLACE TRIGGER trg_after_insert_reserva AFTER INSERT ON dib_reserves FOR EACH ROW
 BEGIN
     DECLARE CONTINUE HANDLER FOR SQLEXCEPTION
     BEGIN
@@ -238,10 +239,10 @@ BEGIN
     END;
 
     INSERT INTO dib_notificacions (usuari_id, titol, missatge, tipus) 
-    VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('Tu reserva con ID ', NEW.reserva, ' ha sido registrada con éxito.'), 'Reserva');
+    VALUES (NEW.usuari_id, 'Reserva Confirmada', CONCAT('La teva reserva amb ID ', NEW.reserva, ' ha estat registrada.'), 'Reserva');
 END;
 
-CREATE TRIGGER noti_user_after_ask_prestec 
+CREATE OR REPLACE TRIGGER noti_user_after_ask_prestec 
 AFTER INSERT ON dib_prestecs 
 FOR EACH ROW
 BEGIN
@@ -249,7 +250,7 @@ BEGIN
     VALUES (NEW.usuari_id, 'Préstec Pendent', 'Préstec a la espera del/la bibliotecari/a.', 'Préstec (usuari)');
 END;
 
-CREATE TRIGGER noti_bibliotecari_after_ask_prestec 
+CREATE OR REPLACE TRIGGER noti_bibliotecari_after_ask_prestec 
 AFTER INSERT ON dib_prestecs 
 FOR EACH ROW
 BEGIN

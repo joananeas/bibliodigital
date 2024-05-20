@@ -41,6 +41,22 @@ const getCategories = async () => {
     }
 }
 
+const getPFP = async () => {
+    let formData = new FormData();
+    formData.append('pttn', 'getPFP');
+
+    try {
+        const response = await fetch(urlForFetch, {
+            method: "POST",
+            body: formData
+        });
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error al hacer la petición:', error);
+    }
+}
+
 //getCategories();
 
 function getNotificaciones() {
@@ -290,6 +306,16 @@ const loadGlobals = () => {
             versionElement.textContent = data.version;
             let path = data.rootPath;
 
+            // Carga la foto de perfil al cargar las globales
+            getPFP().then(data => {
+                let pfp = document.getElementById("pfpNav");
+                let path = "./media/sistema/usuaris/";
+                if (window.location.href.includes("admin")) path = "../media/sistema/usuaris/";
+                let img = data.pfp;
+
+                pfp.src = path + data.pfp;
+            })
+
             menuMobile();
         })
         .catch(error => {
@@ -349,12 +375,13 @@ const scriptsInstall = ["install.js"];
 const scriptsError = ["error.js"];
 const scriptsAdmin = ["admin.js"];
 const scriptsXats = ["xats.js"];
+const scriptsPerfil = ["perfil.js"];
 
 const cargarScripts = (scripts) => {
-    for (let i = 0; i < scripts.length; i++) {
+    for (const element of scripts) {
         let script = document.createElement("script");
-        if (url.includes("admin")) script.src = "../mantenimiento/scripts/" + scripts[i];
-        else script.src = "./mantenimiento/scripts/" + scripts[i];
+        if (url.includes("admin")) script.src = "../mantenimiento/scripts/" + element;
+        else script.src = "./mantenimiento/scripts/" + element;
         document.body.appendChild(script);
     }
 }
@@ -366,9 +393,9 @@ switch (true) {
         else cargarScripts(scriptsIndex);
         console.log("indice");
         break;
-    case url.includes("cuenta"):
-        cargarScripts(scriptsCuenta);
-        console.log("cuenta");
+    case url.includes("perfil"):
+        cargarScripts(scriptsPerfil);
+        console.log("perfil");
         break;
     case url.includes("login"):
         cargarScripts(scriptsLogin);
