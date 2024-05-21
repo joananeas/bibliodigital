@@ -161,18 +161,18 @@ const comprobarConexionBBDD = async () => {
 const menuMobile = () => {
     const linksNormal = [
         { id: "footer-m-home", href: "./", src: "./media/icons/home.png", id_img: "footer-img-home" },
-        { id: "footer-m-community", href: "./comunitat.php", src: "./media/icons/heart.png", id_img: "footer-img-community" },
+        { id: "footer-m-community", href: "./xats.php", src: "./media/icons/heart.png", id_img: "footer-img-community" },
         { id: "footer-m-qr", href: "./qr.php", src: "./media/icons/qr-code-white.png", id_img: "footer-img-qr" },
         { id: "footer-m-markers", href: "./reservas.php", src: "./media/icons/markers.png", id_img: "footer-img-markers" },
-        { id: "footer-m-profile", href: "./cuenta.php", src: "./media/icons/user.png", id_img: "footer-img-user" }
+        { id: "footer-m-profile", href: "./perfil.php", src: "./media/icons/user.png", id_img: "footer-img-user" }
     ];
 
     const linksAdmin = [
         { id: "footer-m-home", href: "../", src: "../media/icons/home.png", id_img: "footer-img-home" },
-        { id: "footer-m-community", href: "../comunitat.php", src: "../media/icons/heart.png", id_img: "footer-img-community" },
+        { id: "footer-m-community", href: "../xats.php", src: "../media/icons/heart.png", id_img: "footer-img-community" },
         { id: "footer-m-qr", href: "../qr.php", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr" },
         { id: "footer-m-markers", href: "../reservas.php", src: "../media/icons/markers.png", id_img: "footer-img-markers" },
-        { id: "footer-m-profile", href: "../cuenta.php", src: "../media/icons/user.png", id_img: "footer-img-user" },
+        { id: "footer-m-profile", href: "../perfil.php", src: "../media/icons/user.png", id_img: "footer-img-user" },
     ];
 
     if (window.location.href.includes("admin")) {
@@ -461,4 +461,10 @@ if (!url.includes("login") && !url.includes("error")) {
     document.getElementById('notificacionesNavBtn').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
     document.getElementById('esborrarNotificacions').addEventListener("click", () => { viewPopUp('notificationCenter', 'closeNotis') });
     document.getElementById('esborrarNotificacions').addEventListener("click", () => { clearNotifications() });
+}
+
+if (!url.includes("admin")) {
+    document.getElementById('perfilNav').href = "./perfil.php"
+} else {
+    document.getElementById('perfilNav').href = "../perfil.php"
 }

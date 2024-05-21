@@ -510,4 +510,6 @@ class API_Stats
             return json_encode(['response' => 'ERROR', 'message' => 'Error en la consulta: ' . mysqli_error($conn)]);
         }
     }
+
+    
 }

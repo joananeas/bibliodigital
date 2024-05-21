@@ -601,6 +601,18 @@ function denegarPrestec($id_prestec) {
 
     mysqli_stmt_close($stmtUpdateReserva);
 
+    // Actualizar el estado del ejemplar a "Disponible"
+    $sqlUpdateExemplar = "UPDATE dib_exemplars SET ESTAT = 'Disponible' WHERE IDENTIFICADOR = ?";
+    $stmtUpdateExemplar = mysqli_prepare($conn, $sqlUpdateExemplar);
+    mysqli_stmt_bind_param($stmtUpdateExemplar, "i", $exemplar_id);
+
+    if (!mysqli_stmt_execute($stmtUpdateExemplar)) {
+        mysqli_rollback($conn);
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar el estado del ejemplar']);
+    }
+
+    mysqli_stmt_close($stmtUpdateExemplar);
+
     // Confirmar la transacción
     mysqli_commit($conn);
 
@@ -636,16 +648,57 @@ function retornarPrestec($id_prestec){
     }
 }
 
-function eliminarPrestec($id_prestec){
+function eliminarPrestec($id_prestec) {
     $conn = peticionSQL();
-    $sql = "DELETE FROM dib_prestecs WHERE id_prestec = ?";
-    $stmt = mysqli_prepare($conn, $sql);
-    mysqli_stmt_bind_param($stmt, "i", $id_prestec);
-    if (mysqli_stmt_execute($stmt)) {
-        return json_encode(['response' => 'OK']);
-    } else {
+
+    // Obtener los valores de exemplar_id del préstamo
+    $sqlSelect = "SELECT exemplar_id FROM dib_prestecs WHERE id_prestec = ?";
+    $stmtSelect = mysqli_prepare($conn, $sqlSelect);
+    mysqli_stmt_bind_param($stmtSelect, "i", $id_prestec);
+    mysqli_stmt_execute($stmtSelect);
+    mysqli_stmt_bind_result($stmtSelect, $exemplar_id);
+    mysqli_stmt_fetch($stmtSelect);
+    mysqli_stmt_close($stmtSelect);
+
+    // Verificar si se obtuvo el valor de exemplar_id
+    if (empty($exemplar_id)) {
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo obtener los datos del préstamo']);
+    }
+
+    // Iniciar la transacción
+    mysqli_begin_transaction($conn);
+
+    // Eliminar el préstamo
+    $sqlDeletePrestec = "DELETE FROM dib_prestecs WHERE id_prestec = ?";
+    $stmtDeletePrestec = mysqli_prepare($conn, $sqlDeletePrestec);
+    mysqli_stmt_bind_param($stmtDeletePrestec, "i", $id_prestec);
+
+    if (!mysqli_stmt_execute($stmtDeletePrestec)) {
+        mysqli_rollback($conn);
         return json_encode(['response' => 'ERROR', 'message' => 'No se pudo eliminar el préstamo']);
     }
+
+    mysqli_stmt_close($stmtDeletePrestec);
+
+    // Actualizar el estado del ejemplar a "Disponible"
+    $sqlUpdateExemplar = "UPDATE dib_exemplars SET ESTAT = 'Disponible' WHERE IDENTIFICADOR = ?";
+    $stmtUpdateExemplar = mysqli_prepare($conn, $sqlUpdateExemplar);
+    mysqli_stmt_bind_param($stmtUpdateExemplar, "i", $exemplar_id);
+
+    if (!mysqli_stmt_execute($stmtUpdateExemplar)) {
+        mysqli_rollback($conn);
+        return json_encode(['response' => 'ERROR', 'message' => 'No se pudo actualizar el estado del ejemplar']);
+    }
+
+    mysqli_stmt_close($stmtUpdateExemplar);
+
+    // Confirmar la transacción
+    mysqli_commit($conn);
+
+    // Cerrar la conexión
+    mysqli_close($conn);
+
+    return json_encode(['response' => 'OK']);
 }
 
 function crearChat($nom){
@@ -1104,5 +1157,68 @@ function getXatName($id_xat) {
         echo json_encode(['response' => 'ERROR', 'message' => 'No se encontró el nombre del chat']);
     }
     mysqli_stmt_close($stmt);
+    $conn->close();
+}
+
+# Mejorar a bind param
+function searchUser($user_id){
+    $conn = peticionSQL();
+    $user_id = mysqli_real_escape_string($conn, $user_id); // Protege contra inyecciones SQL
+    $sql = "SELECT `email`, `usuari`  FROM dib_usuaris WHERE `email` LIKE '%$user_id%' OR `nickname` LIKE '%$user_id%'";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) {
+        $row = mysqli_fetch_assoc($result);
+        echo json_encode(['response' => 'OK', 'email' => $row['email'], 'usuari' => $row['usuari']]);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No se encontró el nombre del chat']);
+    }
+    $conn->close();
+}
+
+function crearPrestec($id_llibre, $usuari_id, $data_inici = null, $data_devolucio = null) {
+    $conn = peticionSQL();
+
+    // Comprobar si hay ejemplares disponibles
+    $sql_exemplar = "SELECT NUMERO_EXEMPLAR 
+                     FROM dib_exemplars 
+                     WHERE IDENTIFICADOR = ? AND ESTAT = 'Disponible' 
+                     ORDER BY NUMERO_EXEMPLAR ASC 
+                     LIMIT 1";
+    $stmt_exemplar = mysqli_prepare($conn, $sql_exemplar);
+    mysqli_stmt_bind_param($stmt_exemplar, "i", $id_llibre);
+    mysqli_stmt_execute($stmt_exemplar);
+    mysqli_stmt_bind_result($stmt_exemplar, $exemplar_num);
+    mysqli_stmt_fetch($stmt_exemplar);
+    mysqli_stmt_close($stmt_exemplar);
+
+    if ($exemplar_num) {
+        // Si no se proporcionan fechas, se asignan automáticamente
+        if (is_null($data_inici)) {
+            $data_inici = date("Y-m-d");
+        }
+        if (is_null($data_devolucio)) {
+            $data_devolucio = date("Y-m-d", strtotime("$data_inici +1 month"));
+        }
+
+        $sql_prestec = "INSERT INTO dib_prestecs (id_prestec, exemplar_id, exemplar_num, usuari_id, data_inici, data_devolucio, data_real_tornada, estat, comentaris) 
+                        VALUES (NULL, ?, ?, ?, ?, ?, NULL, 2, 'Pendent del bibliotecari.')";
+        $stmt_prestec = mysqli_prepare($conn, $sql_prestec);
+        mysqli_stmt_bind_param($stmt_prestec, "iiiss", $id_llibre, $exemplar_num, $usuari_id, $data_inici, $data_devolucio);
+        if (mysqli_stmt_execute($stmt_prestec)) {
+            $sql_update_exemplar = "UPDATE dib_exemplars SET ESTAT = 'Prestat' WHERE IDENTIFICADOR = ? AND NUMERO_EXEMPLAR = ?";
+            $stmt_update_exemplar = mysqli_prepare($conn, $sql_update_exemplar);
+            mysqli_stmt_bind_param($stmt_update_exemplar, "ii", $id_llibre, $exemplar_num);
+            mysqli_stmt_execute($stmt_update_exemplar);
+            mysqli_stmt_close($stmt_update_exemplar);
+
+            echo json_encode(['response' => 'OK']);
+        } else {
+            echo json_encode(['response' => 'ERROR', 'message' => mysqli_error($conn)]);
+        }
+        mysqli_stmt_close($stmt_prestec);
+    } else {
+        echo json_encode(['response' => 'ERROR', 'message' => 'No hay ejemplares disponibles']);
+    }
+
     $conn->close();
 }

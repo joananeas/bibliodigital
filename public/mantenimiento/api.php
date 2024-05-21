@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.7.9'; # - ✨ Img and username on xats. Also img picker for xat profile.
+const VERSION =  'v1.8.0'; # - ✨ Add prestecs (librarian)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
@@ -459,7 +459,23 @@ switch ($peticion) {
         $resp = getXatName($id_xat);
         echo $resp;
         break;
+
+    case 'searchUser':
+        $user_id = $_GET['user_id'] ?? $_POST['user_id'];
+        $resp = searchUser($user_id);
+        echo $resp;
+        break;
         
+    case 'crearPrestec':
+        $id_llibre = $_POST['id_llibre'];
+        $usuari_id = $_POST['usuari_id'];
+        $data_inici = $_POST['data_inici'] ?? NULL;
+        $data_fi = $_POST['data_fi'] ?? NULL;
+        
+        $resp = crearPrestec($id_llibre, $usuari_id, $data_inici, $data_fi);
+        echo $resp;
+        break;
+
     default:
         echo json_encode("[ERROR (API)] No se ha encontrado la petición.");
         header('Location: ../error.php?error=404');

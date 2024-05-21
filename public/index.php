@@ -40,6 +40,9 @@
                 <span style="float: left;" class="fuenteH1">Lectòmetre 🔥</span>
             </div>
             <article>
+                <h3 class="fuenteH1">Pròximament.</h3>
+            </article>
+            <article style="display:none;">
                 <div class="lectometre" id="lectometreContainerPodium">
                     <img src="media/icons/user.jpg" alt="1r" width="100" height="100">
                     <p class="fuenteH1">Primer 🥇</p>

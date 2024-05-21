@@ -306,10 +306,22 @@ const formCreateBook = () => {
     });
 };
 
-const buscarLibroIndividual = async () => {
+const buscarLibroIndividual = async (type = null) => {
     let formData = new FormData();
-    formData.append('llibre', document.getElementById('campoBuscarLibroIndividual').value);
-    formData.append('pttn', 'cercaLlibresLite');
+
+    if (type === "prestecs") {
+        formData.append('llibre', document.getElementById('campoBuscarLibroPrestecs').value);
+    } else if (type === "usuaris") {
+        formData.append('user_id', document.getElementById('usuariPrestecs').value);
+    } else {
+        formData.append('llibre', document.getElementById('campoBuscarLibroIndividual').value);
+    }
+
+    if (type === "usuaris") {
+        formData.append('pttn', 'searchUser');
+    } else {
+        formData.append('pttn', 'cercaLlibresLite');
+    }
 
     const response = await fetch('../mantenimiento/api.php', {
         method: 'POST',
@@ -317,55 +329,92 @@ const buscarLibroIndividual = async () => {
     });
     const data = await response.json();
 
-    tabla = document.getElementById('tablaLibros');
+    let tabla = document.getElementById('tablaLibros');
     if (data.response === "OK") {
-        let response = data.llibres;
-        let desplegable = document.getElementById("buscadorLlibres");
+        let desplegable = (type === "prestecs" || type === "usuaris") ? document.getElementById("buscadorPrestecs") : document.getElementById("buscadorLlibres");
         desplegable.innerHTML = "";
-        const inputs = document.querySelectorAll('#crearLlibre input, #crearLlibre textarea');
-        const botonModificar = document.getElementById('modificarLlibreSubmit');
 
-        if (document.getElementById('crearLlibreSubmit').style.display === 'none') {
-            inputs.forEach(input => {
-                input.addEventListener('input', function () {
-                    botonModificar.style.display = 'block';
-                });
-            });
-        }
+        if (type === "usuaris") {
+            let item = data;
 
-        for (let i = 0; i < response.length; i++) {
-            let libro = response[i];
-
-            let estadoLibro = document.createElement("span");
-            let tituloLibro = document.createElement("li");
-
-            estadoLibro.className = "estadoLlibro";
-            if (libro.estadoActual === "Disponible") estadoLibro.style.color = "green", estadoLibro.innerHTML = "Disponible";
-            else estadoLibro.style.color = "red", estadoLibro.innerHTML = "No disponible";
-
-            tituloLibro.className = "llibre";
-            tituloLibro.appendChild(estadoLibro);
-            tituloLibro.appendChild(document.createTextNode(libro.nom));
-
+            let tituloElemento = document.createElement("li");
             let boton = document.createElement("button");
-            boton.innerHTML = "Veure";
+
+            tituloElemento.appendChild(document.createTextNode(item.email));
+            boton.innerHTML = "Seleccionar";
             boton.className = "botonUniversal";
             boton.style.margin = "0px";
             boton.style.marginLeft = "25px";
-            tituloLibro.appendChild(boton);
-
-            desplegable.appendChild(tituloLibro);
-
-            boton.addEventListener("click", async function () {
-                const libroId = libro.id;
-                await llenarDetallesLibro(libroId);
+            tituloElemento.appendChild(boton);
+            boton.addEventListener("click", function () {
+                document.getElementById('usuariPrestecs').value = item.usuari;
+                desplegable.style.display = "none";
             });
 
-            if (i === response.length - 1) {
-                tituloLibro.style.borderBottom = "none";
+            tituloElemento.style.borderBottom = "none";
+            desplegable.appendChild(tituloElemento);
+        } else {
+            let response = data.llibres;
+
+            const inputs = document.querySelectorAll('#crearLlibre input, #crearLlibre textarea');
+            const botonModificar = document.getElementById('modificarLlibreSubmit');
+
+            if (document.getElementById('crearLlibreSubmit').style.display === 'none') {
+                inputs.forEach(input => {
+                    input.addEventListener('input', function () {
+                        botonModificar.style.display = 'block';
+                    });
+                });
+            }
+
+            for (let i = 0; i < response.length; i++) {
+                let item = response[i];
+
+                let estadoElemento = document.createElement("span");
+                let tituloElemento = document.createElement("li");
+                let boton = document.createElement("button");
+
+                estadoElemento.className = "estadoLlibro";
+                if (item.estadoActual === "Disponible") {
+                    estadoElemento.style.color = "green";
+                    estadoElemento.innerHTML = "Disponible";
+                } else {
+                    estadoElemento.style.color = "red";
+                    estadoElemento.innerHTML = "No disponible";
+                }
+
+                tituloElemento.className = "llibre";
+                tituloElemento.appendChild(estadoElemento);
+                tituloElemento.appendChild(document.createTextNode(item.nom));
+
+                boton.innerHTML = (type === "prestecs") ? "Seleccionar" : "Veure";
+                boton.className = "botonUniversal";
+                boton.style.margin = "0px";
+                boton.style.marginLeft = "25px";
+                tituloElemento.appendChild(boton);
+
+                if (type === "prestecs") {
+                    boton.addEventListener("click", function () {
+                        const itemId = item.id;
+                        document.getElementById('campoBuscarLibroPrestecs').value = itemId;
+                        desplegable.style.display = "none";
+                    });
+                } else {
+                    boton.addEventListener("click", async function () {
+                        const libroId = item.id;
+                        await llenarDetallesLibro(libroId);
+                    });
+                }
+
+                if (i === response.length - 1) {
+                    tituloElemento.style.borderBottom = "none";
+                }
+
+                desplegable.appendChild(tituloElemento);
             }
         }
 
+        desplegable.style.display = "block";
     }
 }
 
@@ -395,25 +444,6 @@ document.getElementById('modificarLlibreSubmit').addEventListener('click', funct
         });
 });
 
-// const crearExemplars = async () => {
-//     let formData = new FormData();
-//     formData.append('id', document.getElementById('identificador').value);
-//     formData.append('exemplars', document.getElementById('exemplars').value);
-//     formData.append('pttn', 'crearExemplars');
-
-//     const response = await fetch('../mantenimiento/api.php', {
-//         method: 'POST',
-//         body: formData
-//     });
-//     const data = await response.json();
-
-//     if (data.response === 'OK') {
-//         alert('Exemplares creados correctamente!');
-//     } else {
-//         alert('Error al crear los exemplares: ' + data.message);
-//     }
-// }
-
 document.getElementById('crearLlibreSubmit').addEventListener('click', function (event) {
     event.preventDefault();
 
@@ -439,7 +469,7 @@ document.getElementById('crearLlibreSubmit').addEventListener('click', function 
 });
 
 document.getElementById("campoBuscarLibroIndividual").addEventListener('input', function () {
-    if (this.value.trim() === "" || this.value.trim() === null || this.value.trim() === undefined) {
+    if (this.value.trim() === "") {
         document.getElementById("buscadorLlibres").style.display = "none";
         return;
     }
@@ -448,6 +478,39 @@ document.getElementById("campoBuscarLibroIndividual").addEventListener('input', 
     document.getElementById('vistaLibro').style.display = "none";
     buscarLibroIndividual();
 });
+
+document.getElementById("campoBuscarLibroPrestecs").addEventListener('input', function () {
+    if (this.value.trim() === "") {
+        document.getElementById("buscadorPrestecs").style.display = "none";
+        return;
+    }
+
+    document.getElementById('buscadorPrestecs').style.display = "block";
+    buscarLibroIndividual("prestecs");
+});
+
+document.getElementById("usuariPrestecs").addEventListener('input', function () {
+    const buscador = document.getElementById("buscadorPrestecs");
+    if (this.value.trim() === "") {
+        buscador.style.display = "none";
+        return;
+    }
+
+    buscador.innerHTML = "";
+    buscador.style.display = "block";
+    buscarLibroIndividual("usuaris");
+});
+
+document.getElementById('dataIniciPrestecs').addEventListener('focus', () => {
+    document.getElementById('dataIniciPrestecs').value = new Date().toISOString().split('T')[0];
+});
+
+document.getElementById('dataFiPrestecs').addEventListener('focus', () => {
+    const currentDate = new Date();
+    const oneMonthLater = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, currentDate.getDate());
+    document.getElementById('dataFiPrestecs').value = oneMonthLater.toISOString().split('T')[0];
+});
+
 
 const loadStatsUsers = () => {
     fetch('../mantenimiento/api.php?pttn=getUserStats', {
@@ -875,7 +938,56 @@ document.addEventListener('DOMContentLoaded', () => {
     getChats();
 });
 
+document.getElementById('formCreatePrestec').addEventListener('submit', function (event) {
+    event.preventDefault(); // Evitar el comportamiento predeterminado de envío del formulario
 
+    crearPrestec();
+});
+
+const crearPrestec = () => {
+    // Crear el objeto FormData
+    const formData = new FormData();
+
+    // Agregar datos al FormData
+    formData.append('pttn', 'crearPrestec');
+    formData.append('id_llibre', document.getElementById('campoBuscarLibroPrestecs').value);
+    formData.append('usuari_id', document.getElementById('usuariPrestecs').value);
+
+    // Comprobar si los campos de fechas están vacíos antes de agregarlos
+    const dataInici = document.getElementById('dataIniciPrestecs').value;
+    const dataFi = document.getElementById('dataFiPrestecs').value;
+
+    if (dataInici) {
+        formData.append('data_inici', dataInici);
+    }
+    if (dataFi) {
+        formData.append('data_fi', dataFi);
+    }
+
+    // Realizar la petición fetch
+    fetch('../mantenimiento/api.php', {
+        method: 'POST',
+        body: formData
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok ' + response.statusText);
+            }
+            return response.json();
+        })
+        .then(data => {
+            if (data.response === 'OK') {
+                alert('Préstec creat correctament!');
+                // loadPrestecs(); // Asegurarse que esta función está definida
+            } else {
+                alert('Error al crear el préstec: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error al procesar la solicitud');
+        });
+};
 
 showPanel('admin-config-panel'); // Mostrar el panel de configuración por defecto al cargar la página.
 getColores(); // Suponiendo que estas funciones necesitan ser llamadas al cargar.
@@ -883,6 +995,8 @@ getBanner();
 getAllUsers();
 loadStatsUsers();
 loadBookStats();
+//setInterval(loadPrestecs, 3000);
 loadPrestecs();
+//setInterval(loadReserves, 2000);
 loadReserves();
 getChats();

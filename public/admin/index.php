@@ -198,9 +198,25 @@
         <!-- Panel de préstamos -->
         <div id="admin-prestecs-panel" class="admin-panel">
             <section class="frame">
-                <p class="fuenteH1">
-                    Préstecs
-                </p>
+                <p class="fuenteH1">Crear un nou préstec</p>
+                <form id="formCreatePrestec">
+                    <label for="llibre">Llibre:</label>
+                    <input type="text" id="campoBuscarLibroPrestecs" name="llibre">
+                    <label for="usuari">Usuari:</label>
+                    <input type="text" id="usuariPrestecs" name="usuari">
+                    <label for="dataInici">Data Inici:</label>
+                    <input type="date" id="dataIniciPrestecs" name="dataInici">
+                    <label for="dataFi">Data Fi:</label>
+                    <input type="date" id="dataFiPrestecs" name="dataFi">
+                    <button type="submit" class="botonUniversal">Crear préstec</button>
+                </form>
+                <ul id="buscadorPrestecs" style="list-style-type: none; padding: 0;">
+                    <!-- Los resultados de la búsqueda se añadirán aquí -->
+                </ul>
+            </section>
+
+            <section class="frame" style="margin-top:20px;">
+                <p class="fuenteH1">Préstecs</p>
                 <div class="tableContainer">
                     <table class="tableBody">
                         <thead>
