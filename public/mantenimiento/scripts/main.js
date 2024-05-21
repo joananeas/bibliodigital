@@ -162,7 +162,7 @@ const menuMobile = () => {
     const linksNormal = [
         { id: "footer-m-home", href: "./", src: "./media/icons/home.png", id_img: "footer-img-home" },
         { id: "footer-m-community", href: "./xats.php", src: "./media/icons/heart.png", id_img: "footer-img-community" },
-        { id: "footer-m-qr", href: "./qr.php", src: "./media/icons/qr-code-white.png", id_img: "footer-img-qr" },
+        { id: "footer-m-qr", href: "#", src: "./media/icons/qr-code-white.png", id_img: "footer-img-qr" },
         { id: "footer-m-markers", href: "./reservas.php", src: "./media/icons/markers.png", id_img: "footer-img-markers" },
         { id: "footer-m-profile", href: "./perfil.php", src: "./media/icons/user.png", id_img: "footer-img-user" }
     ];
@@ -170,7 +170,7 @@ const menuMobile = () => {
     const linksAdmin = [
         { id: "footer-m-home", href: "../", src: "../media/icons/home.png", id_img: "footer-img-home" },
         { id: "footer-m-community", href: "../xats.php", src: "../media/icons/heart.png", id_img: "footer-img-community" },
-        { id: "footer-m-qr", href: "../qr.php", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr" },
+        { id: "footer-m-qr", href: "#", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr" },
         { id: "footer-m-markers", href: "../reservas.php", src: "../media/icons/markers.png", id_img: "footer-img-markers" },
         { id: "footer-m-profile", href: "../perfil.php", src: "../media/icons/user.png", id_img: "footer-img-user" },
     ];
@@ -203,7 +203,8 @@ const menuHeader = () => {
         { id: "enquestesNav", href: "./perfil.php" },
         { id: "gestioCompteNav", href: "./perfil.php" },
         { id: "adminNav", href: "./admin" },
-        { id: "suggNav", href: "./perfil.php" }
+        { id: "suggNav", href: "./perfil.php" },
+        { id: "comunitatNav", href: "./xats.php" }
     ];
 
     const linksAdmin = [
@@ -215,7 +216,8 @@ const menuHeader = () => {
         { id: "enquestesNav", href: "../perfil.php" },
         { id: "gestioCompteNav", href: "../perfil.php" },
         { id: "adminNav", href: "#" },
-        { id: "suggNav", href: "../perfil.php" }
+        { id: "suggNav", href: "../perfil.php" },
+        { id: "comunitatNav", href: "../xats.php" }
     ];
 
     if (window.location.href.includes("admin")) {

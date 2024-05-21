@@ -6,42 +6,10 @@ document.getElementById("inputCercaLlibres").addEventListener("focus", function 
     document.getElementById("buscadorLlibres").style.display = "block";
 });
 
-const viewQR = () => {
-    let video = document.getElementById('videoElement');
-    let canvas = document.getElementById('canvasElement');
-
-    let menuActivo = false;
-    let form = document.getElementById('popupQR');
-    if (menuActivo) {
-        menuImg.style.transform = "rotate(0deg)";
-        form.style.display = "none";
-        video.style.display = "none";
-        canvas.style.display = "none";
-        document.querySelector("main").style.display = "block";
-        document.querySelector("main").style.opacity = "1";
-        menuActivo = false;
-    } else {
-        menuImg.style.transform = "rotate(90deg)";
-        form.style.display = "flex";
-        video.style.display = "block";
-        canvas.style.display = "none";
-        document.querySelector("main").style.opacity = "0.2";
-        form.style.opacity = "1";
-        menuActivo = true;
-    }
-
-    document.getElementById('closeQR').addEventListener('click', () => {
-        document.getElementById('popupQR').style.display = 'none';
-        document.querySelector("main").style.display = "block";
-        document.querySelector("main").style.opacity = "1";
-    });
-};
-
-
-document.getElementById('qrCerca').addEventListener("click", function (event) {
-    event.preventDefault();
+const handleQR = (e) => {
+    e.preventDefault();
     const video = document.getElementById('videoElement');
-    viewQR();
+    viewPopUp('popupQR', 'closeQR');
 
     navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
         .then(function (stream) {
@@ -52,6 +20,10 @@ document.getElementById('qrCerca').addEventListener("click", function (event) {
         }).catch(function (error) {
             console.error("Cannot access camera", error);
         });
+};
+
+document.getElementById('qrCerca').addEventListener("click", function (event) {
+    handleQR(event);
 });
 
 const scanQRCode = () => {

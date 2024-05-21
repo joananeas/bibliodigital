@@ -79,19 +79,6 @@
         <script src="https://unpkg.com/jsqr/dist/jsQR.js"></script>
 
     </main>
-    <!-- Para la api de la cámara -->
-    <div class="popup" style="display:none;" id="popupQR">
-        <div class="popup-content">
-            <section class="frame">
-                <a id="closeQR" class="close">&times;</a>
-                <p class="fuenteH1" style="text-align:center;">Escaneja un QR vàlid</p>
-                <div class="qr">
-                    <video id="videoElement" playsInline autoplay style="display:none;"></video>
-                    <canvas id="canvasElement" style="display:none;"></canvas>
-                </div>
-            </section>
-        </div>
-    </div>
 
     <div class="popup" style="display:none;" id="popupCategories">
         <div class="popup-content">

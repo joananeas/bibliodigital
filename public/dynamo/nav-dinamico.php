@@ -43,18 +43,19 @@
 </header>
 <nav id="menu-nav" class="frame" style="margin-left:0; margin-right:0; margin-top:20px; padding:0;">
     <li><a id="iniciNav" href="">🏠 Inici</a></li>
-    <li><a id="llibresNav" href="">🔍 Cerca de llibres</a></li>
-    <li><a id="prestecsNav" href="">💡 Buffet lectura</a></li>
-    <li><a id="gestioReservesNav" href="">📚 Gestió de reserves</a></li>
-    <li><a id="enquestesNav" href="">🚩 Enquestes </a></li>
-    <li><a id="gestioCompteNav" href="">⚙️ Gestió del compte</a></li>
+    <!-- <li><a id="llibresNav" href="">🔍 Cerca de llibres</a></li>
+    <li><a id="prestecsNav" href="">💡 Buffet lectura</a></li> -->
+    <li><a id="gestioReservesNav" href="">📚 Gestió de reserves i préstecs</a></li>
+    <li><a id="comunitatNav" href="">❤️ Comunitat </a></li>
+    <li><a id="gestioCompteNav" href="">👤 Perfil</a></li>
+    <li><a id="qrNav" href="#">📷 Escaneja QR</a></li>
     <?php
     if ($_COOKIE['rol'] == 'admin') {
-        echo '<li><a id="adminNav" href="./admin">👑 Administració</a></li>';
+        echo '<li style="border:none;"><a id="adminNav" href="./admin">👑 Administració</a></li>';
     }
     ?>
-    <li style="border: none;"><a id="suggNav" href="">📬 Bústia suggerim.</a>
-        <!-- <li style="border: none;"><a id="logoutNav" href="">🚪 Logout</a> -->
+    <!-- <li style="border: none;"><a id="suggNav" href="">📬 Bústia suggerim.</a> -->
+    <!-- <li style="border: none;"><a id="logoutNav" href="">🚪 Logout</a> -->
 </nav>
 
 <!-- Centre notificacions 🔔 -->
@@ -95,6 +96,13 @@ const viewPopUp = (formulari, close, action = null) => {
         closePopUp();
     }
 };
+
+document.getElementById('footer-m-qr').addEventListener("click", function() {
+    alert("Pròximament.")
+});
+document.getElementById('qrNav').addEventListener("click", function() {
+    alert("Pròximament.")
+});
 </script>
 
 <script>
