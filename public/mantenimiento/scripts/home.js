@@ -6,26 +6,6 @@ document.getElementById("inputCercaLlibres").addEventListener("focus", function 
     document.getElementById("buscadorLlibres").style.display = "block";
 });
 
-const handleQR = (e) => {
-    e.preventDefault();
-    const video = document.getElementById('videoElement');
-    viewPopUp('popupQR', 'closeQR');
-
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-        .then(function (stream) {
-            video.srcObject = stream;
-            popupQR.style.display = 'block';
-            video.play().catch(error => console.error("Error al iniciar la reproducción del video", error));
-            scanQRCode();
-        }).catch(function (error) {
-            console.error("Cannot access camera", error);
-        });
-};
-
-document.getElementById('qrCerca').addEventListener("click", function (event) {
-    handleQR(event);
-});
-
 const scanQRCode = () => {
     const canvasElement = document.getElementById('canvasElement');
     const canvas = canvasElement.getContext('2d');
@@ -269,6 +249,7 @@ const cercarCategories = () => {
     });
 };
 
+setInterval(l, 5000);
 document.addEventListener("DOMContentLoaded", getFotos());
 document.addEventListener("DOMContentLoaded", fillCategories());
 document.getElementById("veurePopUpCategories").addEventListener("click", () => viewPopUp('popupCategories', 'closeCategories'), console.log("PopUp Cat"));

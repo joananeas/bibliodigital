@@ -71,25 +71,29 @@
 </div>
 
 <script>
+let popup = false;
 const viewPopUp = (formulari, close, action = null) => {
     console.log("[POPUP]", formulari);
+
     let form = document.getElementById(formulari);
-    if (menuActivo) {
+    if (popup) {
         form.style.display = "none";
         document.querySelector("main").style.display = "block";
         document.querySelector("main").style.opacity = "1";
-        menuActivo = false;
+        popup = false;
     } else {
         form.style.display = "flex";
         document.querySelector("main").style.opacity = "0.2";
         form.style.opacity = "1";
-        menuActivo = true;
+        popup = true;
     }
+
     const closePopUp = () => {
         form.style.display = "none";
         document.querySelector("main").style.display = "block";
         document.querySelector("main").style.opacity = "1";
     };
+
     document.getElementById(close).addEventListener("click", () => closePopUp());
     if (action === "close") {
         console.log("[POPUP] Closed by action.");
@@ -97,12 +101,25 @@ const viewPopUp = (formulari, close, action = null) => {
     }
 };
 
-document.getElementById('footer-m-qr').addEventListener("click", function() {
-    alert("Pròximament.")
-});
-document.getElementById('qrNav').addEventListener("click", function() {
-    alert("Pròximament.")
-});
+const handleQR = (e) => {
+    e.preventDefault();
+    const video = document.getElementById('videoElement');
+    viewPopUp('popupQR', 'closeQR');
+
+    navigator.mediaDevices.getUserMedia({
+            video: {
+                facingMode: "environment"
+            }
+        })
+        .then(function(stream) {
+            video.srcObject = stream;
+            popupQR.style.display = 'block';
+            video.play().catch(error => console.error("Error al iniciar la reproducción del video", error));
+            scanQRCode();
+        }).catch(function(error) {
+            console.error("Cannot access camera", error);
+        });
+};
 </script>
 
 <script>

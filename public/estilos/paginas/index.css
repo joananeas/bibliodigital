@@ -67,6 +67,7 @@ section {
     max-height: 700px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    transition: 0.3s ease-in-out !important;
 }
 
 .carroussel-puntos {

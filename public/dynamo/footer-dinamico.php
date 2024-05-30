@@ -22,7 +22,7 @@
             <a id="closeQR" class="close">&times;</a>
             <p class="fuenteH1" style="text-align:center;">Escaneja un QR vàlid</p>
             <div class="qr">
-                <video id="videoElement" playsInline autoplay style="display:none;"></video>
+                <video id="videoElement" playsInline autoplay></video>
                 <canvas id="canvasElement" style="display:none;"></canvas>
             </div>
         </section>

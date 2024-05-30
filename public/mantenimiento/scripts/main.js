@@ -172,23 +172,26 @@ const menuMobile = () => {
         { id: "footer-m-community", href: "../xats.php", src: "../media/icons/heart.png", id_img: "footer-img-community" },
         { id: "footer-m-qr", href: "#", src: "../media/icons/qr-code-white.png", id_img: "footer-img-qr" },
         { id: "footer-m-markers", href: "../reservas.php", src: "../media/icons/markers.png", id_img: "footer-img-markers" },
-        { id: "footer-m-profile", href: "../perfil.php", src: "../media/icons/user.png", id_img: "footer-img-user" },
+        { id: "footer-m-profile", href: "../perfil.php", src: "../media/icons/user.png", id_img: "footer-img-user" }
     ];
 
     if (window.location.href.includes("admin")) {
         linksAdmin.forEach(link => {
             let a = document.getElementById(link.id);
             let img = document.getElementById(link.id_img);
-            a.href = link.href;
-            img.src = link.src;
+            if (a && img) {
+                a.href = link.href;
+                img.src = link.src;
+            }
         });
-    }
-    else {
+    } else {
         linksNormal.forEach(link => {
             let a = document.getElementById(link.id);
             let img = document.getElementById(link.id_img);
-            a.href = link.href;
-            img.src = link.src;
+            if (a && img) {
+                a.href = link.href;
+                img.src = link.src;
+            }
         });
     }
 }
@@ -469,4 +472,19 @@ if (!url.includes("admin")) {
     document.getElementById('perfilNav').href = "./perfil.php"
 } else {
     document.getElementById('perfilNav').href = "../perfil.php"
+}
+
+// PopUps QR
+document.getElementById('qrNav').addEventListener("click", function (event) {
+    handleQR(event);
+});
+
+document.getElementById('footer-m-qr').addEventListener("click", function (event) {
+    handleQR(event);
+});
+
+if (url.includes("index")) {
+    document.getElementById('qrCerca').addEventListener("click", function (event) {
+        handleQR(event);
+    });
 }

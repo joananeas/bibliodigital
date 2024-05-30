@@ -41,7 +41,28 @@ const getAllUsers = async () => {
             tr.appendChild(tdDataFi);
 
             let tdEstat = document.createElement('td');
-            tdEstat.textContent = reserva.estat;
+            console.log("Estat", reserva.estat);
+            switch (reserva.estat) {
+                case '1':
+                case 1:
+                    tdEstat.textContent = 'Pendent';
+                    break;
+                case '2':
+                case 2:
+                    tdEstat.textContent = 'Confirmat';
+                    break;
+                case '3':
+                case 3:
+                    tdEstat.textContent = 'Finalitzat';
+                    break;
+                case '4':
+                case 4:
+                    tdEstat.textContent = 'Cancel·lat';
+                    break;
+                default:
+                    tdEstat.textContent = 'Error';
+                    break;
+            }
             //tdEstat.classList.add('table-row');
             tr.appendChild(tdEstat);
 

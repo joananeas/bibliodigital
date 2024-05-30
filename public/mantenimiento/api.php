@@ -14,7 +14,7 @@
 ###########################################################################
 
 # Versión del core.
-const VERSION =  'v1.8.0'; # - ✨ Add prestecs (librarian)
+const VERSION =  'v1.8.1'; # - 🧹 Minor fixes (presentation day)
 
 // Instancias de las APIs
 $root = realpath(dirname(__FILE__));
